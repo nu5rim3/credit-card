@@ -30,6 +30,11 @@ const Playground = () => {
     const onButtonClick = () => {
         toast.success("hello dear!");
     };
+
+    setTimeout(() => {
+        setLoading(false)
+    }, 5000);
+
     return (
         <>
             {

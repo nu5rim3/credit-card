@@ -1,5 +1,5 @@
 import { Button, Input, OTPDialog } from "../components";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form"
 import { ArrowRight } from "lucide-react";
 import logo from '../assets/images/lolcf_logo.svg'
@@ -22,7 +22,7 @@ const MainForm = () => {
         resolver: zodResolver(schema),
     });
     const [openOTP, setOpenOTP] = useState<boolean>(false);
-    const [files, setFiles] = useState<File[]>([]);
+    // const [files, setFiles] = useState<File[]>([]);
 
     const onSubmit = (data: unknown) => {
         console.log(data);
@@ -30,11 +30,11 @@ const MainForm = () => {
         setOpenOTP(true);
     };
 
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            setFiles([...files, ...Array.from(e.target.files)]);
-        }
-    };
+    // const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    //     if (e.target.files) {
+    //         setFiles([...files, ...Array.from(e.target.files)]);
+    //     }
+    // };
 
     return (
         <>

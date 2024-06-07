@@ -1,7 +1,7 @@
 import cardImage from '../assets/images/nefa-cc.webp'
 import logo from '../assets/images/lolcf_logo.svg'
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form"
 import * as yup from "yup";
 import { ArrowRight } from 'lucide-react';
@@ -30,7 +30,7 @@ const LandingPage = () => {
     } = useForm({
         resolver: yupResolver(schema),
     });
-    const [files, setFiles] = useState<File[]>([]);
+    // const [files, setFiles] = useState<File[]>([]);
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
     const onSubmit = (data: unknown) => {
@@ -38,11 +38,11 @@ const LandingPage = () => {
         setIsOpen(true)
     };
 
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            setFiles([...files, ...Array.from(e.target.files)]);
-        }
-    };
+    // const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    //     if (e.target.files) {
+    //         setFiles([...files, ...Array.from(e.target.files)]);
+    //     }
+    // };
     return (
         <div className="flex flex-row mx-auto h-screen">
             <div className="hidden sm:flex sm:basis-2/3 bg-gradient-to-r from-sky-500 to-indigo-500 flex-1 h-full flex-col justify-between px-20 py-10">
