@@ -51,7 +51,7 @@ const GetStart = () => {
                 </div>
             </div>
 
-            <div className="h-[5vh] bg-gray-900 text-white flex items-center justify-center animate-fade-up animate-duration-[5000ms] animate-once">
+            <div className="sm:h-[5vh] bg-gray-900 text-white flex items-center justify-center animate-fade-up animate-duration-[5000ms] animate-once">
                 <div className="container flex flex-col sm:flex-row justify-between mx-auto p-1 sm:px-10">
                     <div className="text-center sm:text-right text-sm">
                         Copyright © 2024 LOLC Finance Plc
