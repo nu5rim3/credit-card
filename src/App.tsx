@@ -29,7 +29,7 @@ function App() {
               <Route path="/" element={<GetStart />} />
               <Route path="/playground" element={<Playground />} />
               <Route path="/form" element={<MainForm />} />
-              <Route path="/detail-form" element={<DetailForm />} />
+              <Route path="/personal-detail" element={<DetailForm />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>
