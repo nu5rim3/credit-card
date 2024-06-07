@@ -8,6 +8,7 @@ const GetStart = () => {
     const navigate = useNavigate();
 
     const onGetStartClick = () => {
+        // TODO: call the OTP api
         navigate('/form')
     }
 

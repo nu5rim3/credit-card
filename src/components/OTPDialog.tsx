@@ -19,16 +19,18 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, isOpen, setIsOpen }) => {
 
     const handleVerify = () => {
         setIsOpen(false)
+        // TODO: call the API
         navigate('/detail-form')
     }
 
     const handleResend = () => {
+        // TODO: call the OTP api again
         setIsDisabled(true)
-        setIsOpen(false)
     }
 
     return (
         <Dialog
+            static
             open={isOpen}
             onClose={() => setIsOpen(false)}
             className="relative z-50"
@@ -62,7 +64,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, isOpen, setIsOpen }) => {
                         <input type="number" className='w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' />
                         <input type="number" className='w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' />
                     </div>
-                    <div className="flex justify-end gap-4">
+                    <div className="flex justify-center sm:justify-end gap-4">
                         <Button onClick={handleResend} variant={'secondary'} disabled={isDisabled}>Resend</Button>
                         <Button onClick={handleVerify} variant={'primary'} disabled={!isDisabled}>Verify</Button>
                     </div>
