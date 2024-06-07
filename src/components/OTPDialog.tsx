@@ -16,6 +16,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, isOpen, setIsOpen }) => {
 
     const [isDisabled, setIsDisabled] = useState(true);
     const navigate = useNavigate();
+    const [key, setKey] = useState(0);
 
     const handleVerify = () => {
         setIsOpen(false)
@@ -26,6 +27,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, isOpen, setIsOpen }) => {
     const handleResend = () => {
         // TODO: call the OTP api again
         setIsDisabled(true)
+        setKey(prevKey => prevKey + 1)
     }
 
     return (
@@ -44,6 +46,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, isOpen, setIsOpen }) => {
                     </Description>
                     <div className='flex justify-center'>
                         <CountdownCircleTimer
+                            key={key}
                             size={100}
                             isPlaying
                             duration={60}
