@@ -25,7 +25,7 @@ const GetStart = () => {
 
                             <div className="text-3xl sm:text-5xl font-extrabold mb-2 text-primary-900 animate-fade-up animate-duration-[2000ms] animate-once text-center sm:text-left">Fuel the Goodness in You.</div>
                             <div className="w-full sm:w-1/2 text-base mb-10 text-gray-400 animate-fade-up animate-duration-[3000ms] animate-once text-center sm:text-left">The best solution for all your payments. with LOLC finance credit card all kinds of payments are made easy and also many bonuses you can get.</div>
-                            <div className='flex flex-col gap-2 sm:flex-row sm:space-x-5 animate-fade-up animate-duration-[4000ms] animate-once'>
+                            <div className='flex flex-col gap-2 sm:gap-0 sm:flex-row sm:space-x-5 animate-fade-up animate-duration-[4000ms] animate-once'>
                                 <Button variant={'outline'} className={'w-full m-1 sm:w-48'}>What's Required?</Button>
                                 <Button variant={'primary'} className={'w-full m-1 sm:w-44'} onClick={onGetStartClick}>Get Start</Button>
                             </div>
