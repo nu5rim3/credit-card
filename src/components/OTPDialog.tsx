@@ -3,14 +3,16 @@ import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import Button from './Button';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { maskPhoneNumber } from '../utils/textConvertor';
 
 
 interface OTPDialogProps {
+    mobile: string;
     isOpen: boolean | undefined;
     setIsOpen: (isOpen: boolean) => void;
 }
 
-const OTPDialog: React.FC<OTPDialogProps> = ({ isOpen, setIsOpen }) => {
+const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, isOpen, setIsOpen }) => {
 
     const [isDisabled, setIsDisabled] = useState(true);
     const navigate = useNavigate();
@@ -21,6 +23,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ isOpen, setIsOpen }) => {
     }
 
     const handleResend = () => {
+        setIsDisabled(true)
         setIsOpen(false)
     }
 
@@ -35,7 +38,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ isOpen, setIsOpen }) => {
                     <DialogTitle className="font-semibold text-xl">OTP Verification</DialogTitle>
                     <Description className="text-gray-500">
                         Please Check the mobile and enter the verification code<br />
-                        (+XXXX XXXXX XXXX)
+                        ({maskPhoneNumber(mobile)})
                     </Description>
                     <div className='flex justify-center'>
                         <CountdownCircleTimer

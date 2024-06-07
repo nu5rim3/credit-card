@@ -1,5 +1,5 @@
 import { Button, Input, OTPDialog } from "../components";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form"
 import { ArrowRight } from "lucide-react";
 import logo from '../assets/images/lolcf_logo.svg'
@@ -12,29 +12,32 @@ const schema = z.object({
     mobile: z.string().regex(/^\+\d{1,3}\d{10}$/, 'Invalid phone number (e.g. +94712345678)'),
 });
 
+interface FormData {
+    nic: string;
+    email: string;
+    mobile: string;
+}
+
 const MainForm = () => {
 
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm({
+    } = useForm<FormData>({
         resolver: zodResolver(schema),
     });
     const [openOTP, setOpenOTP] = useState<boolean>(false);
-    // const [files, setFiles] = useState<File[]>([]);
+    const [formData, setFormData] = useState<FormData | null>(null);
 
-    const onSubmit = (data: unknown) => {
-        console.log(data);
-        // TODO: add the to the api and OTP
+    const onSubmit = useCallback((data: FormData) => {
+        setFormData(data);
         setOpenOTP(true);
-    };
+    }, []);
 
-    // const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    //     if (e.target.files) {
-    //         setFiles([...files, ...Array.from(e.target.files)]);
-    //     }
-    // };
+    const otpDialog = useMemo(() => {
+        return formData && <OTPDialog setIsOpen={setOpenOTP} isOpen={openOTP} mobile={formData.mobile} />;
+    }, [formData, openOTP]);
 
     return (
         <>
@@ -80,44 +83,13 @@ const MainForm = () => {
                                 {...register("email")}
 
                             />
-                            {/* <label htmlFor="name" className="block font-bold mb-2">
-                            Name
-                        </label>
-                        <input
-                            type="text"
-                            id="name"
-                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.name ? "border-red-500" : "border-gray-300"
-                                }`}
-                            
-                        />
-                        {errors.name && (
-                            <p className="text-red-500 mt-1">{errors.name.message}</p>
-                        )}
-                    </div> */}
-
-                            {/* <div className="mb-4">
-                        <label htmlFor="files" className="block font-bold mb-2">
-                            Files
-                        </label>
-                        <input
-                            type="file"
-                            id="files"
-                            multiple
-                            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300"
-                            {...register("files")}
-                            onChange={handleFileChange}
-                        />
-                        {errors.files && (
-                            <p className="text-red-500 mt-1">{errors.files.message}</p>
-                        )}
-                    </div> */}
 
                             <Button type="submit" variant={"primary"} className="w-full flex flex-row items-center justify-between gap-2 mt-3">Start <ArrowRight /></Button>
                         </div>
                     </form>
-                </div >
-            </div >
-            <OTPDialog setIsOpen={setOpenOTP} isOpen={openOTP} />
+                </div>
+            </div>
+            {otpDialog}
         </>
     );
 };
