@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Input } from '../components';
 
 
 const schema = z.object({
@@ -18,43 +19,55 @@ const DetailForm = () => {
 
     const onSubmit = (data: FormData) => console.log(data);
     return (
-
-
-        <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-                <label htmlFor="name">Name</label>
-                <input
-                    type="text"
-                    id="name"
-                    {...register('name')}
-                    className={`w-full p-2 border ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+        <div className='flex justify-center bg-primary-50 sm:h-screen py-5 px-2 sm:px-0'>
+            <div className='container flex justify-center items-center'>
+                <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl flex flex-col gap-2'>
+                        <Input type={'text'} label={'Name'} required {...register('name')} error={errors.name?.message} />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                    </div>
+                    <div className='bg-primary-100 rounded-lg shadow-lg px-4 py-2 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2'>
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                    </div>
+                    <div className='bg-primary-100 rounded-lg shadow-lg px-4 py-2 animate-fade-up animate-duration-[5000ms] animate-once hover:shadow-xl mb-20 sm:mb-0 flex flex-col gap-2'>
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                        <Input type={'text'} label={'Sample'} required />
+                    </div>
+                    <div className="md:col-span-3 justify-end h-10 animate-fade-up animate-duration-[6000ms] animate-once hidden sm:flex">
+                        <Button variant='primary' type="submit" className={''} >
+                            Save persanl detail
+                        </Button>
+                    </div>
+                    <div className="fixed sm:hidden bottom-3 bg-primary-50 h-auto animate-fade-up animate-duration-[6000ms] animate-once w-full rounded-lg pr-4">
+                        <Button variant='primary' type="submit" className={'w-full'} >
+                            Save persanl detail
+                        </Button>
+                    </div>
+                </form>
             </div>
-            <div>
-                <label htmlFor="email">Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    {...register('email')}
-                    className={`w-full p-2 border ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-            </div>
-            <div>
-                <label htmlFor="phone">Phone</label>
-                <input
-                    type="tel"
-                    id="phone"
-                    {...register('phone')}
-                    className={`w-full p-2 border ${errors.phone ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.phone && <p className="text-red-500">{errors.phone.message}</p>}
-            </div>
-            <button type="submit" className="md:col-span-3 bg-blue-500 text-white p-2">
-                Submit
-            </button>
-        </form>
+        </div>
     )
 }
 

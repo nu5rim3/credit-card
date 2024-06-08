@@ -21,7 +21,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, isOpen, setIsOpen }) => {
     const handleVerify = () => {
         setIsOpen(false)
         // TODO: call the API
-        navigate('/detail-form')
+        navigate('/personal-detail')
     }
 
     const handleResend = () => {
