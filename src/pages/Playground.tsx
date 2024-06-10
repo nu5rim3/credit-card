@@ -2,7 +2,7 @@ import { useState } from 'react';
 import RadioGroup, { RadioOption } from '../components/RadioGroup';
 import { ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { Checkbox, Listbox, Input, Button, Loader } from '../components';
+import { Checkbox, Listbox, Input, Button, Loader, Uploader } from '../components';
 
 const people = [
     { id: 1, name: 'Tom Cook' },
@@ -18,6 +18,7 @@ const Playground = () => {
     const [enabled, setEnabled] = useState<boolean>(false);
     const [textValue, setTextValue] = useState<string>('');
     const [loading, setLoading] = useState(false);
+    const [files, setFiles] = useState<File[]>([]);
 
     const options: RadioOption[] = [
         { value: "option1", label: "Option 1" },
@@ -34,6 +35,8 @@ const Playground = () => {
     setTimeout(() => {
         setLoading(false)
     }, 5000);
+
+    console.log('[files] - ', files)
 
     return (
         <>
@@ -97,6 +100,17 @@ const Playground = () => {
                                 disabled={false}
                                 placeholder='hello'
                             />
+                        </div>
+                        <div className="border border-gray-300 shadow-lg rounded-lg text-center p-4">
+                            <p className="font-semibold">Input</p>
+                            <Uploader
+                                type={'text'}
+                                label={'NIC (Both side)'}
+                                required={true}
+                                disabled={false}
+                                placeholder='hello'
+                                onFileSelected={setFiles}
+                                multiple={true} />
                         </div>
                     </div>
             }

@@ -33,7 +33,7 @@ const DetailForm = () => {
                         <Input type={'text'} label={'Sample'} required />
                         <Input type={'text'} label={'Sample'} required />
                     </div>
-                    <div className='bg-primary-100 rounded-lg shadow-lg px-4 py-2 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2'>
+                    <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2'>
                         <Input type={'text'} label={'Sample'} required />
                         <Input type={'text'} label={'Sample'} required />
                         <Input type={'text'} label={'Sample'} required />
@@ -44,7 +44,7 @@ const DetailForm = () => {
                         <Input type={'text'} label={'Sample'} required />
                         <Input type={'text'} label={'Sample'} required />
                     </div>
-                    <div className='bg-primary-100 rounded-lg shadow-lg px-4 py-2 animate-fade-up animate-duration-[5000ms] animate-once hover:shadow-xl mb-20 sm:mb-0 flex flex-col gap-2'>
+                    <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[5000ms] animate-once hover:shadow-xl mb-20 sm:mb-0 flex flex-col gap-2'>
                         <Input type={'text'} label={'Sample'} required />
                         <Input type={'text'} label={'Sample'} required />
                         <Input type={'text'} label={'Sample'} required />
