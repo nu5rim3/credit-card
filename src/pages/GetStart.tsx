@@ -1,5 +1,5 @@
 import logo from '../assets/images/lolcf_logo.svg'
-import cardImage from '../assets/images/cards.png'
+import cardImage from '../assets/images/cards.webp'
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components';
 
