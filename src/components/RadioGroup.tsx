@@ -24,8 +24,8 @@ const RadioGroup = forwardRef<HTMLDivElement, HUIRadioGroupProps>(({ options, on
     return (
         <Field>
             <Label className="block text-sm font-medium text-primary text-left">{label}{required && <span className='ml-1 text-red-800'>*</span>}</Label>
-            <HUIRadioGroup onChange={onChange} disabled={disabled} ref={ref}>
-                <div className='flex flex-row justify-start gap-4'>
+            <HUIRadioGroup disabled={disabled} onChange={onChange} ref={ref} {...props}>
+                <div className='flex flex-row justify-start gap-3'>
                     {options.map((option, index) => (
                         <Field key={`id-${label}-${index}`} className="flex items-start">
                             <Radio
@@ -44,7 +44,7 @@ const RadioGroup = forwardRef<HTMLDivElement, HUIRadioGroupProps>(({ options, on
                                         className
                                     )
                                 }
-                                {...props}
+
                             >
                                 {({ checked }) => (
                                     <>
@@ -54,7 +54,7 @@ const RadioGroup = forwardRef<HTMLDivElement, HUIRadioGroupProps>(({ options, on
                                                     'h-4 w-4 border border-primary rounded-full',
                                                     {
                                                         'bg-primary-700': checked,
-                                                        'bg-white': !checked,
+                                                        'bg-gray-100': !checked,
                                                     }
                                                 )}
                                             />

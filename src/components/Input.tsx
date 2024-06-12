@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 interface HUIInputProps extends InputProps {
     type: 'text' | 'password' | 'email' | 'tel' | 'url' | 'number' | 'date' | 'datetime-local' | 'month' | 'week' | 'time' | 'range' | 'search';
-    label: string;
+    label?: string;
     value?: string;
     disabled?: boolean;
     className?: string;
@@ -21,7 +21,7 @@ const Input = forwardRef<HTMLInputElement, HUIInputProps>(({ type, label, value,
             <HUIInput
                 // required={required}
                 ref={ref}
-                id={`id-${label.toLowerCase()}`}
+                id={`id-${label?.toLowerCase()}`}
                 name={label}
                 type={type}
                 value={value}
