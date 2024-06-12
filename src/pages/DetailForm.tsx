@@ -39,10 +39,12 @@ const schema = z.object({
     }),
     residenceType: z.string().min(1, 'Residence Type is required'),
     province: z.string().min(1, 'Province is required'),
+    politicallyExposed: z.string().min(1, 'Politically exposed is required'),
 })
 
 const nationalities: RadioOption[] = [{ label: 'Sri Lankan', value: 'SriLankan' }, { label: 'Other', value: 'Other' }]
 const residenceTypes: RadioOption[] = [{ label: 'Resident', value: 'Resident' }, { label: 'NonResident', value: 'NonResident' }]
+const politicallyExposedType: RadioOption[] = [{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]
 const preferredLanguages = ["English", "Sinhala", "Tamil"]
 const provinces = ["Central", "Eastern", "North Central", "North Western", "Northern", "Sabaragamuwa", "Southern", "Western", "Uva"]
 
@@ -71,7 +73,7 @@ const DetailForm = () => {
             mailAddressLine2: "",
             mailAddressLine3: "",
             mailAddressLine4: "",
-            // "politicallyExposed": "Yes",
+            politicallyExposed: "",
             // "employmentCategory": "Test",
             // "expInPresentEmployment": "Test",
             // "occupationType": "test",
@@ -109,8 +111,12 @@ const DetailForm = () => {
         setValue("nationality", value);
     };
 
-    const handleresidenceTypeChange = (value: string) => {
+    const handleResidenceTypeChange = (value: string) => {
         setValue("residenceType", value);
+    };
+
+    const handlePoliticallyExposedTypeChange = (value: string) => {
+        setValue("politicallyExposed", value);
     };
 
     useEffect(() => {
@@ -274,7 +280,21 @@ const DetailForm = () => {
                                     label={'Resident Type'}
                                     error={errors.residenceType?.message}
                                     {...field}
-                                    onChange={handleresidenceTypeChange}
+                                    onChange={handleResidenceTypeChange}
+                                    required
+                                />
+                            }
+                        />
+                        <Controller
+                            control={control}
+                            name={'politicallyExposed'}
+                            render={({ field }) =>
+                                <RadioGroup
+                                    options={politicallyExposedType}
+                                    label={'Politically Exposed'}
+                                    error={errors.politicallyExposed?.message}
+                                    {...field}
+                                    onChange={handlePoliticallyExposedTypeChange}
                                     required
                                 />
                             }
