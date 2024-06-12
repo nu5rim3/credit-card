@@ -9,7 +9,7 @@ import * as z from 'zod';
 const schema = z.object({
     nic: z.string().regex(/^(?:[0-9]{9}[Vv]|[0-9]{10})$/, 'Invalid NIC number (e.g. 123456789V)'),
     email: z.string().email('Invalid email address (e.g. sample@sample.com)'),
-    mobile: z.string().regex(/^\+\d{1,3}\d{10}$/, 'Invalid phone number (e.g. +94712345678)'),
+    mobile: z.string().regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
 });
 
 interface FormData {

@@ -5,7 +5,7 @@ import { Button, Input } from '../components';
 
 
 const schema = z.object({
-    name: z.string().min(1, 'Name is required'),
+    fullName: z.string().min(1, 'Full name is required'),
     email: z.string().email('Invalid email address'),
     phone: z.string().min(10, 'Phone number must be at least 10 digits'),
 });
@@ -13,8 +13,13 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 const DetailForm = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    const { control, register, handleSubmit, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
+        defaultValues: {
+            fullName: '',
+            email: '',
+            phone: ''
+        }
     });
 
     const onSubmit = (data: FormData) => console.log(data);
@@ -23,7 +28,7 @@ const DetailForm = () => {
             <div className='container flex justify-center items-center'>
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl flex flex-col gap-2'>
-                        <Input type={'text'} label={'Name'} required {...register('name')} error={errors.name?.message} />
+                        <Input type={'text'} label={'Name'} required {...register('fullName')} error={errors.fullName?.message} />
                         <Input type={'text'} label={'Sample'} required />
                         <Input type={'text'} label={'Sample'} required />
                         <Input type={'text'} label={'Sample'} required />
