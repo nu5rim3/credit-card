@@ -158,11 +158,11 @@ const DetailForm = () => {
 
 
     return (
-        <div className='flex justify-center bg-primary-50 py-5 px-2 sm:px-0'>
+        <div className='flex justify-center bg-primary-50 py-5 px-2 sm:px-0 h-screen'>
             <div className='container flex flex-col justify-center items-center'>
                 <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
-                    <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl flex flex-col gap-2'>
+                    <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950'>Customer Personal Details</p>
                         <Input
                             type={'text'}
@@ -334,7 +334,7 @@ const DetailForm = () => {
                             {...register('additionalContactNo')}
                         />
                     </div>
-                    <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2'>
+                    <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950'>Customer Employment Details</p>
                         <Controller
                             control={control}
