@@ -41,7 +41,9 @@ const schema = z.object({
     province: z.string().min(1, 'Province is required'),
     politicallyExposed: z.string().min(1, 'Politically exposed is required'),
     employmentCategory: z.string().min(1, 'Employment Category is required'),
-    expInPresentEmployment: z.string().min(1, 'Experience in Present Employment is required'),
+    expInPresentEmployment: z.string().min(1, 'Experience in Present Employment is required').optional(),
+    experienceInPreviousEmployment: z.string().min(1, 'Experience In Previous Employment is required').optional(),
+    nameOfThePreviousEmployer: z.string().min(1, 'Name Of The Previous Employer is required'),
     occupationType: z.string().min(1, 'Occupation Type is required'),
     nameOfTheEmployer: z.string().min(1, 'Name Of The Employer/Business is required'),
     designation: z.string().min(1, 'Designation is required'),
@@ -51,8 +53,6 @@ const schema = z.object({
     officeAddressLine2: z.string().optional(),
     officeAddressLine3: z.string().optional(),
     officeAddressLine4: z.string().optional(),
-    experienceInPreviousEmployment: z.string().min(1, 'Experience In Previous Employment is required'),
-    nameOfThePreviousEmployer: z.string().min(1, 'Name Of The Previous Employer is required'),
 })
 
 const nationalities: RadioOption[] = [{ label: 'Sri Lankan', value: 'SriLankan' }, { label: 'Other', value: 'Other' }]
@@ -67,8 +67,9 @@ type FormData = z.infer<typeof schema>;
 
 
 const DetailForm = () => {
-    const { control, register, handleSubmit, setValue, getValues, formState: { errors } } = useForm<FormData>({
+    const { control, register, unregister, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
+        shouldUnregister: true,
         defaultValues: {
             nationality: "",
             fullName: "",
@@ -115,6 +116,7 @@ const DetailForm = () => {
             // "nameOnCard": "SanjayaKul"
         }
     });
+    const empCategory = watch("employmentCategory");
     const [sameMobile, setSameMobile] = useState<boolean>(false)
     const [sameAddress, setSameAddress] = useState<boolean>(false)
 
@@ -156,9 +158,17 @@ const DetailForm = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sameMobile, sameAddress])
 
+    useEffect(() => {
+        const { employmentCategory } = getValues()
+        if (employmentCategory === 'Government') {
+            unregister("employmentCategory")
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [watch])
+
 
     return (
-        <div className="bg-[url('/img/hero-pattern.svg')] flex justify-center  bg-primary-50 py-5 px-2 sm:px-0 sm:h-screen">
+        <div className="bg-[url('/img/hero-pattern.svg')] flex justify-center py-5 px-2 sm:px-0 sm:h-screen">
             <div className='container flex flex-col justify-center items-center'>
                 <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
@@ -349,12 +359,29 @@ const DetailForm = () => {
                                 />
                             }
                         />
+                        {empCategory === 'Government' &&
+                            <Input
+                                type={'text'}
+                                label={'Experience in Present Employment'}
+                                required
+                                error={errors.expInPresentEmployment?.message}
+                                {...register('expInPresentEmployment')}
+                            />
+                        }
+
                         <Input
                             type={'text'}
-                            label={'Experience in Present Employment'}
+                            label={'Experience In Previous Employment'}
                             required
-                            error={errors.expInPresentEmployment?.message}
-                            {...register('expInPresentEmployment')}
+                            error={errors.experienceInPreviousEmployment?.message}
+                            {...register('experienceInPreviousEmployment')}
+                        />
+                        <Input
+                            type={'text'}
+                            label={'Name of the Previous Employer'}
+                            required
+                            error={errors.nameOfThePreviousEmployer?.message}
+                            {...register('nameOfThePreviousEmployer')}
                         />
                         <Controller
                             control={control}
@@ -422,20 +449,7 @@ const DetailForm = () => {
                                 placeholder='Line 4'
                             />
                         </>
-                        <Input
-                            type={'text'}
-                            label={'Experience In Previous Employment'}
-                            required
-                            error={errors.experienceInPreviousEmployment?.message}
-                            {...register('experienceInPreviousEmployment')}
-                        />
-                        <Input
-                            type={'text'}
-                            label={'Name of the Previous Employer'}
-                            required
-                            error={errors.nameOfThePreviousEmployer?.message}
-                            {...register('nameOfThePreviousEmployer')}
-                        />
+
                     </div>
                     <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2'>
                         <p className='font-semibold text-primary-950'>Guarantor Details</p>

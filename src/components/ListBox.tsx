@@ -38,7 +38,7 @@ const Listbox = forwardRef<HTMLDivElement, HUIListboxProps>(
                         {props?.value}
                         <ChevronDown size={16} />
                     </ListboxButton>
-                    <ListboxOptions anchor="bottom" className={'bg-primary-50 rounded-lg shadow-lg'}>
+                    <ListboxOptions anchor="bottom" className={'w-5/6  sm:w-1/6 bg-primary-50 rounded-lg shadow-lg'}>
                         {options.map((option, index) => (
                             <ListboxOption
                                 key={`id-${label}-${index}`}
