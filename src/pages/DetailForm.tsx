@@ -53,6 +53,17 @@ const schema = z.object({
     officeAddressLine2: z.string().optional(),
     officeAddressLine3: z.string().optional(),
     officeAddressLine4: z.string().optional(),
+    guarantorName: z.string().min(1, 'Guarantor Name is required'),
+    relationShipToApplication: z.string().min(1, 'RelationShip To Application is required'),
+    guarantorNic: z.string().min(1, 'Guarantor NIC Number is required').regex(/^(?:[0-9]{9}[Vv]|[0-9]{10})$/, 'Invalid NIC number (e.g. 123456789V)'),
+    guarantorMobileNo: z.string().min(1, 'Guarantor Mobile Number is required').regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
+    guarantorAddressLine1: z.string().min(1, 'Office Address is required'),
+    guarantorAddressLine2: z.string().optional(),
+    guarantorAddressLine3: z.string().optional(),
+    guarantorAddressLine4: z.string().optional(),
+    dueDate: z.string().min(1, 'Due date is required'),// TODO: must add validation pervious date cannot be add
+    cardCollectBranch: z.string().min(1, 'Card Collect Branch is required'),// TODO: branch list
+    nameOnCard: z.string().min(1, 'Name On Card is required'),// TODO: same as full name and validation
 })
 
 const nationalities: RadioOption[] = [{ label: 'Sri Lankan', value: 'SriLankan' }, { label: 'Other', value: 'Other' }]
@@ -62,6 +73,7 @@ const preferredLanguages = ["English", "Sinhala", "Tamil"]
 const provinces = ["Central", "Eastern", "North Central", "North Western", "Northern", "Sabaragamuwa", "Southern", "Western", "Uva"]
 const employmentCategories = ["Government", "Private", "Self"]
 const occupationTypes = ["Full Time", "Part Time", "Contract"]
+const branches = ["Colombo", "Kandy", "Galle", "Jaffna"]
 
 type FormData = z.infer<typeof schema>;
 
@@ -103,36 +115,53 @@ const DetailForm = () => {
             officeAddressLine4: "",
             experienceInPreviousEmployment: "",
             nameOfThePreviousEmployer: "",
-            // "guarantorName": "Mahela",
-            // "relationShipToApplication": "test",
-            // "guarantorNic": "200128904037",
-            // "guarantorMobileNo": "0764306768",
-            // "guarantorAddressLine1": "testAddress1",
-            // "guarantorAddressLine2": "testAddress2",
-            // "guarantorAddressLine3": "test",
-            // "guarantorAddressLine4": "test",
-            // "dueDate": "2024-06-07",
-            // "cardCollectBranch": "Head Office",
-            // "nameOnCard": "SanjayaKul"
+            guarantorName: "",
+            relationShipToApplication: "",
+            guarantorNic: "",
+            guarantorMobileNo: "",
+            guarantorAddressLine1: "",
+            guarantorAddressLine2: "",
+            guarantorAddressLine3: "",
+            guarantorAddressLine4: "",
+            dueDate: "",
+            cardCollectBranch: branches[0],
+            nameOnCard: ""
         }
     });
     const empCategory = watch("employmentCategory");
     const [sameMobile, setSameMobile] = useState<boolean>(false)
     const [sameAddress, setSameAddress] = useState<boolean>(false)
+    const [sameFullName, setSameFullName] = useState<boolean>(false)
 
+    /**
+     * on Submit - main api call to  save the personal details
+     * @param data 
+     */
     const onSubmit = (data: FormData) => {
         // TODO: call the API
         console.log(data)
     };
 
+    /**
+     * handleNationalityChange
+     * @param value 
+     */
     const handleNationalityChange = (value: string) => {
         setValue("nationality", value);
     };
 
+    /**
+     * handleResidenceTypeChange
+     * @param value 
+     */
     const handleResidenceTypeChange = (value: string) => {
         setValue("residenceType", value);
     };
 
+    /**
+     * handlePoliticallyExposedTypeChange
+     * @param value 
+     */
     const handlePoliticallyExposedTypeChange = (value: string) => {
         setValue("politicallyExposed", value);
     };
@@ -155,8 +184,14 @@ const DetailForm = () => {
             setValue('mailAddressLine3', "")
             setValue('mailAddressLine4', "")
         }
+        if (sameFullName) {
+            const { fullName } = getValues();
+            setValue("nameOnCard", fullName)
+        } else {
+            setValue("nameOnCard", "")
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sameMobile, sameAddress])
+    }, [sameMobile, sameAddress, sameFullName])
 
     useEffect(() => {
         const { employmentCategory } = getValues()
@@ -171,7 +206,8 @@ const DetailForm = () => {
         <div className="bg-[url('/img/hero-pattern.svg')] flex justify-center py-5 px-2 sm:px-0 sm:h-screen">
             <div className='container flex flex-col justify-center items-center'>
                 <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
-                <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 md: sm:grid-cols-4 gap-4">
+                    {/* Customer Personal Details */}
                     <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950'>Customer Personal Details</p>
                         <Input
@@ -344,6 +380,7 @@ const DetailForm = () => {
                             {...register('additionalContactNo')}
                         />
                     </div>
+                    {/* Customer Employment Details */}
                     <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950'>Customer Employment Details</p>
                         <Controller
@@ -451,11 +488,97 @@ const DetailForm = () => {
                         </>
 
                     </div>
-                    <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2'>
+                    {/* Guarantor Details */}
+                    <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950'>Guarantor Details</p>
+                        <Input
+                            type={'text'}
+                            label={'Guarantor Name'}
+                            required
+                            error={errors.guarantorName?.message}
+                            {...register('guarantorName')}
+                        />
+                        <Input
+                            type={'text'}
+                            label={'Guarantor NIC'}
+                            required
+                            error={errors.guarantorNic?.message}
+                            {...register('guarantorNic')}
+                        />
+                        <Input
+                            type={'text'}
+                            label={'Guarantor Mobile Number'}
+                            required
+                            error={errors.guarantorMobileNo?.message}
+                            {...register('guarantorMobileNo')}
+                        />
+                        <Input
+                            type={'text'}
+                            label={'RelationShip To Application'}
+                            required
+                            error={errors.relationShipToApplication?.message}
+                            {...register('relationShipToApplication')}
+                        />
+                        <>
+                            <Input
+                                type={'text'}
+                                label={'Guarantor Residential Address'}
+                                required
+                                {...register('guarantorAddressLine1')}
+                                placeholder='Line 1'
+                            />
+                            <Input
+                                type={'text'}
+                                {...register('guarantorAddressLine2')}
+                                placeholder='Line 2'
+                            />
+                            <Input
+                                type={'text'}
+                                {...register('guarantorAddressLine3')}
+                                placeholder='Line 3'
+                            />
+                            <Input
+                                type={'text'}
+                                error={errors.guarantorAddressLine1?.message}
+                                {...register('guarantorAddressLine4')}
+                                placeholder='Line 4'
+                            />
+                        </>
                     </div>
-                    <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[5000ms] animate-once hover:shadow-xl mb-20 sm:mb-0 flex flex-col gap-2'>
+                    {/* Credit Card Details */}
+                    <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[5000ms] animate-once hover:shadow-xl mb-20 sm:mb-0 flex flex-col gap-2  sm:h-[80vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950'>Credit Card Details</p>
+                        <Input
+                            type={'date'}
+                            label={'Due Date'}
+                            required
+                            error={errors.dueDate?.message}
+                            {...register('dueDate')}
+                        />
+                        <Input
+                            type={'text'}
+                            label={'Name on Card'}
+                            required
+                            error={errors.nameOnCard?.message}
+                            {...register('nameOnCard')}
+                            check
+                            checkLabel={'Same as the full name'}
+                            checkStatus={sameFullName}
+                            setCheackStatus={setSameFullName}
+                        />
+                        <Controller
+                            control={control}
+                            name={'cardCollectBranch'}
+                            render={({ field }) =>
+                                <Listbox
+                                    options={branches}
+                                    label={'Card Collecting Branch'}
+                                    error={errors.cardCollectBranch?.message}
+                                    {...field}
+                                    required
+                                />
+                            }
+                        />
                     </div>
                     <div className="md:col-span-4 justify-end h-10 animate-fade-up animate-duration-[6000ms] animate-once hidden sm:flex">
                         <Button variant='primary' type="submit" className={''} >
