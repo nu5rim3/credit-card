@@ -9,23 +9,23 @@ export interface RadioOption {
 
 interface HUIRadioGroupProps extends RadioGroupProps {
     options: RadioOption[];
-    selectedOption: string;
     onChange: (value: string) => void;
     disabled?: boolean;
     label?: string;
     className?: string;
     required?: boolean;
+    error?: string;
 }
 
-const RadioGroup = forwardRef<HTMLDivElement, HUIRadioGroupProps>(({ options, selectedOption, onChange, disabled, label, className, required, ...props }, ref) => {
+const RadioGroup = forwardRef<HTMLDivElement, HUIRadioGroupProps>(({ options, onChange, disabled, label, className, required, error, ...props }, ref) => {
     const baseStyles = 'py-1 rounded-md';
     const disabledStyles = 'opacity-50 cursor-not-allowed';
 
     return (
         <Field>
             <Label className="block text-sm font-medium text-primary text-left">{label}{required && <span className='ml-1 text-red-800'>*</span>}</Label>
-            <HUIRadioGroup value={selectedOption} onChange={onChange} disabled={disabled} ref={ref}>
-                <div className='flex flex-row justify-center gap-4'>
+            <HUIRadioGroup onChange={onChange} disabled={disabled} ref={ref}>
+                <div className='flex flex-row justify-start gap-4'>
                     {options.map((option, index) => (
                         <Field key={`id-${label}-${index}`} className="flex items-start">
                             <Radio
@@ -51,9 +51,9 @@ const RadioGroup = forwardRef<HTMLDivElement, HUIRadioGroupProps>(({ options, se
                                         <span className="flex items-center">
                                             <span
                                                 className={classNames(
-                                                    'h-4 w-4 border border-gray-300 rounded-full',
+                                                    'h-4 w-4 border border-primary rounded-full',
                                                     {
-                                                        'bg-primary-500': checked,
+                                                        'bg-primary-700': checked,
                                                         'bg-white': !checked,
                                                     }
                                                 )}
@@ -67,6 +67,7 @@ const RadioGroup = forwardRef<HTMLDivElement, HUIRadioGroupProps>(({ options, se
                     ))}
                 </div>
             </HUIRadioGroup>
+            <Label className="block text-xs font-medium text-red-800 text-left mt-1 italic">{error}</Label>
         </Field>
     )
 });

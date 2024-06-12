@@ -1,7 +1,7 @@
 export function maskPhoneNumber(phoneNumber: string): string {
   // Validate the input to ensure it's in the correct format
 
-  const phoneRegex = /^\+\d{11,14}$/;
+  const phoneRegex = /^(?:\+\d{1,3}\d{10}|[0-9]{10})$/;
   if (!phoneNumber.match(phoneRegex)) {
     throw new Error("Invalid phone number format");
   }
