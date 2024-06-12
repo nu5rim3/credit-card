@@ -445,12 +445,12 @@ const DetailForm = () => {
                     </div>
                     <div className="md:col-span-4 justify-end h-10 animate-fade-up animate-duration-[6000ms] animate-once hidden sm:flex">
                         <Button variant='primary' type="submit" className={''} >
-                            Save persanl detail
+                            Save Personal Details
                         </Button>
                     </div>
                     <div className="fixed sm:hidden bottom-3 bg-primary-50 h-auto animate-fade-up animate-duration-[6000ms] animate-once w-full rounded-lg pr-4">
                         <Button variant='primary' type="submit" className={'w-full'} >
-                            Save persanl detail
+                            Save Personal Details
                         </Button>
                     </div>
                 </form>
