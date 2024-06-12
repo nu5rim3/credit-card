@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Listbox, RadioGroup } from '../components';
 import logo from '../assets/images/lolcf_logo.svg'
 import { RadioOption } from '../components/RadioGroup';
+import { useState } from 'react';
 
 const eighteenYearsAgo = new Date();
 eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
@@ -96,6 +97,8 @@ const DetailForm = () => {
             // "nameOnCard": "SanjayaKul"
         }
     });
+    const [sameMobile, setSameMobile] = useState<boolean>(false)
+    const [sameAddress, setSameAddress] = useState<boolean>(false)
 
     const onSubmit = (data: FormData) => console.log(data);
 
@@ -133,6 +136,10 @@ const DetailForm = () => {
                             label={'Whatsapp Number'}
                             error={errors.whatsappNo?.message}
                             {...register('whatsappNo')}
+                            check
+                            checkLabel={'Same as the mobile number'}
+                            checkStatus={sameMobile}
+                            setCheackStatus={setSameMobile}
                             required
                         />
                         <>
@@ -166,22 +173,29 @@ const DetailForm = () => {
                                 label={'Mailling Address'}
                                 {...register('mailAddressLine1')}
                                 placeholder='Line 1'
+                                check
+                                checkLabel={'Same as the permenant address'}
+                                checkStatus={sameAddress}
+                                setCheackStatus={setSameAddress}
                                 required
                             />
                             <Input
                                 type={'text'}
                                 {...register('mailAddressLine2')}
+                                disabled={sameAddress}
                                 placeholder='Line 2'
                             />
                             <Input
                                 type={'text'}
                                 {...register('mailAddressLine3')}
+                                disabled={sameAddress}
                                 placeholder='Line 3'
                             />
                             <Input
                                 type={'text'}
                                 error={errors.mailAddressLine1?.message}
                                 {...register('mailAddressLine4')}
+                                disabled={sameAddress}
                                 placeholder='Line 4'
                             />
                         </>
