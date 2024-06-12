@@ -158,7 +158,7 @@ const DetailForm = () => {
 
 
     return (
-        <div className='flex justify-center bg-primary-50 py-5 px-2 sm:px-0 h-screen'>
+        <div className='flex justify-center bg-primary-50 py-5 px-2 sm:px-0 sm:h-screen'>
             <div className='container flex flex-col justify-center items-center'>
                 <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
