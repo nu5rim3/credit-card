@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Listbox, RadioGroup } from '../components';
 import logo from '../assets/images/lolcf_logo.svg'
 import { RadioOption } from '../components/RadioGroup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const eighteenYearsAgo = new Date();
 eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
@@ -50,7 +50,7 @@ type FormData = z.infer<typeof schema>;
 
 
 const DetailForm = () => {
-    const { control, register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
+    const { control, register, handleSubmit, setValue, getValues, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
         defaultValues: {
             nationality: "",
@@ -100,14 +100,40 @@ const DetailForm = () => {
     const [sameMobile, setSameMobile] = useState<boolean>(false)
     const [sameAddress, setSameAddress] = useState<boolean>(false)
 
-    const onSubmit = (data: FormData) => console.log(data);
+    const onSubmit = (data: FormData) => {
+        // TODO: call the API
+        console.log(data)
+    };
 
     const handleNationalityChange = (value: string) => {
         setValue("nationality", value);
     };
+
     const handleresidenceTypeChange = (value: string) => {
         setValue("residenceType", value);
     };
+
+    useEffect(() => {
+        if (sameMobile) {
+            setValue("whatsappNo", '0762525765');
+        } else {
+            setValue("whatsappNo", '');
+        }
+        if (sameAddress) {
+            const { permAddressLine1, permAddressLine2, permAddressLine3, permAddressLine4 } = getValues();
+            setValue('mailAddressLine1', permAddressLine1)
+            setValue('mailAddressLine2', permAddressLine2)
+            setValue('mailAddressLine3', permAddressLine3)
+            setValue('mailAddressLine4', permAddressLine4)
+        } else {
+            setValue('mailAddressLine1', "")
+            setValue('mailAddressLine2', "")
+            setValue('mailAddressLine3', "")
+            setValue('mailAddressLine4', "")
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sameMobile, sameAddress])
+
 
     return (
         <div className='flex justify-center bg-primary-50 py-5 px-2 sm:px-0'>
