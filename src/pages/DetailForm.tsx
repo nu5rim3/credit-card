@@ -33,13 +33,26 @@ const schema = z.object({
     mailAddressLine2: z.string().optional(),
     mailAddressLine3: z.string().optional(),
     mailAddressLine4: z.string().optional(),
-    whatsappNo: z.string().regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
+    whatsappNo: z.string().min(1, 'Whatsapp Number is requied').regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
     additionalContactNo: z.string().optional().refine((val) => !val || /^\d{10}$|^\+\d{1,3}\d{10}$/.test(val), {
         message: 'Invalid phone number (e.g. +94712345678)',
     }),
     residenceType: z.string().min(1, 'Residence Type is required'),
     province: z.string().min(1, 'Province is required'),
     politicallyExposed: z.string().min(1, 'Politically exposed is required'),
+    employmentCategory: z.string().min(1, 'Employment Category is required'),
+    expInPresentEmployment: z.string().min(1, 'Experience in Present Employment is required'),
+    occupationType: z.string().min(1, 'Occupation Type is required'),
+    nameOfTheEmployer: z.string().min(1, 'Name Of The Employer/Business is required'),
+    designation: z.string().min(1, 'Designation is required'),
+    monthlyNetIncome: z.string().min(1, 'Monthly Net Income is required'),
+    officeContactNo: z.string().min(1, 'Office Contact Number is required').regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
+    officeAddressLine1: z.string().min(1, 'Office Address is required'),
+    officeAddressLine2: z.string().optional(),
+    officeAddressLine3: z.string().optional(),
+    officeAddressLine4: z.string().optional(),
+    experienceInPreviousEmployment: z.string().min(1, 'Experience In Previous Employment is required'),
+    nameOfThePreviousEmployer: z.string().min(1, 'Name Of The Previous Employer is required'),
 })
 
 const nationalities: RadioOption[] = [{ label: 'Sri Lankan', value: 'SriLankan' }, { label: 'Other', value: 'Other' }]
@@ -47,6 +60,8 @@ const residenceTypes: RadioOption[] = [{ label: 'Resident', value: 'Resident' },
 const politicallyExposedType: RadioOption[] = [{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]
 const preferredLanguages = ["English", "Sinhala", "Tamil"]
 const provinces = ["Central", "Eastern", "North Central", "North Western", "Northern", "Sabaragamuwa", "Southern", "Western", "Uva"]
+const employmentCategories = ["Government", "Private", "Self"]
+const occupationTypes = ["Full Time", "Part Time", "Contract"]
 
 type FormData = z.infer<typeof schema>;
 
@@ -74,18 +89,19 @@ const DetailForm = () => {
             mailAddressLine3: "",
             mailAddressLine4: "",
             politicallyExposed: "",
-            // "employmentCategory": "Test",
-            // "expInPresentEmployment": "Test",
-            // "occupationType": "test",
-            // "nameOfTheEmployer": "test Name",
-            // "designation": "trainee Software Engineer",
-            // "monthlyNetIncome": "100000",
-            // "officeAddressLine1": "Rajagiriya",
-            // "officeAddressLine2": "Rajagiriya",
-            // "officeAddressLine3": "test",
-            // "officeAddressLine4": "test",
-            // "experienceInPreviousEmployment": "test",
-            // "nameOfThePreviousEmployer": "Dulan",
+            employmentCategory: employmentCategories[0],
+            expInPresentEmployment: "",
+            occupationType: occupationTypes[0],
+            nameOfTheEmployer: "",
+            designation: "",
+            monthlyNetIncome: "",
+            officeContactNo: "", //TODO: api has missed
+            officeAddressLine1: "",
+            officeAddressLine2: "",
+            officeAddressLine3: "",
+            officeAddressLine4: "",
+            experienceInPreviousEmployment: "",
+            nameOfThePreviousEmployer: "",
             // "guarantorName": "Mahela",
             // "relationShipToApplication": "test",
             // "guarantorNic": "200128904037",
@@ -148,7 +164,13 @@ const DetailForm = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
                     <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl flex flex-col gap-2'>
                         <p className='font-semibold text-primary-950'>Customer Personal Details</p>
-                        <Input type={'text'} label={'Full Name'} required {...register('fullName')} error={errors.fullName?.message} />
+                        <Input
+                            type={'text'}
+                            label={'Full Name'}
+                            required
+                            error={errors.fullName?.message}
+                            {...register('fullName')}
+                        />
                         <Input
                             type={'date'}
                             label={'Date of Birth'}
@@ -314,6 +336,106 @@ const DetailForm = () => {
                     </div>
                     <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2'>
                         <p className='font-semibold text-primary-950'>Customer Employment Details</p>
+                        <Controller
+                            control={control}
+                            name={'employmentCategory'}
+                            render={({ field }) =>
+                                <Listbox
+                                    options={employmentCategories}
+                                    label={'Employment Category'}
+                                    error={errors.employmentCategory?.message}
+                                    {...field}
+                                    required
+                                />
+                            }
+                        />
+                        <Input
+                            type={'text'}
+                            label={'Experience in Present Employment'}
+                            required
+                            error={errors.expInPresentEmployment?.message}
+                            {...register('expInPresentEmployment')}
+                        />
+                        <Controller
+                            control={control}
+                            name={'occupationType'}
+                            render={({ field }) =>
+                                <Listbox
+                                    options={occupationTypes}
+                                    label={'Employment Category'}
+                                    error={errors.occupationType?.message}
+                                    {...field}
+                                    required
+                                />
+                            }
+                        />
+                        <Input
+                            type={'text'}
+                            label={'Name Of The Employer/Business'}
+                            required
+                            error={errors.nameOfTheEmployer?.message}
+                            {...register('nameOfTheEmployer')}
+                        />
+                        <Input
+                            type={'text'}
+                            label={'Designation'}
+                            required
+                            error={errors.designation?.message}
+                            {...register('designation')}
+                        />
+                        <Input
+                            type={'text'}
+                            label={'Monthly Net Income'}
+                            required
+                            error={errors.monthlyNetIncome?.message}
+                            {...register('monthlyNetIncome')}
+                        />
+                        <Input
+                            type={'text'}
+                            label={'Office Contact Number'}
+                            required
+                            error={errors.officeContactNo?.message}
+                            {...register('officeContactNo')}
+                        />
+                        <>
+                            <Input
+                                type={'text'}
+                                label={'Office Address'}
+                                required
+                                {...register('officeAddressLine1')}
+                                placeholder='Line 1'
+                            />
+                            <Input
+                                type={'text'}
+                                {...register('officeAddressLine2')}
+                                placeholder='Line 2'
+                            />
+                            <Input
+                                type={'text'}
+                                {...register('officeAddressLine3')}
+                                placeholder='Line 3'
+                            />
+                            <Input
+                                type={'text'}
+                                error={errors.officeAddressLine1?.message}
+                                {...register('officeAddressLine4')}
+                                placeholder='Line 4'
+                            />
+                        </>
+                        <Input
+                            type={'text'}
+                            label={'Experience In Previous Employment'}
+                            required
+                            error={errors.experienceInPreviousEmployment?.message}
+                            {...register('experienceInPreviousEmployment')}
+                        />
+                        <Input
+                            type={'text'}
+                            label={'Name of the Previous Employer'}
+                            required
+                            error={errors.nameOfThePreviousEmployer?.message}
+                            {...register('nameOfThePreviousEmployer')}
+                        />
                     </div>
                     <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2'>
                         <p className='font-semibold text-primary-950'>Guarantor Details</p>
