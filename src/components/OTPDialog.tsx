@@ -116,7 +116,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, isOpen, setIsOpen }) => {
                         <Button
                             onClick={handleVerify}
                             variant={"primary"}
-                            disabled={!isDisabled}
+                            disabled={!isDisabled || !isComplete}
                         >
                             Verify
                         </Button>
