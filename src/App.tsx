@@ -16,6 +16,7 @@ const GetStart = lazy(() => import('./pages/GetStart'));
 const Playground = lazy(() => import('./pages/Playground'));
 const MainForm = lazy(() => import('./pages/MainForm'));
 const DetailForm = lazy(() => import('./pages/DetailForm'));
+const DocumentForm = lazy(() => import('./pages/DocumentForm'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
               <Route path="/playground" element={<Playground />} />
               <Route path="/form" element={<MainForm />} />
               <Route path="/personal-detail" element={<DetailForm />} />
+              <Route path="/document-detail" element={<DocumentForm />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>

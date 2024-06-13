@@ -1,4 +1,5 @@
 import DetailForm from "./DetailForm";
+import DocumentForm from "./DocumentForm";
 import GetStart from "./GetStart";
 import LandingPage from "./Landing";
 import MainForm from "./MainForm";
@@ -11,5 +12,6 @@ export {
   GetStart,
   Playground,
   DetailForm,
+  DocumentForm,
   NotFoundPage,
 };

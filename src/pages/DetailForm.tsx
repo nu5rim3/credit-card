@@ -5,6 +5,7 @@ import { Button, Checkbox, Input, Listbox, RadioGroup, TermsDialog } from '../co
 import logo from '../assets/images/lolcf_logo.svg'
 import { RadioOption } from '../components/RadioGroup';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const eighteenYearsAgo = new Date();
 eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
@@ -41,8 +42,11 @@ const schema = z.object({
     province: z.string().min(1, 'Province is required'),
     politicallyExposed: z.string().min(1, 'Politically exposed is required'),
     employmentCategory: z.string().min(1, 'Employment Category is required'),
-    expInPresentEmployment: z.string().min(1, 'Experience in Present Employment is required').optional(),
-    experienceInPreviousEmployment: z.string().min(1, 'Experience In Previous Employment is required').optional(),
+    governmentSectorType: z.string().min(1, 'Government Sector Type is required').optional(),
+    privateSectorType: z.string().min(1, 'Private Sector Type is required').optional(),
+    selfEmployedType: z.string().min(1, 'Self Employed Types is required').optional(),
+    expInPresentEmployment: z.string().min(1, 'Experience in Present Employment is required'),
+    experienceInPreviousEmployment: z.string().min(1, 'Experience In Previous Employment is required'),
     nameOfThePreviousEmployer: z.string().min(1, 'Name Of The Previous Employer is required'),
     occupationType: z.string().min(1, 'Occupation Type is required'),
     nameOfTheEmployer: z.string().min(1, 'Name Of The Employer/Business is required'),
@@ -72,7 +76,10 @@ const residenceTypes: RadioOption[] = [{ label: 'Resident', value: 'Resident' },
 const politicallyExposedType: RadioOption[] = [{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]
 const preferredLanguages = ["English", "Sinhala", "Tamil"]
 const provinces = ["Central", "Eastern", "North Central", "North Western", "Northern", "Sabaragamuwa", "Southern", "Western", "Uva"]
-const employmentCategories = ["Government", "Private", "Self"]
+const employmentCategories = ["Government Sector", "Private Sector", "Self Employed"]
+const governmentSectorTypes = ["Government Healthcare Professionals", "Government Bankers", "Others"]
+const privateSectorTypes = ["Private Healthcare Professionals", "Private Bankers", "Others"]
+const selfEmployedTypes = ["Entrepreneurs/Small Business Owners", "Freelancers"]
 const occupationTypes = ["Full Time", "Part Time", "Contract"]
 const branches = ["Colombo", "Kandy", "Galle", "Jaffna"]
 
@@ -127,9 +134,13 @@ const DetailForm = () => {
             dueDate: "",
             cardCollectBranch: branches[0],
             nameOnCard: "",
-            termsAndCondition: false
+            termsAndCondition: false,
+            governmentSectorType: governmentSectorTypes[0],
+            privateSectorType: privateSectorTypes[0],
+            selfEmployedType: selfEmployedTypes[0]
         }
     });
+    const navigate = useNavigate();
     const empCategory = watch("employmentCategory");
     const [sameMobile, setSameMobile] = useState<boolean>(false)
     const [sameAddress, setSameAddress] = useState<boolean>(false)
@@ -143,6 +154,7 @@ const DetailForm = () => {
     const onSubmit = (data: FormData) => {
         // TODO: call the API
         console.log(data)
+        navigate('/document-detail')
     };
 
     /**
@@ -208,7 +220,7 @@ const DetailForm = () => {
         <div className="bg-[url('/img/hero-pattern.svg')] flex justify-center py-5 px-2 sm:px-0 sm:h-screen">
             <div className='container flex flex-col justify-center items-center'>
                 <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
-                <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 md: sm:grid-cols-4 gap-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
                     {/* Customer Personal Details */}
                     <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950'>Customer Personal Details</p>
@@ -398,16 +410,58 @@ const DetailForm = () => {
                                 />
                             }
                         />
-                        {empCategory === 'Government' &&
-                            <Input
-                                type={'text'}
-                                label={'Experience in Present Employment'}
-                                required
-                                error={errors.expInPresentEmployment?.message}
-                                {...register('expInPresentEmployment')}
+                        {empCategory === 'Government Sector' &&
+                            <Controller
+                                control={control}
+                                name={'governmentSectorType'}
+                                render={({ field }) =>
+                                    <Listbox
+                                        options={governmentSectorTypes}
+                                        label={'Government Sector Type'}
+                                        error={errors.governmentSectorType?.message}
+                                        {...field}
+                                        required
+                                    />
+                                }
                             />
                         }
-
+                        {empCategory === 'Private Sector' &&
+                            <Controller
+                                control={control}
+                                name={'privateSectorType'}
+                                render={({ field }) =>
+                                    <Listbox
+                                        options={privateSectorTypes}
+                                        label={'Private Sector Type'}
+                                        error={errors.privateSectorType?.message}
+                                        {...field}
+                                        required
+                                    />
+                                }
+                            />
+                        }
+                        {empCategory === 'Self Employed' &&
+                            <Controller
+                                control={control}
+                                name={'selfEmployedType'}
+                                render={({ field }) =>
+                                    <Listbox
+                                        options={selfEmployedTypes}
+                                        label={'Self Employed Type'}
+                                        error={errors.selfEmployedType?.message}
+                                        {...field}
+                                        required
+                                    />
+                                }
+                            />
+                        }
+                        <Input
+                            type={'text'}
+                            label={'Experience in Present Employment'}
+                            required
+                            error={errors.expInPresentEmployment?.message}
+                            {...register('expInPresentEmployment')}
+                        />
                         <Input
                             type={'text'}
                             label={'Experience In Previous Employment'}

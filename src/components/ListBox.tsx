@@ -5,8 +5,6 @@ import { ChevronDown } from 'lucide-react';
 
 interface HUIListboxProps extends ListboxProps {
     options: string[];
-    // selectedOption: { id: number; name: string };
-    // onAction: (option: { id: number; name: string }) => void;
     disabled?: boolean;
     label: string;
     className?: string;

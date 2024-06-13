@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { useRef } from "react";
 import { Field, Input, InputProps, Label } from "@headlessui/react";
 import Button from "./Button";
+import { FileUp, Trash2, ZoomIn } from "lucide-react";
 
 interface UploaderProps extends InputProps {
     onFileSelected: (files: File[]) => void;
@@ -12,7 +13,7 @@ interface UploaderProps extends InputProps {
 }
 
 const Uploader: React.FC<UploaderProps> = (
-    ({ onFileSelected, multiple, label, required, error }) => { //...props
+    ({ onFileSelected, multiple, label, required, error, ...props }) => { //...props
         const inputRef = useRef<HTMLInputElement>(null);
         const [files, setFiles] = useState<File[]>([]);
 
@@ -34,14 +35,14 @@ const Uploader: React.FC<UploaderProps> = (
                     {label}
                     {required && <span className="ml-1 text-red-800">*</span>}
                 </Label>
-                <Button variant={"outline"} className="my-2" onClick={() => handleButtonClick()}>Upload {label}</Button>
+                <Button variant={"outline"} className="my-2 w-full flex flex-row justify-between bg-gray-100" onClick={() => handleButtonClick()}>Upload {label} <FileUp /></Button>
                 <Input
                     ref={inputRef}
                     type="file"
                     multiple={multiple}
                     onChange={handleFileSelected}
                     className="hidden"
-                // {...props}
+                    {...props}
                 />
                 <Label className="block text-xs font-medium text-red-800 text-left mt-1 italic">
                     {error}
@@ -53,11 +54,14 @@ const Uploader: React.FC<UploaderProps> = (
                             {files.map((file, index) => (
                                 <div
                                     key={index}
-                                    className="relative w-full h-32  border rounded-lg flex items-center justify-center overflow-hidden cursor-pointer"
+                                    className="relative w-44 sm:w-full h-28 rounded-lg flex items-center justify-center overflow-hidden cursor-pointer bg-gray-100 p-1 hover:shadow-xl transition duration-300 delay-500 hover:delay-300 animate-fade-up animate-duration-[3000ms] animate-once"
                                 >
                                     <img src={URL.createObjectURL(file)} alt={file.name}
-                                        className="object-cover w-full h-full rounded-lg" />
-                                    <button className="absolute bottom-0 right-3">hello</button>
+                                        className="object-contain w-full h-full rounded-lg" />
+                                    <div className="absolute bottom-0 h-full w-full flex justify-between items-end p-3 rounded-lg bg-gray-800/50 sm:bg-gray-800/0 hover:bg-gray-800/50">
+                                        <button className="bg-primary-900/70 p-1 rounded-full hover:bg-primary-900"><ZoomIn size={20} className="text-primary-200" /></button>
+                                        <button className="bg-primary-900/70 p-1 rounded-full hover:bg-primary-900"><Trash2 size={20} className="text-primary-200" /></button>
+                                    </div>
                                 </div>
 
                             ))}
