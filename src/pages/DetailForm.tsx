@@ -1,10 +1,10 @@
 import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Input, Listbox, RadioGroup } from '../components';
+import { Button, Checkbox, Input, Listbox, RadioGroup, TermsDialog } from '../components';
 import logo from '../assets/images/lolcf_logo.svg'
 import { RadioOption } from '../components/RadioGroup';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const eighteenYearsAgo = new Date();
 eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
@@ -64,6 +64,7 @@ const schema = z.object({
     dueDate: z.string().min(1, 'Due date is required'),// TODO: must add validation pervious date cannot be add
     cardCollectBranch: z.string().min(1, 'Card Collect Branch is required'),// TODO: branch list
     nameOnCard: z.string().min(1, 'Name On Card is required'),// TODO: same as full name and validation
+    termsAndCondition: z.boolean().refine((val) => val === true, "You must accept the Terms and Conditions."),
 })
 
 const nationalities: RadioOption[] = [{ label: 'Sri Lankan', value: 'SriLankan' }, { label: 'Other', value: 'Other' }]
@@ -125,13 +126,15 @@ const DetailForm = () => {
             guarantorAddressLine4: "",
             dueDate: "",
             cardCollectBranch: branches[0],
-            nameOnCard: ""
+            nameOnCard: "",
+            termsAndCondition: false
         }
     });
     const empCategory = watch("employmentCategory");
     const [sameMobile, setSameMobile] = useState<boolean>(false)
     const [sameAddress, setSameAddress] = useState<boolean>(false)
     const [sameFullName, setSameFullName] = useState<boolean>(false)
+    const [openTermsDialog, setOpenTermsDialog] = useState<boolean>(false);
 
     /**
      * on Submit - main api call to  save the personal details
@@ -201,6 +204,9 @@ const DetailForm = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [watch])
 
+    const termDialog = useMemo(() => {
+        return <TermsDialog setIsOpen={setOpenTermsDialog} isOpen={openTermsDialog} />;
+    }, [openTermsDialog]);
 
     return (
         <div className="bg-[url('/img/hero-pattern.svg')] flex justify-center py-5 px-2 sm:px-0 sm:h-screen">
@@ -579,6 +585,23 @@ const DetailForm = () => {
                                 />
                             }
                         />
+
+                        <div className="bg-primary-200 rounded-lg p-3 text-primary animate-fade-up animate-duration-[1500ms] animate-once">
+                            <Controller
+                                control={control}
+                                name={'termsAndCondition'}
+                                render={({ field }) =>
+                                    <Checkbox
+                                        type={"terms"}
+                                        {...field}
+                                        value={field.value ? "true" : "false"}
+                                        setOpen={setOpenTermsDialog}
+                                        error={errors.termsAndCondition?.message}
+                                    />
+                                }
+                            />
+
+                        </div>
                     </div>
                     <div className="md:col-span-4 justify-end h-10 animate-fade-up animate-duration-[6000ms] animate-once hidden sm:flex">
                         <Button variant='primary' type="submit" className={''} >
@@ -592,6 +615,8 @@ const DetailForm = () => {
                     </div>
                 </form>
             </div>
+            {/* {termDialog} */}
+            <TermsDialog setIsOpen={setOpenTermsDialog} isOpen={openTermsDialog} />;
         </div>
     )
 }
