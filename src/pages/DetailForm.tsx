@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Checkbox, Input, Listbox, RadioGroup, TermsDialog } from '../components';
 import logo from '../assets/images/lolcf_logo.svg'
 import { RadioOption } from '../components/RadioGroup';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const eighteenYearsAgo = new Date();
 eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
@@ -203,10 +203,6 @@ const DetailForm = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [watch])
-
-    const termDialog = useMemo(() => {
-        return <TermsDialog setIsOpen={setOpenTermsDialog} isOpen={openTermsDialog} />;
-    }, [openTermsDialog]);
 
     return (
         <div className="bg-[url('/img/hero-pattern.svg')] flex justify-center py-5 px-2 sm:px-0 sm:h-screen">
@@ -615,7 +611,6 @@ const DetailForm = () => {
                     </div>
                 </form>
             </div>
-            {/* {termDialog} */}
             <TermsDialog setIsOpen={setOpenTermsDialog} isOpen={openTermsDialog} />;
         </div>
     )
