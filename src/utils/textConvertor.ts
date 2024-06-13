@@ -12,3 +12,7 @@ export function maskPhoneNumber(phoneNumber: string): string {
 
   return maskedPart + visiblePart;
 }
+
+export function otpToString(data: number[]): string {
+  return data.join("");
+}
