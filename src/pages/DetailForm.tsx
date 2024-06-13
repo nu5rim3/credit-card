@@ -611,7 +611,7 @@ const DetailForm = () => {
                     </div>
                 </form>
             </div>
-            <TermsDialog setIsOpen={setOpenTermsDialog} isOpen={openTermsDialog} />;
+            <TermsDialog setIsOpen={setOpenTermsDialog} isOpen={openTermsDialog} />
         </div>
     )
 }
