@@ -234,7 +234,7 @@ const DetailForm = () => {
                             {...register('mothersMaidenName')}
                         />
                         <Input
-                            type={'text'}
+                            type={'tel'}
                             label={'Whatsapp Number'}
                             error={errors.whatsappNo?.message}
                             {...register('whatsappNo')}
@@ -370,13 +370,13 @@ const DetailForm = () => {
                             }
                         />
                         <Input
-                            type={'text'}
+                            type={'tel'}
                             label={'Residence Phone Number'}
                             error={errors.residencePhone?.message}
                             {...register('residencePhone')}
                         />
                         <Input
-                            type={'text'}
+                            type={'tel'}
                             label={'Additional Contact Number'}
                             error={errors.additionalContactNo?.message}
                             {...register('additionalContactNo')}
@@ -457,7 +457,7 @@ const DetailForm = () => {
                             {...register('monthlyNetIncome')}
                         />
                         <Input
-                            type={'text'}
+                            type={'tel'}
                             label={'Office Contact Number'}
                             required
                             error={errors.officeContactNo?.message}
@@ -508,7 +508,7 @@ const DetailForm = () => {
                             {...register('guarantorNic')}
                         />
                         <Input
-                            type={'text'}
+                            type={"tel"}
                             label={'Guarantor Mobile Number'}
                             required
                             error={errors.guarantorMobileNo?.message}

@@ -99,6 +99,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, isOpen, setIsOpen }) => {
                                     pattern="\d{1}"
                                     value={String(value)}
                                     key={`index-${index}`}
+                                    disabled={!isDisabled}
                                     {...rest}
                                 />
                             );
