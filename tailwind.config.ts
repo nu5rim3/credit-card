@@ -8,6 +8,9 @@ const config = {
       colors: {
         primary: { ...colors.blue, DEFAULT: colors.blue[900] },
       },
+      backgroundImage: {
+        "card-pattern": "url('/img/hero-pattern.svg')",
+      },
     },
   },
   plugins: [require("tailwindcss-animated")],

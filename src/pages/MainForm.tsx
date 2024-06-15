@@ -54,8 +54,8 @@ const MainForm = () => {
 
     return (
         <>
-            <div className="bg-[url('/img/hero-pattern.svg')] flex justify-center items-center min-h-screen">
-                <div className="bg-primary-50 p-8 rounded-lg shadow-md w-full my-2 max-w-md animate-fade-up animate-duration-[1000ms] animate-once">
+            <div className="bg-card-pattern flex justify-center items-center min-h-screen">
+                <div className="bg-primary-50 p-8 rounded-lg shadow-md w-full my-2 max-w-md animate-fade-up animate-duration-[3000ms] animate-once">
                     <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
                     <div className="bg-white border rounded-lg p-3 text-primary-950 animate-fade-up animate-duration-[1500ms] animate-once">
                         <h3 className="text-base mb-2">WellCome to LOLC Credit Card</h3>

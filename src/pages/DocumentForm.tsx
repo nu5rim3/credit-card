@@ -30,13 +30,13 @@ const DocumentForm = () => {
     };
 
     return (
-        <div className="bg-[url('/img/hero-pattern.svg')] flex justify-center py-5 px-2 sm:px-0 sm:h-screen">
+        <div className="bg-card-pattern flex justify-center py-5 px-2 sm:px-0 sm:h-screen">
             <div className='container flex flex-col justify-center items-center'>
                 <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
                     {/* Customer Personal Details */}
                     <div className='hidden sm:block' />
-                    <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
+                    <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950'>Customer Personal Details</p>
                         <Uploader
                             label={'NIC'}
@@ -90,7 +90,7 @@ const DocumentForm = () => {
                         />
                     </div>
                     {/* Customer Personal Details */}
-                    <div className='bg-primary-100 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll mb-20 sm:mb-0'>
+                    <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll mb-20 sm:mb-0'>
                         <p className='font-semibold text-primary-950'>Customer Personal Details</p>
                         <Uploader
                             onFileSelected={function (files: File[]): void {
