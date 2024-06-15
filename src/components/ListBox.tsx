@@ -17,12 +17,12 @@ const Listbox = forwardRef<HTMLDivElement, HUIListboxProps>(
         { options, disabled, label, className, required, error, ...props },
         ref
     ) => {
-        const baseStyles = 'w-full text-center text-sm flex justify-between items-center rounded-lg border border-primary-400 py-2 px-3 bg-gray-100 text-primary-900 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+        const baseStyles = 'w-full text-center text-sm flex justify-between items-center rounded-lg border border-primary-400 py-2 px-3 bg-white text-primary-950 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
         const disabledStyles = "opacity-50 cursor-not-allowed";
 
         return (
             <Field>
-                <Label className="block text-sm font-medium text-primary text-left mb-1">{label}{required && <span className='ml-1 text-red-800'>*</span>}</Label>
+                <Label className="block text-sm font-medium text-primary-950 text-left mb-1">{label}{required && <span className='ml-1 text-red-800'>*</span>}</Label>
                 <HUIListbox
                     as={'div'}
                     ref={ref}

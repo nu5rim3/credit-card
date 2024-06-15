@@ -35,7 +35,7 @@ const Uploader: React.FC<UploaderProps> = (
                     {label}
                     {required && <span className="ml-1 text-red-800">*</span>}
                 </Label>
-                <Button variant={"outline"} className="my-2 w-full flex flex-row justify-between bg-gray-100" onClick={() => handleButtonClick()}>Upload {label} <FileUp /></Button>
+                <Button variant={"outline"} className="my-2 w-full flex flex-row justify-between bg-white" onClick={() => handleButtonClick()}>Upload {label} <FileUp /></Button>
                 <Input
                     ref={inputRef}
                     type="file"

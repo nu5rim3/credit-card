@@ -5,17 +5,20 @@ import { ArrowRight } from "lucide-react";
 import logo from '../assets/images/lolcf_logo.svg'
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
+import { userLogin } from "../store/actions/userLoginAction";
 
 const schema = z.object({
     nic: z.string().min(1, 'NIC Number is required').regex(/^(?:[0-9]{9}[Vv]|[0-9]{10})$/, 'Invalid NIC number (e.g. 123456789V)'),
     email: z.string().min(1, 'Email Address is required').email('Invalid email address (e.g. sample@sample.com)'),
-    mobile: z.string().min(1, 'Mobile Number is required').regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
+    mobileNumber: z.string().min(1, 'Mobile Number is required').regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
 });
 
 interface FormData {
     nic: string;
     email: string;
-    mobile: string;
+    mobileNumber: string;
 }
 
 const MainForm = () => {
@@ -30,21 +33,31 @@ const MainForm = () => {
     const [openOTP, setOpenOTP] = useState<boolean>(false);
     const [formData, setFormData] = useState<FormData | null>(null);
 
+    const dispatch = useDispatch<AppDispatch>();
+    const { data, loading, error } = useSelector((state: RootState) => state.userLogin);
+
     const onSubmit = useCallback((data: FormData) => {
         setFormData(data);
+        dispatch(userLogin(data))
         setOpenOTP(true);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const otpDialog = useMemo(() => {
-        return formData && <OTPDialog setIsOpen={setOpenOTP} isOpen={openOTP} mobile={formData.mobile} />;
+        return formData && <OTPDialog setIsOpen={setOpenOTP} isOpen={openOTP} mobile={formData.mobileNumber} />;
     }, [formData, openOTP]);
+
+
+    console.log('[DATA] - ', data)
+    console.log('[LOADING] - ', loading)
+    console.log('[ERROR] - ', error)
 
     return (
         <>
             <div className="bg-[url('/img/hero-pattern.svg')] flex justify-center items-center min-h-screen">
-                <div className="bg-primary-100/60 p-8 rounded-lg shadow-md w-full my-2 max-w-md animate-fade-up animate-duration-[1000ms] animate-once">
+                <div className="bg-primary-50 p-8 rounded-lg shadow-md w-full my-2 max-w-md animate-fade-up animate-duration-[1000ms] animate-once">
                     <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
-                    <div className="bg-primary-100 rounded-lg p-3 text-primary animate-fade-up animate-duration-[1500ms] animate-once">
+                    <div className="bg-white border rounded-lg p-3 text-primary-950 animate-fade-up animate-duration-[1500ms] animate-once">
                         <h3 className="text-base mb-2">WellCome to LOLC Credit Card</h3>
                         <ul className="list-disc list-inside text-sm">
                             <li className="">NIC or driving license (Both side)</li>
@@ -70,9 +83,9 @@ const MainForm = () => {
                             <Input
                                 type={"tel"}
                                 label={"Mobile"}
-                                error={errors?.mobile?.message?.toString()}
+                                error={errors?.mobileNumber?.message?.toString()}
                                 required
-                                {...register("mobile")}
+                                {...register("mobileNumber")}
 
                             />
                             <Input

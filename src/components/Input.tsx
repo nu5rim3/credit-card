@@ -35,19 +35,19 @@ const Input = forwardRef<HTMLInputElement, HUIInputProps>(
         ref
     ) => {
         const baseStyles =
-            "block w-full py-2 px-3 border border-gray-300 rounded-md shadow-lg focus:outline-none focus:ring-primary-500 focus:border-primary-500 text-sm bg-gray-100";
+            "block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 text-sm bg-white0";
         const baseCheckboxStyles =
             "group block w-4 h-4 rounded border bg-white data-[checked]:bg-primary-500 data-[checked]:data-[disabled]:bg-gray-500 cursor-pointer";
         const disabledStyles = "opacity-50 cursor-not-allowed";
         return (
             <Field>
-                <Label className="block text-sm font-medium text-primary text-left mb-1">
+                <Label className="block text-sm font-medium text-primary-950 text-left mb-1">
                     {label}
                     {required && <span className="ml-1 text-red-800">*</span>}
                 </Label>
                 {check && (
-                    <div className="flex flex-row justify-between items-center px-2 mb-1">
-                        <p className="text-xs text-primary-800">{checkLabel}</p>
+                    <div className="flex flex-row justify-between items-center mb-1">
+                        <p className="text-xs text-gray-500">{checkLabel}</p>
                         <Checkbox
                             checked={checkStatus}
                             disabled={disabled}

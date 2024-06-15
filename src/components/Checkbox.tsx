@@ -43,7 +43,7 @@ const Checkbox = forwardRef<HTMLElement, HUICheckboxProps>(({ label, className, 
                     <Label className={() => classNames(
                         'text-sm',
                         {
-                            'text-primary-900': props.value,
+                            'text-primary-950': props.value,
                             'text-primary': !props.value,
                             [disabledStyles]: disabled,
                         })}>I accept the <span onClick={() => setOpen && setOpen(true)} className='text-red-500 underline cursor-pointer'>terms and conditions</span></Label>
@@ -51,7 +51,7 @@ const Checkbox = forwardRef<HTMLElement, HUICheckboxProps>(({ label, className, 
                     <Label onClick={() => props.onChange && props.onChange(!props.value)} className={() => classNames(
                         'text-sm',
                         {
-                            'text-primary-900': props.value,
+                            'text-primary-950': props.value,
                             'text-primary': !props.value,
                             [disabledStyles]: disabled,
                         })}>{label}</Label>
