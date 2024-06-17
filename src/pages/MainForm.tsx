@@ -1,5 +1,5 @@
 import { Button, Input, OTPDialog } from "../components";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form"
 import { ArrowRight } from "lucide-react";
 import logo from '../assets/images/lolcf_logo.svg'
@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/store";
-import { userLogin } from "../store/actions/userLoginAction";
+import { userLogin } from "../store/actions/userLoginActions";
 
 const schema = z.object({
     nic: z.string().min(1, 'NIC Number is required').regex(/^(?:[0-9]{9}[Vv]|[0-9]{10})$/, 'Invalid NIC number (e.g. 123456789V)'),
@@ -34,23 +34,26 @@ const MainForm = () => {
     const [formData, setFormData] = useState<FormData | null>(null);
 
     const dispatch = useDispatch<AppDispatch>();
-    const { data, loading, error } = useSelector((state: RootState) => state.userLogin);
+    const { data } = useSelector((state: RootState) => state.userLogin);
 
-    const onSubmit = useCallback((data: FormData) => {
-        setFormData(data);
-        dispatch(userLogin(data))
-        setOpenOTP(true);
+    const onSubmit = useCallback((formData: FormData) => {
+        setFormData(formData);
+        dispatch(userLogin(formData))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const otpDialog = useMemo(() => {
-        return formData && <OTPDialog setIsOpen={setOpenOTP} isOpen={openOTP} mobile={formData.mobileNumber} />;
+        return formData && <OTPDialog setIsOpen={setOpenOTP} isOpen={openOTP} mobile={formData.mobileNumber} referenceId={data?.id ?? ''} />;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formData, openOTP]);
 
-
-    console.log('[DATA] - ', data)
-    console.log('[LOADING] - ', loading)
-    console.log('[ERROR] - ', error)
+    useEffect(() => {
+        if (data !== null) {
+            // toast.success(data.message);
+            setOpenOTP(true);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data])
 
     return (
         <>

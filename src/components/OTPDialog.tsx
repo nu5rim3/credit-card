@@ -2,27 +2,32 @@ import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import Button from './Button';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { maskPhoneNumber, otpToString } from '../utils/textConvertor';
 import { usePasscode } from "react-headless-passcode";
+import { AppDispatch } from '../store/store';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { requestOTP } from '../store/actions/requestActions';
+import { validateOTP } from '../store/actions/validateActions';
+// import toast from 'react-hot-toast';
 
 
 interface OTPDialogProps {
     mobile: string;
+    referenceId: string;
     isOpen: boolean | undefined;
     setIsOpen: (isOpen: boolean) => void;
 }
 
-const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, isOpen, setIsOpen }) => {
+const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, referenceId, isOpen, setIsOpen }) => {
     const [isDisabled, setIsDisabled] = useState(true);
     const navigate = useNavigate();
     const [key, setKey] = useState(0);
+    const dispatch: AppDispatch = useDispatch();
 
     const {
         passcode,
-        // setPasscode,
-        // currentFocusedIndex,
-        // setCurrentFocusedIndex,
         getEventHandlers,
         isComplete,
         refs,
@@ -30,19 +35,17 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, isOpen, setIsOpen }) => {
         count: 6,
     });
 
-    console.log('[REFS] - ', refs.current.values)
-
     const handleVerify = () => {
-        setIsOpen(false);
-        // TODO: call the API
+        setIsOpen(false)
         const stringPasscode = otpToString(passcode)
-        console.log('[stringPasscode] - ', stringPasscode)
-        navigate("/personal-detail");
+        if (referenceId !== '' && stringPasscode !== '') {
+            dispatch(validateOTP(navigate, referenceId, stringPasscode))
+        }
     };
 
     const handleResend = () => {
-        // TODO: call the OTP api again
         setIsDisabled(true);
+        dispatch(requestOTP(referenceId))
         setKey((prevKey) => prevKey + 1);
     };
 
@@ -53,10 +56,14 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, isOpen, setIsOpen }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isComplete])
 
+    useEffect(() => {
+        if (referenceId !== '')
+            dispatch(requestOTP(referenceId))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [referenceId])
 
     return (
         <Dialog
-            static
             open={isOpen}
             onClose={() => setIsOpen(false)}
             className="relative z-50"
@@ -107,14 +114,14 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, isOpen, setIsOpen }) => {
                     </div>
                     <div className="flex justify-center sm:justify-end gap-4">
                         <Button
-                            onClick={handleResend}
+                            onClick={() => handleResend()}
                             variant={"secondary"}
                             disabled={isDisabled}
                         >
                             Resend
                         </Button>
                         <Button
-                            onClick={handleVerify}
+                            onClick={() => handleVerify()}
                             variant={"primary"}
                             disabled={!isDisabled || !isComplete}
                         >

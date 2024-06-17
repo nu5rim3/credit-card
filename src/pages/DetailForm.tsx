@@ -221,34 +221,34 @@ const DetailForm = () => {
             <div className='container flex flex-col justify-center items-center'>
                 <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
-                    {/* Customer Personal Details */}
+
                     <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950'>Customer Personal Details</p>
                         <Input
                             type={'text'}
                             label={'Full Name'}
                             required
-                            error={errors.fullName?.message}
+                            error={errors?.fullName?.message}
                             {...register('fullName')}
                         />
                         <Input
                             type={'date'}
                             label={'Date of Birth'}
                             required
-                            error={errors.dob?.message}
+                            error={errors?.dob?.message}
                             {...register('dob')}
                         />
                         <Input
                             type={'text'}
                             label={'Mother`s Maiden Name'}
                             required
-                            error={errors.mothersMaidenName?.message}
+                            error={errors?.mothersMaidenName?.message}
                             {...register('mothersMaidenName')}
                         />
                         <Input
                             type={'tel'}
                             label={'Whatsapp Number'}
-                            error={errors.whatsappNo?.message}
+                            error={errors?.whatsappNo?.message}
                             {...register('whatsappNo')}
                             check
                             checkLabel={'Same as the mobile number'}
@@ -276,7 +276,7 @@ const DetailForm = () => {
                             />
                             <Input
                                 type={'text'}
-                                error={errors.permAddressLine1?.message}
+                                error={errors?.permAddressLine1?.message}
                                 {...register('permAddressLine4')}
                                 placeholder='Line 4'
                             />
@@ -307,7 +307,7 @@ const DetailForm = () => {
                             />
                             <Input
                                 type={'text'}
-                                error={errors.mailAddressLine1?.message}
+                                error={errors?.mailAddressLine1?.message}
                                 {...register('mailAddressLine4')}
                                 disabled={sameAddress}
                                 placeholder='Line 4'
@@ -320,7 +320,7 @@ const DetailForm = () => {
                                 <Listbox
                                     options={provinces}
                                     label={'Province'}
-                                    error={errors.province?.message}
+                                    error={errors?.province?.message}
                                     {...field}
                                     required
                                 />
@@ -333,7 +333,7 @@ const DetailForm = () => {
                                 <Listbox
                                     options={preferredLanguages}
                                     label={'Preferred Language'}
-                                    error={errors.preferredLanguage?.message}
+                                    error={errors?.preferredLanguage?.message}
                                     {...field}
                                     required
                                 />
@@ -346,7 +346,7 @@ const DetailForm = () => {
                                 <RadioGroup
                                     options={nationalities}
                                     label={'Nationality'}
-                                    error={errors.nationality?.message}
+                                    error={errors?.nationality?.message}
                                     {...field}
                                     onChange={handleNationalityChange}
                                     required
@@ -360,7 +360,7 @@ const DetailForm = () => {
                                 <RadioGroup
                                     options={residenceTypes}
                                     label={'Resident Type'}
-                                    error={errors.residenceType?.message}
+                                    error={errors?.residenceType?.message}
                                     {...field}
                                     onChange={handleResidenceTypeChange}
                                     required
@@ -374,7 +374,7 @@ const DetailForm = () => {
                                 <RadioGroup
                                     options={politicallyExposedType}
                                     label={'Politically Exposed'}
-                                    error={errors.politicallyExposed?.message}
+                                    error={errors?.politicallyExposed?.message}
                                     {...field}
                                     onChange={handlePoliticallyExposedTypeChange}
                                     required
@@ -384,17 +384,17 @@ const DetailForm = () => {
                         <Input
                             type={'tel'}
                             label={'Residence Phone Number'}
-                            error={errors.residencePhone?.message}
+                            error={errors?.residencePhone?.message}
                             {...register('residencePhone')}
                         />
                         <Input
                             type={'tel'}
                             label={'Additional Contact Number'}
-                            error={errors.additionalContactNo?.message}
+                            error={errors?.additionalContactNo?.message}
                             {...register('additionalContactNo')}
                         />
                     </div>
-                    {/* Customer Employment Details */}
+
                     <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950'>Customer Employment Details</p>
                         <Controller
@@ -404,7 +404,7 @@ const DetailForm = () => {
                                 <Listbox
                                     options={employmentCategories}
                                     label={'Employment Category'}
-                                    error={errors.employmentCategory?.message}
+                                    error={errors?.employmentCategory?.message}
                                     {...field}
                                     required
                                 />
@@ -418,7 +418,7 @@ const DetailForm = () => {
                                     <Listbox
                                         options={governmentSectorTypes}
                                         label={'Government Sector Type'}
-                                        error={errors.governmentSectorType?.message}
+                                        error={errors?.governmentSectorType?.message}
                                         {...field}
                                         required
                                     />
@@ -433,7 +433,7 @@ const DetailForm = () => {
                                     <Listbox
                                         options={privateSectorTypes}
                                         label={'Private Sector Type'}
-                                        error={errors.privateSectorType?.message}
+                                        error={errors?.privateSectorType?.message}
                                         {...field}
                                         required
                                     />
@@ -448,7 +448,7 @@ const DetailForm = () => {
                                     <Listbox
                                         options={selfEmployedTypes}
                                         label={'Self Employed Type'}
-                                        error={errors.selfEmployedType?.message}
+                                        error={errors?.selfEmployedType?.message}
                                         {...field}
                                         required
                                     />
@@ -459,21 +459,21 @@ const DetailForm = () => {
                             type={'text'}
                             label={'Experience in Present Employment'}
                             required
-                            error={errors.expInPresentEmployment?.message}
+                            error={errors?.expInPresentEmployment?.message}
                             {...register('expInPresentEmployment')}
                         />
                         <Input
                             type={'text'}
                             label={'Experience In Previous Employment'}
                             required
-                            error={errors.experienceInPreviousEmployment?.message}
+                            error={errors?.experienceInPreviousEmployment?.message}
                             {...register('experienceInPreviousEmployment')}
                         />
                         <Input
                             type={'text'}
                             label={'Name of the Previous Employer'}
                             required
-                            error={errors.nameOfThePreviousEmployer?.message}
+                            error={errors?.nameOfThePreviousEmployer?.message}
                             {...register('nameOfThePreviousEmployer')}
                         />
                         <Controller
@@ -483,7 +483,7 @@ const DetailForm = () => {
                                 <Listbox
                                     options={occupationTypes}
                                     label={'Employment Category'}
-                                    error={errors.occupationType?.message}
+                                    error={errors?.occupationType?.message}
                                     {...field}
                                     required
                                 />
@@ -493,28 +493,28 @@ const DetailForm = () => {
                             type={'text'}
                             label={'Name Of The Employer/Business'}
                             required
-                            error={errors.nameOfTheEmployer?.message}
+                            error={errors?.nameOfTheEmployer?.message}
                             {...register('nameOfTheEmployer')}
                         />
                         <Input
                             type={'text'}
                             label={'Designation'}
                             required
-                            error={errors.designation?.message}
+                            error={errors?.designation?.message}
                             {...register('designation')}
                         />
                         <Input
                             type={'text'}
                             label={'Monthly Net Income'}
                             required
-                            error={errors.monthlyNetIncome?.message}
+                            error={errors?.monthlyNetIncome?.message}
                             {...register('monthlyNetIncome')}
                         />
                         <Input
                             type={'tel'}
                             label={'Office Contact Number'}
                             required
-                            error={errors.officeContactNo?.message}
+                            error={errors?.officeContactNo?.message}
                             {...register('officeContactNo')}
                         />
                         <>
@@ -537,42 +537,42 @@ const DetailForm = () => {
                             />
                             <Input
                                 type={'text'}
-                                error={errors.officeAddressLine1?.message}
+                                error={errors?.officeAddressLine1?.message}
                                 {...register('officeAddressLine4')}
                                 placeholder='Line 4'
                             />
                         </>
 
                     </div>
-                    {/* Guarantor Details */}
+
                     <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950'>Guarantor Details</p>
                         <Input
                             type={'text'}
                             label={'Guarantor Name'}
                             required
-                            error={errors.guarantorName?.message}
+                            error={errors?.guarantorName?.message}
                             {...register('guarantorName')}
                         />
                         <Input
                             type={'text'}
                             label={'Guarantor NIC'}
                             required
-                            error={errors.guarantorNic?.message}
+                            error={errors?.guarantorNic?.message}
                             {...register('guarantorNic')}
                         />
                         <Input
                             type={"tel"}
                             label={'Guarantor Mobile Number'}
                             required
-                            error={errors.guarantorMobileNo?.message}
+                            error={errors?.guarantorMobileNo?.message}
                             {...register('guarantorMobileNo')}
                         />
                         <Input
                             type={'text'}
                             label={'RelationShip To Application'}
                             required
-                            error={errors.relationShipToApplication?.message}
+                            error={errors?.relationShipToApplication?.message}
                             {...register('relationShipToApplication')}
                         />
                         <>
@@ -595,27 +595,27 @@ const DetailForm = () => {
                             />
                             <Input
                                 type={'text'}
-                                error={errors.guarantorAddressLine1?.message}
+                                error={errors?.guarantorAddressLine1?.message}
                                 {...register('guarantorAddressLine4')}
                                 placeholder='Line 4'
                             />
                         </>
                     </div>
-                    {/* Credit Card Details */}
+
                     <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[5000ms] animate-once hover:shadow-xl mb-20 sm:mb-0 flex flex-col gap-2  sm:h-[80vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950'>Credit Card Details</p>
                         <Input
                             type={'date'}
                             label={'Due Date'}
                             required
-                            error={errors.dueDate?.message}
+                            error={errors?.dueDate?.message}
                             {...register('dueDate')}
                         />
                         <Input
                             type={'text'}
                             label={'Name on Card'}
                             required
-                            error={errors.nameOnCard?.message}
+                            error={errors?.nameOnCard?.message}
                             {...register('nameOnCard')}
                             check
                             checkLabel={'Same as the full name'}
@@ -629,7 +629,7 @@ const DetailForm = () => {
                                 <Listbox
                                     options={branches}
                                     label={'Card Collecting Branch'}
-                                    error={errors.cardCollectBranch?.message}
+                                    error={errors?.cardCollectBranch?.message}
                                     {...field}
                                     required
                                 />
@@ -646,7 +646,7 @@ const DetailForm = () => {
                                         {...field}
                                         value={field.value ? "true" : "false"}
                                         setOpen={setOpenTermsDialog}
-                                        error={errors.termsAndCondition?.message}
+                                        error={errors?.termsAndCondition?.message}
                                     />
                                 }
                             />

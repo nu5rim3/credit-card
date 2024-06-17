@@ -7,19 +7,19 @@ const initialState: IUserLoginState = {
   error: null,
 };
 
-const userLoginSlice = createSlice({
-  name: "CREDIT",
+const requestOTPSlice = createSlice({
+  name: "OTP",
   initialState,
   reducers: {
-    loginStart(state) {
+    requestOTPStart(state) {
       state.loading = true;
       state.error = null;
     },
-    loginSuccess(state, action: PayloadAction<IApiResponse>) {
+    requestOTPSuccess(state, action: PayloadAction<IApiResponse>) {
       state.loading = false;
       state.data = action.payload.data;
     },
-    loginFailure(state, action: PayloadAction<string>) {
+    requestOTPFailure(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
     },
@@ -41,19 +41,7 @@ const userLoginSlice = createSlice({
   },
 });
 
-export const {
-  loginStart,
-  loginSuccess,
-  loginFailure,
-  personalDetailPostStart,
-  personalDetailPostSuccess,
-  personalDetailPostFailure,
-  personalDetailGetStart,
-  personalDetailGetSuccess,
-  personalDetailGetFailure,
-  documentDetailPostStart,
-  documentDetailPostSuccess,
-  documentDetailPostFailure,
-} = userLoginSlice.actions;
+export const { requestOTPStart, requestOTPSuccess, requestOTPFailure } =
+  requestOTPSlice.actions;
 
-export default userLoginSlice.reducer;
+export default requestOTPSlice.reducer;
