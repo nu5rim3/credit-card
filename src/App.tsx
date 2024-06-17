@@ -11,6 +11,7 @@ import { lazy, Suspense } from "react";
 import { Loader } from './components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { fallbackRender } from "./components/ErrorBoundaryComp";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const GetStart = lazy(() => import('./pages/GetStart'));
 const Playground = lazy(() => import('./pages/Playground'));
@@ -30,8 +31,8 @@ function App() {
               <Route path="/" element={<GetStart />} />
               <Route path="/playground" element={<Playground />} />
               <Route path="/form" element={<MainForm />} />
-              <Route path="/personal-detail" element={<DetailForm />} />
-              <Route path="/document-detail" element={<DocumentForm />} />
+              <Route path="/personal-detail" element={<ProtectedRoute component={DetailForm} />} />
+              <Route path="/document-detail" element={<ProtectedRoute component={DocumentForm} />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>

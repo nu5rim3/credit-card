@@ -36,7 +36,6 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, referenceId, isOpen, setI
     });
 
     const handleVerify = () => {
-        setIsOpen(false)
         const stringPasscode = otpToString(passcode)
         if (referenceId !== '' && stringPasscode !== '') {
             dispatch(validateOTP(navigate, referenceId, stringPasscode))
