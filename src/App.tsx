@@ -32,7 +32,8 @@ function App() {
               <Route path="/playground" element={<Playground />} />
               <Route path="/form" element={<MainForm />} />
               <Route path="/personal-detail" element={<ProtectedRoute component={DetailForm} />} />
-              <Route path="/document-detail" element={<ProtectedRoute component={DocumentForm} />} />
+              {/* <Route path="/document-detail" element={<ProtectedRoute component={DocumentForm} />} /> */}
+              <Route path="/document-detail" element={<DocumentForm />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>

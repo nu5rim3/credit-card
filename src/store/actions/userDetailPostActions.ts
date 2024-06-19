@@ -21,8 +21,8 @@ export const userDetailPost =
     try {
       const response = await axiosInstance.post("/general-customer", data);
       dispatch(personalDetailPostSuccess(response.data));
-      toast.success(response.data.data.message);
-      navigate("/personal-detail");
+      toast.success(response.data.message);
+      navigate("/document-detail");
     } catch (error: unknown) {
       if (error instanceof Error) {
         dispatch(personalDetailPostFailure(error.message));
