@@ -3,15 +3,14 @@ import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import Button from './Button';
 import { useEffect, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
-import { maskPhoneNumber, otpToString } from '../utils/textConvertor';
-import { usePasscode } from "react-headless-passcode";
+import { maskPhoneNumber } from '../utils/textConvertor';
 import { AppDispatch } from '../store/store';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { requestOTP } from '../store/actions/requestActions';
 import { validateOTP } from '../store/actions/validateActions';
 // import toast from 'react-hot-toast';
-
+import OtpInput from 'react-otp-input';
 
 interface OTPDialogProps {
     mobile: string;
@@ -25,41 +24,27 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, referenceId, isOpen, setI
     const navigate = useNavigate();
     const [key, setKey] = useState(0);
     const dispatch: AppDispatch = useDispatch();
-
-    const {
-        passcode,
-        getEventHandlers,
-        isComplete,
-        refs,
-    } = usePasscode({
-        count: 6,
-    });
+    const [otp, setOtp] = useState('');
 
     const handleVerify = () => {
-        const stringPasscode = otpToString(passcode)
-        if (referenceId !== '' && stringPasscode !== '') {
-            dispatch(validateOTP(navigate, referenceId, stringPasscode))
+        if (referenceId !== '' && otp !== '') {
+            dispatch(validateOTP(navigate, referenceId, otp))
         }
     };
 
     const handleResend = () => {
         setIsDisabled(true);
+        setOtp('');
         dispatch(requestOTP(referenceId))
         setKey((prevKey) => prevKey + 1);
     };
 
     useEffect(() => {
-        if (isComplete) {
+        if (otp.length === 6) {
             handleVerify()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isComplete])
-
-    useEffect(() => {
-        if (referenceId !== '')
-            dispatch(requestOTP(referenceId))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [referenceId])
+    }, [otp])
 
     return (
         <Dialog
@@ -91,25 +76,16 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, referenceId, isOpen, setI
                             {({ remainingTime }) => remainingTime}
                         </CountdownCircleTimer>
                     </div>
-                    <div className="bg-gray-100 grid grid-cols-6 gap-2 p-5 rounded-lg w-auto">
-                        {passcode.map((value, index) => {
-                            const { ...rest } = getEventHandlers(index);
-                            return (
-                                <input
-                                    className="px-3 py-2 border border-primary-600 rounded-lg text-center text-primary-950"
-                                    ref={(el) => el && (refs.current[index] = el)}
-                                    type="text"
-                                    inputMode="numeric"
-                                    autoComplete="one-time-code"
-                                    maxLength={1}
-                                    pattern="\d{1}"
-                                    value={String(value)}
-                                    key={`index-${index}`}
-                                    disabled={!isDisabled}
-                                    {...rest}
-                                />
-                            );
-                        })}
+                    <div className="bg-gray-100 p-5 rounded-lg">
+                        <OtpInput
+                            containerStyle="grid grid-cols-6 gap-2 justify-center"
+                            value={otp}
+                            onChange={setOtp}
+                            numInputs={6}
+                            renderSeparator={<span>-</span>}
+                            renderInput={(props) => <input {...props} />}
+                            inputStyle={{ width: '2.5rem', height: '2.5rem', fontSize: '1.5rem', borderRadius: '0.5rem', border: '1px solid #1c34c6' }}
+                        />
                     </div>
                     <div className="flex justify-center sm:justify-end gap-4">
                         <Button
@@ -122,7 +98,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, referenceId, isOpen, setI
                         <Button
                             onClick={() => handleVerify()}
                             variant={"primary"}
-                            disabled={!isDisabled || !isComplete}
+                            disabled={!isDisabled || otp.length !== 6}
                         >
                             Verify
                         </Button>

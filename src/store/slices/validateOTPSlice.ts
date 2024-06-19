@@ -8,7 +8,7 @@ const initialState: IUserLoginState = {
 };
 
 const validateOTPSlice = createSlice({
-  name: "OTP",
+  name: "OTP-VALIDATE",
   initialState,
   reducers: {
     validateOTPStart(state) {

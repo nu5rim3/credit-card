@@ -19,15 +19,13 @@ export const validateOTP =
     dispatch(validateOTPStart());
     try {
       const response = await axiosInstance.post(
-        `/otp-request/validate/${referenceId}/${otpCode}`
+        `/otp-request/v2/validate/${referenceId}/${otpCode}`
       );
       dispatch(validateOTPSuccess(response.data));
       toast.success(
-        response.data.data.message ?? "OTP Code Successfully Validated!"
+        response.data.message ?? "OTP Code Successfully Validated!"
       );
-      if (response.data.status === 200) {
-        navigate("/personal-detail");
-      }
+      navigate("/personal-detail");
     } catch (error: unknown) {
       if (error instanceof Error) {
         dispatch(validateOTPFailure(error.message));

@@ -17,9 +17,9 @@ export const userLogin =
   (data: IUserLoginRequest) => async (dispatch: AppDispatch) => {
     dispatch(loginStart());
     try {
-      const response = await axiosInstance.post("/master", data);
+      const response = await axiosInstance.post("/master/v2", data);
       dispatch(loginSuccess(response.data));
-      toast.success(response.data.data.message);
+      toast.success(response.data.message);
     } catch (error: unknown) {
       if (error instanceof Error) {
         dispatch(loginFailure(error.message));

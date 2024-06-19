@@ -8,7 +8,7 @@ const initialState: IUserLoginState = {
 };
 
 const requestOTPSlice = createSlice({
-  name: "OTP",
+  name: "OTP-REQUEST",
   initialState,
   reducers: {
     requestOTPStart(state) {

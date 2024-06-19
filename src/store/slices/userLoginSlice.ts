@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IApiResponse, IUserLoginState } from "../../types/userLoginTypes";
+import { IUserLoginData, IUserLoginState } from "../../types/userLoginTypes";
 
 const initialState: IUserLoginState = {
   data: null,
@@ -15,9 +15,9 @@ const userLoginSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    loginSuccess(state, action: PayloadAction<IApiResponse>) {
+    loginSuccess(state, action: PayloadAction<IUserLoginData>) {
       state.loading = false;
-      state.data = action.payload.data;
+      state.data = action.payload;
     },
     loginFailure(state, action: PayloadAction<string>) {
       state.loading = false;

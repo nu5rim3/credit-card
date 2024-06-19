@@ -43,7 +43,7 @@ const MainForm = () => {
     }, []);
 
     const otpDialog = useMemo(() => {
-        return formData && <OTPDialog setIsOpen={setOpenOTP} isOpen={openOTP} mobile={formData.mobileNumber} referenceId={data?.id ?? ''} />;
+        return formData && <OTPDialog setIsOpen={setOpenOTP} isOpen={openOTP} mobile={formData.mobileNumber} referenceId={data?.referenceNo ?? ''} />;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formData, openOTP]);
 

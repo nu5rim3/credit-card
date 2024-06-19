@@ -6,6 +6,9 @@ import logo from '../assets/images/lolcf_logo.svg'
 import { RadioOption } from '../components/RadioGroup';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '../store/store';
+import { userDetailPost } from '../store/actions/userDetailPostActions';
 
 const eighteenYearsAgo = new Date();
 eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
@@ -43,8 +46,8 @@ const schema = z.object({
     politicallyExposed: z.string().min(1, 'Politically exposed is required'),
     employmentCategory: z.string().min(1, 'Employment Category is required'),
     governmentSectorType: z.string().min(1, 'Government Sector Type is required').optional(),
-    privateSectorType: z.string().min(1, 'Private Sector Type is required').optional(),
-    selfEmployedType: z.string().min(1, 'Self Employed Types is required').optional(),
+    pvtSectorType: z.string().min(1, 'Private Sector Type is required').optional(),
+    selfEmpType: z.string().min(1, 'Self Employed Types is required').optional(),
     expInPresentEmployment: z.string().min(1, 'Experience in Present Employment is required'),
     experienceInPreviousEmployment: z.string().min(1, 'Experience In Previous Employment is required'),
     nameOfThePreviousEmployer: z.string().min(1, 'Name Of The Previous Employer is required'),
@@ -116,7 +119,7 @@ const DetailForm = () => {
             nameOfTheEmployer: "",
             designation: "",
             monthlyNetIncome: "",
-            officeContactNo: "", //TODO: api has missed
+            officeContactNo: "",
             officeAddressLine1: "",
             officeAddressLine2: "",
             officeAddressLine3: "",
@@ -136,25 +139,28 @@ const DetailForm = () => {
             nameOnCard: "",
             termsAndCondition: false,
             governmentSectorType: governmentSectorTypes[0],
-            privateSectorType: privateSectorTypes[0],
-            selfEmployedType: selfEmployedTypes[0]
+            pvtSectorType: privateSectorTypes[0],
+            selfEmpType: selfEmployedTypes[0]
         }
     });
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const empCategory = watch("employmentCategory");
     const [sameMobile, setSameMobile] = useState<boolean>(false)
     const [sameAddress, setSameAddress] = useState<boolean>(false)
     const [sameFullName, setSameFullName] = useState<boolean>(false)
     const [openTermsDialog, setOpenTermsDialog] = useState<boolean>(false);
+    const { loading: documentLoading } = useSelector((state: RootState) => state.userDetailPost);
+    const { data: userData } = useSelector((state: RootState) => state.userLogin);
+
+    console.log('[documentLoading] - ', documentLoading)
 
     /**
      * on Submit - main api call to  save the personal details
      * @param data 
      */
     const onSubmit = (data: FormData) => {
-        // TODO: call the API
-        console.log(data)
-        navigate('/document-detail')
+        dispatch(userDetailPost(navigate, { ...data, referenceNo: userData?.referenceNo ?? "" }))
     };
 
     /**
@@ -428,12 +434,12 @@ const DetailForm = () => {
                         {empCategory === 'Private Sector' &&
                             <Controller
                                 control={control}
-                                name={'privateSectorType'}
+                                name={'pvtSectorType'}
                                 render={({ field }) =>
                                     <Listbox
                                         options={privateSectorTypes}
                                         label={'Private Sector Type'}
-                                        error={errors?.privateSectorType?.message}
+                                        error={errors?.pvtSectorType?.message}
                                         {...field}
                                         required
                                     />
@@ -443,12 +449,12 @@ const DetailForm = () => {
                         {empCategory === 'Self Employed' &&
                             <Controller
                                 control={control}
-                                name={'selfEmployedType'}
+                                name={'selfEmpType'}
                                 render={({ field }) =>
                                     <Listbox
                                         options={selfEmployedTypes}
                                         label={'Self Employed Type'}
-                                        error={errors?.selfEmployedType?.message}
+                                        error={errors?.selfEmpType?.message}
                                         {...field}
                                         required
                                     />

@@ -18,8 +18,7 @@ export const requestOTP =
     try {
       const response = await axiosInstance.post(`/otp-request/${referenceId}`);
       dispatch(requestOTPSuccess(response.data));
-      console.log("[response.data] - ", response.data);
-      toast.success(response.data.data.message ?? "OTP sended to your mobile");
+      toast.success(response.data.message ?? "OTP sended to your mobile");
     } catch (error: unknown) {
       if (error instanceof Error) {
         dispatch(requestOTPFailure(error.message));

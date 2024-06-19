@@ -14,7 +14,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component: Component, u
 };
 
 const mapStateToProps = (state: RootState) => ({
-    userLogin: state.userLogin.data?.id, // Adjust this according to your state structure
+    userLogin: state.userLogin.data?.referenceNo, // Adjust this according to your state structure
 });
 
 const connector = connect(mapStateToProps);
