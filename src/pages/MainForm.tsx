@@ -61,15 +61,17 @@ const MainForm = () => {
                 <div className="bg-primary-50 p-8 rounded-lg shadow-md w-full my-2 max-w-md animate-fade-up animate-duration-[3000ms] animate-once">
                     <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
                     <div className="bg-white border rounded-lg p-3 text-primary-950 animate-fade-up animate-duration-[1500ms] animate-once">
-                        <h3 className="text-base mb-2">WellCome to LOLC Credit Card</h3>
+                        <h3 className="text-base mb-2">Welcome to LOLC Credit Card</h3>
+                        <h3 className="text-sm mb-2">Required Documents</h3>
                         <ul className="list-disc list-inside text-sm">
-                            <li className="">NIC or driving license (Both side)</li>
-                            <li className="">Income proof (Latest pay slip or 03 months bank Statements)</li>
-                            <li className="">Billing Proof - Electricity/ Water bill</li>
+                            <li className="">NIC or Driving License <br />&nbsp;&nbsp;&nbsp;&nbsp;(Both Sides)</li>
+                            <li className="">Income Proof <br />&nbsp;&nbsp;&nbsp;&nbsp;(Latest Payslip or 03 months Bank Statements)</li>
+                            <li className="">Billing Proof <br />&nbsp;&nbsp;&nbsp;&nbsp;(Electricity/ Water Bill)</li>
                         </ul>
-                        <p className="mt-3 text-xs">
-                            To attach multiple images. <br />Please select from your gallery.<br />
-                            Allowed document types - (PDF,JPG,JPEG,PNG)
+                        <p className="mt-3 text-sm">
+                            Use gallery to select and attach multiple documents.
+                            <br />
+                            Allowed document types - (PDF, JPG, JPEG, PNG)
                         </p>
                     </div>
 

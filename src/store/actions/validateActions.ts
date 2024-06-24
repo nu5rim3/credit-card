@@ -25,7 +25,13 @@ export const validateOTP =
       toast.success(
         response.data.message ?? "OTP Code Successfully Validated!"
       );
-      navigate("/personal-detail");
+      if (response?.data?.stage === "PENDING") {
+        navigate("/personal-detail");
+      } else if (response?.data?.stage === "PENDING_DOCUMENT") {
+        navigate("/document-detail");
+      } else if (response?.data?.stage === "COMPLETED") {
+        navigate("/complete");
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         dispatch(validateOTPFailure(error.message));

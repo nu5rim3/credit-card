@@ -18,6 +18,7 @@ const Playground = lazy(() => import('./pages/Playground'));
 const MainForm = lazy(() => import('./pages/MainForm'));
 const DetailForm = lazy(() => import('./pages/DetailForm'));
 const DocumentForm = lazy(() => import('./pages/DocumentForm'));
+const Completed = lazy(() => import('./pages/Completed'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
               <Route path="/personal-detail" element={<ProtectedRoute component={DetailForm} />} />
               {/* <Route path="/document-detail" element={<ProtectedRoute component={DocumentForm} />} /> */}
               <Route path="/document-detail" element={<DocumentForm />} />
+              <Route path="/complete" element={<Completed />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>

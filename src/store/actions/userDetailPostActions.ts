@@ -1,5 +1,5 @@
 import axiosInstance from "../../utils/axiosInstance";
-import { IUserDetailRequest } from "../../types/userLoginTypes";
+import { IUserDetailPostRequest } from "../../types/userLoginTypes";
 import {
   personalDetailPostFailure,
   personalDetailPostStart,
@@ -15,7 +15,7 @@ import { AppThunk } from "../store";
  * @returns
  */
 export const userDetailPost =
-  (navigate: NavigateFunction, data: IUserDetailRequest): AppThunk =>
+  (navigate: NavigateFunction, data: IUserDetailPostRequest): AppThunk =>
   async (dispatch) => {
     dispatch(personalDetailPostStart());
     try {

@@ -1,3 +1,4 @@
+import Completed from "./Completed";
 import DetailForm from "./DetailForm";
 import DocumentForm from "./DocumentForm";
 import GetStart from "./GetStart";
@@ -12,4 +13,5 @@ export {
   DetailForm,
   DocumentForm,
   NotFoundPage,
+  Completed,
 };

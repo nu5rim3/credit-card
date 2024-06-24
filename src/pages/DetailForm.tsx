@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store/store';
 import { userDetailPost } from '../store/actions/userDetailPostActions';
+import { parseNIC } from '../utils/textConvertor';
 
 const eighteenYearsAgo = new Date();
 eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
@@ -90,6 +91,9 @@ type FormData = z.infer<typeof schema>;
 
 
 const DetailForm = () => {
+    const { loading: documentLoading } = useSelector((state: RootState) => state.userDetailPost);
+    const { data: userData } = useSelector((state: RootState) => state.userLogin);
+    const userdob = parseNIC(userData?.nic)
     const { control, register, unregister, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
         shouldUnregister: true,
@@ -97,7 +101,7 @@ const DetailForm = () => {
             nationality: "",
             fullName: "",
             preferredLanguage: preferredLanguages[0],
-            dob: "",
+            dob: userdob?.Birthday ?? "",
             mothersMaidenName: "",
             residencePhone: "",
             whatsappNo: "",
@@ -150,8 +154,7 @@ const DetailForm = () => {
     const [sameAddress, setSameAddress] = useState<boolean>(false)
     const [sameFullName, setSameFullName] = useState<boolean>(false)
     const [openTermsDialog, setOpenTermsDialog] = useState<boolean>(false);
-    const { loading: documentLoading } = useSelector((state: RootState) => state.userDetailPost);
-    const { data: userData } = useSelector((state: RootState) => state.userLogin);
+
 
     console.log('[documentLoading] - ', documentLoading)
 
@@ -189,7 +192,7 @@ const DetailForm = () => {
 
     useEffect(() => {
         if (sameMobile) {
-            setValue("whatsappNo", '0762525765');
+            setValue("whatsappNo", userData.mobileNumber);
         } else {
             setValue("whatsappNo", '');
         }
@@ -463,41 +466,7 @@ const DetailForm = () => {
                         }
                         <Input
                             type={'text'}
-                            label={'Experience in Present Employment'}
-                            required
-                            error={errors?.expInPresentEmployment?.message}
-                            {...register('expInPresentEmployment')}
-                        />
-                        <Input
-                            type={'text'}
-                            label={'Experience In Previous Employment'}
-                            required
-                            error={errors?.experienceInPreviousEmployment?.message}
-                            {...register('experienceInPreviousEmployment')}
-                        />
-                        <Input
-                            type={'text'}
-                            label={'Name of the Previous Employer'}
-                            required
-                            error={errors?.nameOfThePreviousEmployer?.message}
-                            {...register('nameOfThePreviousEmployer')}
-                        />
-                        <Controller
-                            control={control}
-                            name={'occupationType'}
-                            render={({ field }) =>
-                                <Listbox
-                                    options={occupationTypes}
-                                    label={'Employment Category'}
-                                    error={errors?.occupationType?.message}
-                                    {...field}
-                                    required
-                                />
-                            }
-                        />
-                        <Input
-                            type={'text'}
-                            label={'Name Of The Employer/Business'}
+                            label={'Name of the Employer / Business'}
                             required
                             error={errors?.nameOfTheEmployer?.message}
                             {...register('nameOfTheEmployer')}
@@ -508,6 +477,26 @@ const DetailForm = () => {
                             required
                             error={errors?.designation?.message}
                             {...register('designation')}
+                        />
+                        <Controller
+                            control={control}
+                            name={'occupationType'}
+                            render={({ field }) =>
+                                <Listbox
+                                    options={occupationTypes}
+                                    label={'Nature of Work'}
+                                    error={errors?.occupationType?.message}
+                                    {...field}
+                                    required
+                                />
+                            }
+                        />
+                        <Input
+                            type={'text'}
+                            label={'Experience in Employment'}
+                            required
+                            error={errors?.expInPresentEmployment?.message}
+                            {...register('expInPresentEmployment')}
                         />
                         <Input
                             type={'text'}
@@ -548,6 +537,20 @@ const DetailForm = () => {
                                 placeholder='Line 4'
                             />
                         </>
+                        <Input
+                            type={'text'}
+                            label={'Experience In Previous Employment'}
+                            required
+                            error={errors?.experienceInPreviousEmployment?.message}
+                            {...register('experienceInPreviousEmployment')}
+                        />
+                        <Input
+                            type={'text'}
+                            label={'Name of the Previous Employer'}
+                            required
+                            error={errors?.nameOfThePreviousEmployer?.message}
+                            {...register('nameOfThePreviousEmployer')}
+                        />
 
                     </div>
 
@@ -576,7 +579,7 @@ const DetailForm = () => {
                         />
                         <Input
                             type={'text'}
-                            label={'RelationShip To Application'}
+                            label={'Relationship to Application'}
                             required
                             error={errors?.relationShipToApplication?.message}
                             {...register('relationShipToApplication')}

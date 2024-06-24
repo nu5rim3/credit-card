@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IApiResponse, IUserLoginState } from "../../types/userLoginTypes";
+import { IApiResponse, IResponseState } from "../../types/userLoginTypes";
 
-const initialState: IUserLoginState = {
+const initialState: IResponseState = {
   data: null,
   loading: false,
   error: null,

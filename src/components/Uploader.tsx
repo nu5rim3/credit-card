@@ -1,31 +1,29 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, forwardRef, useState } from "react";
 import { useRef } from "react";
 import { Field, Input, InputProps, Label } from "@headlessui/react";
 import Button from "./Button";
 import { FileUp, Trash2, ZoomIn } from "lucide-react";
 
 interface UploaderProps extends InputProps {
-    onFileSelected: (files: File[]) => void;
+    onChange: React.ChangeEventHandler<HTMLInputElement>;
     multiple: boolean;
-    label: string;
+    label?: string;
     required: boolean;
     error?: string;
 }
 
-const Uploader: React.FC<UploaderProps> = (
-    ({ onFileSelected, multiple, label, required, error, ...props }) => { //...props
+const Uploader = forwardRef<HTMLInputElement, UploaderProps>(
+    ({ onChange, multiple, label, required, error }, ref) => {
         const inputRef = useRef<HTMLInputElement>(null);
         const [files, setFiles] = useState<File[]>([]);
 
         const handleFileSelected = (event: ChangeEvent<HTMLInputElement>) => {
-            console.log('[CLICKED] - handleFileSelected')
             const selectedFiles = Array.from(event.target.files || []);
             setFiles(selectedFiles);
-            onFileSelected(selectedFiles);
+            onChange(event);
         };
 
         const handleButtonClick = () => {
-            console.log('[CLICKED] - handleButtonClick')
             inputRef.current?.click();
         };
 
@@ -35,14 +33,13 @@ const Uploader: React.FC<UploaderProps> = (
                     {label}
                     {required && <span className="ml-1 text-red-800">*</span>}
                 </Label>
-                <Button variant={"outline"} className="my-2 w-full flex flex-row justify-between bg-white" onClick={() => handleButtonClick()}>Upload {label} <FileUp /></Button>
+                <Button variant={"outline"} className="my-2 w-full flex flex-row justify-between bg-white" onClick={() => handleButtonClick()}>Upload Document <FileUp /></Button>
                 <Input
-                    ref={inputRef}
+                    ref={inputRef || ref}
                     type="file"
                     multiple={multiple}
-                    onChange={handleFileSelected}
                     className="hidden"
-                    {...props}
+                    onChange={handleFileSelected}
                 />
                 <Label className="block text-xs font-medium text-red-800 text-left mt-1 italic">
                     {error}
@@ -50,11 +47,11 @@ const Uploader: React.FC<UploaderProps> = (
                 {files.length > 0 && (
                     <div className="mt-2">
                         <p className="text-sm font-medium text-gray-700">Selected files:</p>
-                        <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="mt-2 flex flex-col sm:flex-row gap-2">
                             {files.map((file, index) => (
                                 <div
                                     key={index}
-                                    className="relative w-44 sm:w-full h-28 rounded-lg flex items-center justify-center overflow-hidden cursor-pointer bg-gray-100 p-1 hover:shadow-xl transition duration-300 delay-500 hover:delay-300 animate-fade-up animate-duration-[3000ms] animate-once"
+                                    className="relative w-44 sm:w-44 h-28 rounded-lg flex items-center justify-start overflow-hidden cursor-pointer bg-gray-100 p-1 hover:shadow-xl transition duration-300 delay-500 hover:delay-300 animate-fade-up animate-duration-[3000ms] animate-once"
                                 >
                                     <img src={URL.createObjectURL(file)} alt={file.name}
                                         className="object-contain w-full h-full rounded-lg" />
@@ -71,6 +68,6 @@ const Uploader: React.FC<UploaderProps> = (
             </Field>
         );
     }
-);
+)
 
 export default Uploader;

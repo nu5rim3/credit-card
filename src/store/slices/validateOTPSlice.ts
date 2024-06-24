@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IApiResponse, IUserLoginState } from "../../types/userLoginTypes";
+import { IResponseState, IValidateResponse } from "../../types/userLoginTypes";
 
-const initialState: IUserLoginState = {
+const initialState: IResponseState = {
   data: null,
   loading: false,
   error: null,
@@ -15,9 +15,9 @@ const validateOTPSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    validateOTPSuccess(state, action: PayloadAction<IApiResponse>) {
+    validateOTPSuccess(state, action: PayloadAction<IValidateResponse>) {
       state.loading = false;
-      state.data = action.payload.data;
+      state.data = action.payload;
     },
     validateOTPFailure(state, action: PayloadAction<string>) {
       state.loading = false;

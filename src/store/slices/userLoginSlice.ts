@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IUserLoginData, IUserLoginState } from "../../types/userLoginTypes";
+import { IResponseState, IUserLoginData } from "../../types/userLoginTypes";
 
-const initialState: IUserLoginState = {
+const initialState: IResponseState = {
   data: null,
   loading: false,
   error: null,
@@ -24,16 +24,6 @@ const userLoginSlice = createSlice({
       state.error = action.payload;
     },
 
-    // personal detail post
-    personalDetailPostStart() {},
-    personalDetailPostSuccess() {},
-    personalDetailPostFailure() {},
-
-    // personal detail get
-    personalDetailGetStart() {},
-    personalDetailGetSuccess() {},
-    personalDetailGetFailure() {},
-
     // document detail
     documentDetailPostStart() {},
     documentDetailPostSuccess() {},
@@ -45,12 +35,6 @@ export const {
   loginStart,
   loginSuccess,
   loginFailure,
-  personalDetailPostStart,
-  personalDetailPostSuccess,
-  personalDetailPostFailure,
-  personalDetailGetStart,
-  personalDetailGetSuccess,
-  personalDetailGetFailure,
   documentDetailPostStart,
   documentDetailPostSuccess,
   documentDetailPostFailure,
