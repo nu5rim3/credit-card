@@ -7,26 +7,29 @@ const initialState: IResponseState = {
   error: null,
 };
 
-const userLoginSlice = createSlice({
-  name: "CREDIT",
+const documentUpdateSlice = createSlice({
+  name: "DOCUMENT_UPDATE",
   initialState,
   reducers: {
-    loginStart(state) {
+    documentUpdatePostStart(state) {
       state.loading = true;
       state.error = null;
     },
-    loginSuccess(state, action: PayloadAction<IUserLoginData>) {
+    documentUpdatePostSuccess(state, action: PayloadAction<IUserLoginData>) {
       state.loading = false;
       state.data = action.payload;
     },
-    loginFailure(state, action: PayloadAction<string>) {
+    documentUpdatePostFailure(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
     },
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure } =
-  userLoginSlice.actions;
+export const {
+  documentUpdatePostStart,
+  documentUpdatePostSuccess,
+  documentUpdatePostFailure,
+} = documentUpdateSlice.actions;
 
-export default userLoginSlice.reducer;
+export default documentUpdateSlice.reducer;

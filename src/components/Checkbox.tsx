@@ -12,7 +12,7 @@ interface HUICheckboxProps extends CheckboxProps {
 }
 
 const Checkbox = forwardRef<HTMLElement, HUICheckboxProps>(({ label, className, disabled, type, setOpen, error, ...props }, ref) => {
-    const baseStyles = 'group block w-5 h-5 rounded border bg-white data-[checked]:bg-primary-500 data-[checked]:data-[disabled]:bg-gray-500 cursor-pointer';
+    const baseStyles = 'group block w-5 h-5 rounded border border-blue-900 bg-white data-[checked]:bg-primary-500 data-[checked]:data-[disabled]:bg-gray-500 cursor-pointer';
     const disabledStyles = 'opacity-50 cursor-not-allowed';
     return (
         <Field className="flex flex-col justify-start items-start">

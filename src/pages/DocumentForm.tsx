@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import logo from '../assets/images/lolcf_logo.svg'
@@ -5,9 +6,13 @@ import { useForm } from 'react-hook-form';
 import { Button, Loader, Uploader } from '../components';
 import { RootState, useAppDispatch } from '../store/store';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { userDetailGet } from '../store/actions/userDetailGetActions';
 import imageCompression from 'browser-image-compression';
+import { createGoogleUat } from '../services/api/apiFetch';
+import toast from 'react-hot-toast';
+import { updateDocumentStatus } from '../store/actions/documentUpdateActions';
+import { useNavigate } from 'react-router-dom';
 
 const MAX_FILE_SIZE = 5000000
 const ACCEPTED_IMAGE_TYPES = [
@@ -18,16 +23,25 @@ const ACCEPTED_IMAGE_TYPES = [
 ]
 
 const schema = z.object({
-    identification: z
+    USER_IDENTIFICATION_1: z
         .any()
-        .refine((files) => files?.length >= 1, { message: 'You must upload both sides of the identification' })
+        .refine((files) => files?.length >= 1, { message: 'You must upload front side of the identification' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
             message: '.jpg, .jpeg, .png and .pdf files are accepted',
         })
         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
             message: `Max file size is 5MB`,
         }),
-    utilityBill: z
+    USER_IDENTIFICATION_2: z
+        .any()
+        .refine((files) => files?.length >= 1, { message: 'You must upload rear side of the identification' })
+        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
+            message: '.jpg, .jpeg, .png and .pdf files are accepted',
+        })
+        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
+            message: `Max file size is 5MB`,
+        }),
+    UTILITY_BILL: z
         .any()
         .refine((files) => files?.length >= 1, { message: 'Utility Bill is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
@@ -36,7 +50,7 @@ const schema = z.object({
         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
             message: `Max file size is 5MB`,
         }),
-    latestPaySlip: z
+    PAY_SLIP: z
         .any()
         .refine((files) => files?.length >= 1, { message: 'Latest Pay Slip is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
@@ -45,7 +59,7 @@ const schema = z.object({
         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
             message: `Max file size is 5MB`,
         }),
-    employeeID: z
+    EMLOYEE_ID: z
         .any()
         .refine((files) => files?.length >= 1, { message: 'Employee ID is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
@@ -54,7 +68,7 @@ const schema = z.object({
         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
             message: `Max file size is 5MB`,
         }).optional(),
-    employementConfirmationLetter: z
+    EMPLOYEMENT_CONFIRMATION_LETTER: z
         .any()
         .refine((files) => files?.length >= 1, { message: 'Employement Confirmation Letter is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
@@ -63,7 +77,7 @@ const schema = z.object({
         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
             message: `Max file size is 5MB`,
         }).optional(),
-    BankStatements: z
+    BANK_STATEMENT: z
         .any()
         .refine((files) => files?.length >= 1, { message: 'Bank Statements is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
@@ -72,7 +86,7 @@ const schema = z.object({
         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
             message: `Max file size is 5MB`,
         }).optional(),
-    proofOfIncome: z
+    PROOF_OF_INCOME: z
         .any()
         .refine((files) => files?.length >= 1, { message: 'Proof of Income is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
@@ -81,7 +95,7 @@ const schema = z.object({
         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
             message: `Max file size is 5MB`,
         }).optional(),
-    businuessCard: z
+    BUSINUESS_CARD: z
         .any()
         .refine((files) => files?.length >= 1, { message: 'Businuess Card is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
@@ -90,7 +104,7 @@ const schema = z.object({
         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
             message: `Max file size is 5MB`,
         }).optional(),
-    businuessRegisterationCertificate: z
+    BUSINUESS_REGISTRATION_CRETIFICATION: z
         .any()
         .refine((files) => files?.length >= 1, { message: 'Businuess Registeration Certificate is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
@@ -99,7 +113,7 @@ const schema = z.object({
         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
             message: `Max file size is 5MB`,
         }).optional(),
-    selfBankStatements: z
+    SELF_BANK_STATEMENT: z
         .any()
         .refine((files) => files?.length >= 1, { message: 'Bank Statements is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
@@ -110,28 +124,44 @@ const schema = z.object({
         }).optional(),
 
 })
-type FormData = z.infer<typeof schema>;
+
+interface FormData {
+    [key: string]: any;
+    USER_IDENTIFICATION_1?: any;
+    USER_IDENTIFICATION_2?: any;
+    UTILITY_BILL?: any;
+    PAY_SLIP?: any;
+    EMLOYEE_ID?: any;
+    EMPLOYEMENT_CONFIRMATION_LETTER?: any;
+    BANK_STATEMENT?: any;
+    PROOF_OF_INCOME?: any;
+    BUSINUESS_CARD?: any;
+    BUSINUESS_REGISTRATION_CRETIFICATION?: any;
+    SELF_BANK_STATEMENT?: any;
+}
 
 const DocumentForm = () => {
-    // control, register, unregister, 
-    // setValue, getValues, watch,
     const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
         shouldUnregister: true,
         defaultValues: {
-            identification: [],
-            utilityBill: [],
-            latestPaySlip: [],
-            employeeID: [],
-            employementConfirmationLetter: [],
-            BankStatements: [],
-            proofOfIncome: [],
-            businuessCard: [],
-            businuessRegisterationCertificate: [],
-            selfBankStatements: []
+            USER_IDENTIFICATION_1: [],
+            USER_IDENTIFICATION_2: [],
+            UTILITY_BILL: [],
+            PAY_SLIP: [],
+            EMLOYEE_ID: [],
+            EMPLOYEMENT_CONFIRMATION_LETTER: [],
+            BANK_STATEMENT: [],
+            PROOF_OF_INCOME: [],
+            BUSINUESS_CARD: [],
+            BUSINUESS_REGISTRATION_CRETIFICATION: [],
+            SELF_BANK_STATEMENT: []
         }
     })
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const [successCount, setSuccessCount] = useState<number>(0)
+    const [fileCount, setFileCount] = useState<number>(0)
     const { data: userData, loading: isUserDataLoading } = useSelector((state: RootState) => state.userDetailGet);
     const { data: userLoginData } = useSelector((state: RootState) => state.userLogin);
 
@@ -141,43 +171,78 @@ const DocumentForm = () => {
     }, [userLoginData])
 
     /**
+     * getKey - get the key for the document
+     * @param key 
+     * @returns 
+     */
+    const getKey = (key: string) => {
+        switch (key) {
+            case 'USER_IDENTIFICATION_1':
+                return 'identification_document_1_1'
+            case 'USER_IDENTIFICATION_2':
+                return 'identification_document_1_2'
+            case 'PROOF_OF_INCOME':
+                return 'income_proof_document'
+            default:
+                return 'other_supporting_document'
+        }
+    }
+
+    /**
     * on Submit - main api call to  save the document details
     * @param data 
     */
     const onSubmit = (data: FormData) => {
-        // TODO: call the API
-        console.log('CLICKED')
-        const files = extractFiles(data);
-        uploadBuildFormData(files)
-    };
+        Object.keys(data).forEach(async (key: any) => {
+            if (data[key].length > 1) {
+                data[key].forEach(async (_: any, i: number) => {
+                    if (data[key][i].type !== 'application/pdf') {
+                        const options = {
+                            maxSizeMB: 1,
+                            maxWidthOrHeight: 1920,
+                            useWebWorker: true,
+                            fileType: data[key].type
+                        }
+                        const compressedFile = await imageCompression(data[key][i], options);
+                        const base64String = await fileToBase64(compressedFile);
+                        await upload(base64String.split(',')[0], getKey(key), data[key][i].type, key);
+                    } else {
+                        const base64String = await fileToBase64(data[key][i]);
+                        await upload(base64String.split(',')[0], getKey(key), data[key][i].type, key);
+                    }
+                })
 
-    const uploadBuildFormData = async (data: File[]) => {
-        console.log('DATA - ', data)
-        data.map(async (file) => {
-            if (file.type !== 'application/pdf') {
-                const options = {
-                    maxSizeMB: 1,
-                    maxWidthOrHeight: 1920,
-                    useWebWorker: true,
-                    fileType: file.type
-                }
-                const compressedFile = await imageCompression(file, options);
-                let base64String = await fileToBase64(compressedFile);
-                // await upload(base64String.split(',')[1], key, data[key][i].type, data.expected_card_limit);
             } else {
-                console.log('PDF')
-                // await upload(base64String.split(',')[1], key, data[key][i].type, data.expected_card_limit);
+                if (data[key][0].type !== 'application/pdf') {
+                    const options = {
+                        maxSizeMB: 1,
+                        maxWidthOrHeight: 1920,
+                        useWebWorker: true,
+                        fileType: data[key].type
+                    }
+                    const compressedFile = await imageCompression(data[key][0], options);
+                    const base64String = await fileToBase64(compressedFile);
+                    await upload(base64String.split(',')[0], getKey(key), data[key][0].type, key);
+                } else {
+                    const base64String = await fileToBase64(data[key][0]);
+                    await upload(base64String.split(',')[0], getKey(key), data[key][0].type, key);
+                }
             }
         })
-
     }
 
+    /**
+     * fileToBase64
+     * @param file 
+     * @returns 
+     */
     const fileToBase64 = (file: File): Promise<string> => {
+        setFileCount(fileCount + 1)
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => {
                 const result = reader.result as string;
-                const base64String = result.split(',')[1]; // Removing the prefix if you want only the Base64 string
+                const base64String = result.split(',')[1];
                 resolve(base64String);
             };
             reader.onerror = (error) => reject(error);
@@ -185,18 +250,50 @@ const DocumentForm = () => {
         });
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const extractFiles = (filesObject: any): File[] => {
-        const fileArray: File[] = [];
+    /**
+     * uploadImageToGCPFunction
+     * @param base64Image 
+     * @param category 
+     * @param type 
+     * @param comment 
+     */
+    const upload = async (base64Image: string, category: string, type: string, comment: string) => {
 
-        for (const key in filesObject) {
-            if (Object.prototype.hasOwnProperty.call(filesObject, key)) {
-                fileArray.push(...filesObject[key]);
-            }
+        const wrapper = {
+            referenceNo: userLoginData?.referenceNo,
+            category: category,
+            fileName: `${userLoginData?.referenceNo}_${category}_${new Date().getTime()}.${type.toLowerCase().split("/")[1]}`,
+            fileType: type,
+            image: base64Image,
+            additionalComments: comment
         }
 
-        return fileArray;
-    };
+        await createGoogleUat(wrapper)
+            .then((response: any) => {
+                if (response.status === 200) {
+                    if (response.data.status === 200) {
+                        setSuccessCount(successCount + 1)
+                    } else {
+                        toast.error(category + ' Uploaded Failed')
+                    }
+                }
+            });
+    }
+
+    useEffect(() => {
+        if (successCount === fileCount && successCount !== 0) {
+            toast.success('All Documents Uploaded Successfully')
+            dispatch(updateDocumentStatus(navigate, userLoginData?.referenceNo ?? '', "A"))
+        }
+
+        return () => {
+            setFileCount(0);
+            setSuccessCount(0);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [successCount])
+
+
 
     isUserDataLoading && <Loader />
 
@@ -205,20 +302,30 @@ const DocumentForm = () => {
             <div className='container flex flex-col justify-center items-center'>
                 <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full mb-10 sm:mb-0">
-                    {/* Customer Personal Details */}
                     <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl sm:h-[75vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950 text-center sm:text-left mb-5 text-lg'>Customer Document Details</p>
                         <div className='grid grid-cols-1 sm:grid-cols-4 gap-2'>
                             <Uploader
-                                label={'NIC/Driving License (Both Side)'}
+                                label={'NIC/Driving License (Front Side)'}
                                 multiple={true}
                                 required
-                                {...register('identification')}
+                                {...register('USER_IDENTIFICATION_1')}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                     const files = event.target.files ? Array.from(event.target.files) : [];
-                                    setValue('identification', files);
+                                    setValue('USER_IDENTIFICATION_1', files);
                                 }}
-                                error={errors?.identification?.message?.toString() || ''}
+                                error={errors?.USER_IDENTIFICATION_1?.message?.toString() || ''}
+                            />
+                            <Uploader
+                                label={'NIC/Driving License (Rear Side)'}
+                                multiple={true}
+                                required
+                                {...register('USER_IDENTIFICATION_2')}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                    const files = event.target.files ? Array.from(event.target.files) : [];
+                                    setValue('USER_IDENTIFICATION_2', files);
+                                }}
+                                error={errors?.USER_IDENTIFICATION_2?.message?.toString() || ''}
                             />
                             <Uploader
                                 label={'Utility Bill (within last 3 months)'}
@@ -226,9 +333,9 @@ const DocumentForm = () => {
                                 required
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                     const files = event.target.files ? Array.from(event.target.files) : [];
-                                    setValue('utilityBill', files);
+                                    setValue('UTILITY_BILL', files);
                                 }}
-                                error={errors.utilityBill?.message?.toString() || ''}
+                                error={errors.UTILITY_BILL?.message?.toString() || ''}
                             />
                             {
                                 userData?.employmentCategory !== 'self' &&
@@ -237,9 +344,9 @@ const DocumentForm = () => {
                                         label={'Latest Pay Slip'}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             const files = event.target.files ? Array.from(event.target.files) : [];
-                                            setValue('latestPaySlip', files);
+                                            setValue('PAY_SLIP', files);
                                         }}
-                                        error={errors.latestPaySlip?.message?.toString() || ''}
+                                        error={errors.PAY_SLIP?.message?.toString() || ''}
                                         multiple={true}
                                         required
                                     />
@@ -247,9 +354,9 @@ const DocumentForm = () => {
                                         label={'Employee ID'}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             const files = event.target.files ? Array.from(event.target.files) : [];
-                                            setValue('employeeID', files);
+                                            setValue('EMLOYEE_ID', files);
                                         }}
-                                        error={errors.employeeID?.message?.toString() || ''}
+                                        error={errors.EMLOYEE_ID?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
                                     />
@@ -257,9 +364,9 @@ const DocumentForm = () => {
                                         label={'Employement Confirmation Letter'}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             const files = event.target.files ? Array.from(event.target.files) : [];
-                                            setValue('employementConfirmationLetter', files);
+                                            setValue('EMPLOYEMENT_CONFIRMATION_LETTER', files);
                                         }}
-                                        error={errors.employementConfirmationLetter?.message?.toString() || ''}
+                                        error={errors.EMPLOYEMENT_CONFIRMATION_LETTER?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
                                     />
@@ -267,9 +374,9 @@ const DocumentForm = () => {
                                         label={'Bank Statements (Last month)'}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             const files = event.target.files ? Array.from(event.target.files) : [];
-                                            setValue('BankStatements', files);
+                                            setValue('BANK_STATEMENT', files);
                                         }}
-                                        error={errors.BankStatements?.message?.toString() || ''}
+                                        error={errors.BANK_STATEMENT?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
                                     />
@@ -277,9 +384,9 @@ const DocumentForm = () => {
                                         label={'Proof of Income (Last month)'}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             const files = event.target.files ? Array.from(event.target.files) : [];
-                                            setValue('proofOfIncome', files);
+                                            setValue('PROOF_OF_INCOME', files);
                                         }}
-                                        error={errors.proofOfIncome?.message?.toString() || ''}
+                                        error={errors.PROOF_OF_INCOME?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
                                     />
@@ -287,9 +394,9 @@ const DocumentForm = () => {
                                         label={'Businuess Card'}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             const files = event.target.files ? Array.from(event.target.files) : [];
-                                            setValue('businuessCard', files);
+                                            setValue('BUSINUESS_CARD', files);
                                         }}
-                                        error={errors.businuessCard?.message?.toString() || ''}
+                                        error={errors.BUSINUESS_CARD?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
                                     />
@@ -302,9 +409,9 @@ const DocumentForm = () => {
                                         label={'Businuess Registeration Certificate'}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             const files = event.target.files ? Array.from(event.target.files) : [];
-                                            setValue('businuessRegisterationCertificate', files);
+                                            setValue('BUSINUESS_REGISTRATION_CRETIFICATION', files);
                                         }}
-                                        error={errors.businuessRegisterationCertificate?.message?.toString() || ''}
+                                        error={errors.BUSINUESS_REGISTRATION_CRETIFICATION?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
                                     />
@@ -312,9 +419,9 @@ const DocumentForm = () => {
                                         label={'Bank Statements (Last 3 months)'}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             const files = event.target.files ? Array.from(event.target.files) : [];
-                                            setValue('selfBankStatements', files);
+                                            setValue('SELF_BANK_STATEMENT', files);
                                         }}
-                                        error={errors.selfBankStatements?.message?.toString() || ''}
+                                        error={errors.SELF_BANK_STATEMENT?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
                                     />
