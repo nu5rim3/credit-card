@@ -1,7 +1,7 @@
 import { Button, Input, OTPDialog } from "../components";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form"
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, LoaderCircle } from "lucide-react";
 import logo from '../assets/images/lolcf_logo.svg'
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -34,7 +34,7 @@ const MainForm = () => {
     const [formData, setFormData] = useState<FormData | null>(null);
 
     const dispatch = useDispatch<AppDispatch>();
-    const { data } = useSelector((state: RootState) => state.userLogin);
+    const { data, loading } = useSelector((state: RootState) => state.userLogin);
 
     const onSubmit = useCallback((formData: FormData) => {
         setFormData(formData);
@@ -49,7 +49,6 @@ const MainForm = () => {
 
     useEffect(() => {
         if (data !== null) {
-            // toast.success(data.message);
             setOpenOTP(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,7 +101,7 @@ const MainForm = () => {
 
                             />
 
-                            <Button type="submit" variant={"primary"} className="w-full flex flex-row items-center justify-between gap-2 mt-3">Start <ArrowRight /></Button>
+                            <Button type="submit" variant={"primary"} className="w-full flex flex-row items-center justify-between gap-2 mt-3">Start {loading ? <LoaderCircle className="animate-spin animate-infinite" /> : <ArrowRight />}</Button>
                         </div>
                     </form>
                 </div>

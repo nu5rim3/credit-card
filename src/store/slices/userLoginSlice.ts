@@ -1,7 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IResponseState, IUserLoginData } from "../../types/userLoginTypes";
+import { IUserLoginData } from "../../types/userLoginTypes";
 
-const initialState: IResponseState = {
+interface IGetResponse {
+  data: IUserLoginData | null;
+  loading: boolean;
+  error: string | null;
+}
+
+const initialState: IGetResponse = {
   data: null,
   loading: false,
   error: null,

@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store/store';
 import { userDetailPost } from '../store/actions/userDetailPostActions';
 import { parseNIC } from '../utils/textConvertor';
+import { LoaderCircle } from 'lucide-react';
 
 const eighteenYearsAgo = new Date();
 eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
@@ -69,9 +70,8 @@ const schema = z.object({
     guarantorAddressLine2: z.string().optional(),
     guarantorAddressLine3: z.string().optional(),
     guarantorAddressLine4: z.string().optional(),
-    dueDate: z.string().min(1, 'Due date is required'),// TODO: must add validation pervious date cannot be add
-    cardCollectBranch: z.string().min(1, 'Card Collect Branch is required'),// TODO: branch list
-    nameOnCard: z.string().min(1, 'Name On Card is required'),// TODO: same as full name and validation
+    cardCollectBranch: z.string().min(1, 'Card Collect Branch is required'),
+    nameOnCard: z.string().min(1, 'Name On Card is required'),
     termsAndCondition: z.boolean().refine((val) => val === true, "You must accept the Terms and Conditions."),
 })
 
@@ -298,9 +298,9 @@ type FormData = z.infer<typeof schema>;
 
 
 const DetailForm = () => {
-    const { loading: documentLoading } = useSelector((state: RootState) => state.userDetailPost);
     const { data: userData } = useSelector((state: RootState) => state.userLogin);
-    const userdob = parseNIC(userData?.nic)
+    const { loading } = useSelector((state: RootState) => state.userDetailPost);
+    const userdob = parseNIC(userData?.nic ?? '')
     const { control, register, unregister, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
         shouldUnregister: true,
@@ -345,7 +345,6 @@ const DetailForm = () => {
             guarantorAddressLine2: "",
             guarantorAddressLine3: "",
             guarantorAddressLine4: "",
-            dueDate: "",
             cardCollectBranch: branches[0],
             nameOnCard: "",
             termsAndCondition: false,
@@ -361,9 +360,6 @@ const DetailForm = () => {
     const [sameAddress, setSameAddress] = useState<boolean>(false)
     const [sameFullName, setSameFullName] = useState<boolean>(false)
     const [openTermsDialog, setOpenTermsDialog] = useState<boolean>(false);
-
-
-    console.log('[documentLoading] - ', documentLoading)
 
     /**
      * on Submit - main api call to  save the personal details
@@ -399,7 +395,7 @@ const DetailForm = () => {
 
     useEffect(() => {
         if (sameMobile) {
-            setValue("whatsappNo", userData.mobileNumber);
+            setValue("whatsappNo", userData?.mobileNumber ?? '');
         } else {
             setValue("whatsappNo", '');
         }
@@ -821,13 +817,6 @@ const DetailForm = () => {
                     <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[5000ms] animate-once hover:shadow-xl mb-20 sm:mb-0 flex flex-col gap-2  sm:h-[80vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950'>Credit Card Details</p>
                         <Input
-                            type={'date'}
-                            label={'Due Date'}
-                            required
-                            error={errors?.dueDate?.message}
-                            {...register('dueDate')}
-                        />
-                        <Input
                             type={'text'}
                             label={'Name on Card'}
                             required
@@ -871,12 +860,12 @@ const DetailForm = () => {
                     </div>
                     <div className="md:col-span-4 justify-end h-10 animate-fade-up animate-duration-[6000ms] animate-once hidden sm:flex">
                         <Button variant='primary' type="submit" className={''} >
-                            Save Personal Details
+                            {loading ? <LoaderCircle className="animate-spin animate-infinite" /> : 'Save Personal Details'}
                         </Button>
                     </div>
                     <div className="fixed sm:hidden bottom-3 bg-primary-50 h-auto animate-fade-up animate-duration-[6000ms] animate-once w-full rounded-lg pr-4">
                         <Button variant='primary' type="submit" className={'w-full'} >
-                            Save Personal Details
+                            {loading ? <LoaderCircle className="animate-spin animate-infinite" /> : 'Save Personal Details'}
                         </Button>
                     </div>
                 </form>

@@ -13,6 +13,7 @@ import { createGoogleUat } from '../services/api/apiFetch';
 import toast from 'react-hot-toast';
 import { updateDocumentStatus } from '../store/actions/documentUpdateActions';
 import { useNavigate } from 'react-router-dom';
+import { LoaderCircle } from 'lucide-react';
 
 
 const MAX_FILE_SIZE = 5000000
@@ -164,6 +165,7 @@ const DocumentForm = () => {
     const [successCount, setSuccessCount] = useState<number>(0)
     const [fileCount, setFileCount] = useState<number>(0)
     const { data: userData, loading: isUserDataLoading } = useSelector((state: RootState) => state.userDetailGet);
+    const { loading: isdocumentUpdateLoading } = useSelector((state: RootState) => state.documentUpdatePost);
     const { data: userLoginData } = useSelector((state: RootState) => state.userLogin);
 
     useEffect(() => {
@@ -432,12 +434,12 @@ const DocumentForm = () => {
                     </div>
                     <div className="mt-5 md:col-span-3 justify-end h-10 animate-fade-up animate-duration-[6000ms] animate-once hidden sm:flex">
                         <Button variant='primary' type="submit" className={''} >
-                            Save Document Details
+                            {isdocumentUpdateLoading ? <LoaderCircle className="animate-spin animate-infinite" /> : 'Save Document Details'}
                         </Button>
                     </div>
                     <div className="fixed sm:hidden bottom-3 bg-primary-50 h-auto animate-fade-up animate-duration-[6000ms] animate-once w-full rounded-lg pr-4">
                         <Button variant='primary' type="submit" className={'w-full'} >
-                            Save Document Details
+                            {isdocumentUpdateLoading ? <LoaderCircle className="animate-spin animate-infinite" /> : 'Save Document Details'}
                         </Button>
                     </div>
                 </form>

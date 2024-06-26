@@ -4,6 +4,7 @@ export interface IUserLoginData {
   referenceNo: string;
   mobileNumber: string;
   stage: string;
+  nic: string;
 }
 
 export interface IValidateResponse {
@@ -77,7 +78,6 @@ export interface IUserDetailPostRequest {
   guarantorAddressLine2?: string;
   guarantorAddressLine3?: string;
   guarantorAddressLine4?: string;
-  dueDate: string;
   cardCollectBranch: string;
   nameOnCard: string;
   governmentSectorType?: string;
