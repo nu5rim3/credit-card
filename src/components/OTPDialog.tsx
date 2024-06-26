@@ -48,6 +48,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, referenceId, isOpen, setI
 
     return (
         <Dialog
+            static
             open={isOpen}
             onClose={() => setIsOpen(false)}
             className="relative z-50"
