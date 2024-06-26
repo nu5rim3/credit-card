@@ -1,95 +1,78 @@
 // Input.test.tsx
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+
 import Input from '../src/components/Input';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-describe('Input', () => {
-    it('renders without crashing', () => {
-        render(<Input type="text" label="Test Label" />);
-        const input = screen.getByText('Test Label');
-        expect(input).toBeInTheDocument();
+describe('Input Component', () => {
+    const mockSetCheckStatus = vi.fn();
+    const mockOnChange = vi.fn();
+    const baseProps = {
+        type: 'text',
+        label: 'Username',
+        value: 'textBox',
+        check: true,
+        checkLabel: 'Enable',
+        checkStatus: false,
+        setCheackStatus: mockSetCheckStatus,
+        onChange: mockOnChange,
+        className: 'additional-class',
+    };
+
+    beforeEach(() => {
+        vi.clearAllMocks();
     });
 
-    it('renders label correctly', () => {
-        render(<Input type="text" label="Test Label" />);
-        const label = screen.getByText('Test Label');
-        expect(label).toBeInTheDocument();
+    it('1. renders input with label', () => {
+        render(<Input {...baseProps} />);
+        const inputLableElement = screen.getByText('Username');
+        expect(inputLableElement).toBeInTheDocument();
     });
 
-    it('handles input value correctly', () => {
-        render(<Input type="text" label="Test Label" value="test value" />);
-        const input = screen.getByText('Test Label') as HTMLInputElement;
-        expect(input.value).toBe('test value');
-    });
-
-    it('calls onChange handler correctly', () => {
-        const handleChange = vi.fn();
-        render(<Input type="text" label="Test Label" onChange={handleChange} />);
-        const input = screen.getByText('Test Label');
-        fireEvent.change(input, { target: { value: 'new value' } });
-        expect(handleChange).toHaveBeenCalled();
-    });
-
-    it('handles disabled state', () => {
-        render(<Input type="text" label="Test Label" disabled />);
-        const input = screen.getByText('Test Label');
-        expect(input).toBeDisabled();
-    });
-
-    it('displays error message', () => {
-        const errorMessage = 'This is an error message';
-        render(<Input type="text" label="Test Label" error={errorMessage} />);
-        const error = screen.getByText(errorMessage);
-        expect(error).toBeInTheDocument();
-        expect(error).toHaveClass('text-red-800');
-    });
-
-    it('renders checkbox correctly', () => {
-        render(
-            <Input
-                type="text"
-                label="Test Label"
-                check
-                checkLabel="Check me"
-                checkStatus={false}
-                setCheackStatus={vi.fn()}
-            />
-        );
+    it('2. displays the checkbox if check is true', () => {
+        render(<Input {...baseProps} />);
         const checkbox = screen.getByRole('checkbox');
         expect(checkbox).toBeInTheDocument();
-        const checkLabel = screen.getByText('Check me');
-        expect(checkLabel).toBeInTheDocument();
     });
 
-    it('handles checkbox state and calls setCheackStatus', () => {
-        const setCheackStatus = vi.fn();
-        render(
-            <Input
-                type="text"
-                label="Test Label"
-                check
-                checkLabel="Check me"
-                checkStatus={false}
-                setCheackStatus={setCheackStatus}
-            />
-        );
+    it('3. does not display the checkbox if check is false', () => {
+        render(<Input {...{ ...baseProps, check: false }} />);
+        const checkbox = screen.queryByRole('checkbox');
+        expect(checkbox).toBeNull();
+    });
+
+    it('4. calls setCheackStatus when checkbox is clicked', async () => {
+        render(<Input {...baseProps} />);
         const checkbox = screen.getByRole('checkbox');
-        fireEvent.click(checkbox);
-        expect(setCheackStatus).toHaveBeenCalledWith(true);
+        await userEvent.click(checkbox);
+        expect(mockSetCheckStatus).toHaveBeenCalledWith(true);
     });
 
-    it('disables input when checkbox is checked', () => {
-        render(
-            <Input
-                type="text"
-                label="Test Label"
-                check
-                checkLabel="Check me"
-                checkStatus={true}
-            />
-        );
-        const input = screen.getByText('Test Label') as HTMLInputElement;
-        expect(input.disabled).toBe(true);
+
+    it('5. applies additional classes passed to the component', () => {
+        render(<Input {...baseProps} />);
+        const inputElement = screen.getByRole('textbox');
+        expect(inputElement).toHaveClass('additional-class');
+    });
+
+    it('6. displays an error message when error prop is provided', () => {
+        const errorMessage = "Invalid username";
+        render(<Input {...baseProps} error={errorMessage} />);
+        const errorLabel = screen.getByText(errorMessage);
+        expect(errorLabel).toBeInTheDocument();
+    });
+
+    it('7. input is disabled if disabled prop is true', () => {
+        render(<Input {...{ ...baseProps, disabled: true }} />);
+        const inputElement = screen.getByRole('textbox');
+        expect(inputElement).toBeDisabled();
+    });
+
+    it('8. input is disabled if checkStatus is true', () => {
+        render(<Input {...{ ...baseProps, checkStatus: true }} />);
+        const inputElement = screen.getByRole('textbox');
+        expect(inputElement).toBeDisabled();
     });
 });

@@ -29,7 +29,8 @@
     "src/**/*.test.ts",
     "src/**/*.test.tsx",
     "tests/Button.test.tsx",
-    "tests/Checkbox.test.tsx"
+    "tests/Checkbox.test.tsx",
+    "tests/ListBox.test.tsx"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

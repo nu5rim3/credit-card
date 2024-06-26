@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 import { updateDocumentStatus } from '../store/actions/documentUpdateActions';
 import { useNavigate } from 'react-router-dom';
 
+
 const MAX_FILE_SIZE = 5000000
 const ACCEPTED_IMAGE_TYPES = [
     'image/jpeg',
