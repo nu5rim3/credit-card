@@ -499,7 +499,7 @@ const DetailForm = () => {
                             {...register('expInPresentEmployment')}
                         />
                         <Input
-                            type={'text'}
+                            type={'number'}
                             label={'Monthly Net Income'}
                             required
                             error={errors?.monthlyNetIncome?.message}
