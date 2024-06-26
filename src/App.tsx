@@ -24,7 +24,7 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 function App() {
   return (
     <React.Fragment>
-      <Toaster />
+      <Toaster position="bottom-center" />
       <ErrorBoundary fallbackRender={fallbackRender}>
         <Router>
           <Suspense fallback={<Loader />}>
