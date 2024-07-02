@@ -10,7 +10,7 @@ import { AppDispatch, RootState } from "../store/store";
 import { userLogin } from "../store/actions/userLoginActions";
 
 const schema = z.object({
-    nic: z.string().min(1, 'NIC Number is required').regex(/^(?:[0-9]{9}[Vv]|[0-9]{10})$/, 'Invalid NIC number (e.g. 123456789V)'),
+    nic: z.string().min(1, 'NIC Number is required').regex(/^(?:\d{9}[VX]|\d{12})$/, 'Invalid NIC number (e.g. 123456789V)'),
     email: z.string().min(1, 'Email Address is required').email('Invalid email address (e.g. sample@sample.com)'),
     mobileNumber: z.string().min(1, 'Mobile Number is required').regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
 });
