@@ -1,16 +1,23 @@
-const express = require('express');
-const path = require('path');
+const express = require("express");
+const path = require("path");
+var httpProxy = require("http-proxy");
+var cors = require("cors");
+
 const app = express();
-var httpProxy = require('http-proxy')
-var cors = require('cors')
-var proxy = httpProxy.createProxyServer()
+var proxy = httpProxy.createProxyServer();
+require("dotenv").config();
 
-var serverOne = 'https://uat.warranty.lk'
+app.use(cors());
 
-app.disable('x-powered-by');
+var serverOne = "https://uat.warranty.lk";
 
-app.use(function(req, res, next) {
-  res.setHeader("content-security-policy", "upgrade-insecure-requests; frame-ancestors 'self' https://creditcard.lolc.lk");
+app.disable("x-powered-by");
+
+app.use(function (req, res, next) {
+  res.setHeader(
+    "content-security-policy",
+    "upgrade-insecure-requests; frame-ancestors 'self' https://creditcard.lolc.lk"
+  );
   res.setHeader("strict-transport-security", "max-age=31536000");
   res.setHeader("Referrer-Policy", "no-referrer");
   res.setHeader("X-Content-Type-Options", "nosniff");
@@ -19,18 +26,26 @@ app.use(function(req, res, next) {
   return next();
 });
 
-app.use('/robots.txt', function (req, res, next) {
-  res.redirect('https://creditcard.lolc.lk');
+app.use("/check", function (req, res) {
+  res.send("Services server is working fine.");
 });
 
-app.use(express.static(path.join(__dirname, 'build')));
+app.use("/robots.txt", function (req, res, next) {
+  res.redirect("https://creditcard.lolc.lk");
+});
+
+app.use(express.static(path.join(__dirname, "build")));
 
 app.all("/services*", function (req, res) {
-    proxy.web(req, res, { target: serverOne, secure: false, changeOrigin: true })
+  proxy.web(req, res, { target: serverOne, secure: false, changeOrigin: true });
 });
 
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-app.listen(8080);
+const port = process.env.PORT || 8080; // Use the port from the environment file or default to 8080
+
+app.listen(port, function () {
+  console.log("Server is working fine. Port: " + port);
+});
