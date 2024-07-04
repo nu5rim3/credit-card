@@ -23,7 +23,9 @@
     "axios": "^1.7.2",
     "browser-image-compression": "^2.0.2",
     "classnames": "^2.5.1",
+    "express": "^4.19.2",
     "lucide-react": "^0.383.0",
+    "path": "^0.12.7",
     "postcss": "^8.4.38",
     "react": "^18.2.0",
     "react-confetti": "^6.1.0",
@@ -60,5 +62,9 @@
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vitest": "^1.6.0"
-  }
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
+  },
+  "proxy": "https://uat.warranty.lk"
 }
