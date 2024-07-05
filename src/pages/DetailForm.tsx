@@ -64,7 +64,7 @@ const schema = z.object({
     officeAddressLine4: z.string().optional(),
     guarantorName: z.string().min(1, 'Guarantor Name is required'),
     relationShipToApplication: z.string().min(1, 'RelationShip To Application is required'),
-    guarantorNic: z.string().min(1, 'Guarantor NIC Number is required').regex(/^(?:[0-9]{9}[Vv]|[0-9]{10})$/, 'Invalid NIC number (e.g. 123456789V)'),
+    guarantorNic: z.string().min(1, 'Guarantor NIC Number is required').regex(/^(?:\d{9}[VX]|\d{12})$/, 'Invalid NIC number (e.g. 123456789V)'),
     guarantorMobileNo: z.string().min(1, 'Guarantor Mobile Number is required').regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
     guarantorAddressLine1: z.string().min(1, 'Office Address is required'),
     guarantorAddressLine2: z.string().optional(),
