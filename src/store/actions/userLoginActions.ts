@@ -22,6 +22,7 @@ export const userLogin =
       toast.success(response.data.message);
     } catch (error: unknown) {
       if (error instanceof Error) {
+        console.error("[ERROR] - ", error);
         dispatch(loginFailure(error.message));
         toast.error(error.message);
       } else {
