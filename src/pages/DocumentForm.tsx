@@ -162,8 +162,7 @@ const DocumentForm = () => {
     })
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const [successCount, setSuccessCount] = useState<number>(0)
-    const [fileCount, setFileCount] = useState<number>(0)
+    const [allUploaded, setAllUploaded] = useState(false);
     const { data: userData, loading: isUserDataLoading } = useSelector((state: RootState) => state.userDetailGet);
     const { loading: isdocumentUpdateLoading } = useSelector((state: RootState) => state.documentUpdatePost);
     const { data: userLoginData } = useSelector((state: RootState) => state.userLogin);
@@ -195,8 +194,8 @@ const DocumentForm = () => {
     * on Submit - main api call to  save the document details
     * @param data 
     */
-    const onSubmit = (data: FormData) => {
-        Object.keys(data).forEach(async (key: any) => {
+    const onSubmit = async (data: FormData) => {
+        const uploadResult = Object.keys(data).map(async (key: any) => {
             if (data[key].length > 1) {
                 data[key].forEach(async (_: any, i: number) => {
                     if (data[key][i].type !== 'application/pdf') {
@@ -208,10 +207,10 @@ const DocumentForm = () => {
                         }
                         const compressedFile = await imageCompression(data[key][i], options);
                         const base64String = await fileToBase64(compressedFile);
-                        await upload(base64String.split(',')[0], getKey(key), data[key][i].type, key);
+                        return await upload(base64String.split(',')[0], getKey(key), data[key][i].type, key);
                     } else {
                         const base64String = await fileToBase64(data[key][i]);
-                        await upload(base64String.split(',')[0], getKey(key), data[key][i].type, key);
+                        return await upload(base64String.split(',')[0], getKey(key), data[key][i].type, key);
                     }
                 })
 
@@ -225,14 +224,27 @@ const DocumentForm = () => {
                     }
                     const compressedFile = await imageCompression(data[key][0], options);
                     const base64String = await fileToBase64(compressedFile);
-                    await upload(base64String.split(',')[0], getKey(key), data[key][0].type, key);
+                    return await upload(base64String.split(',')[0], getKey(key), data[key][0].type, key);
                 } else {
                     const base64String = await fileToBase64(data[key][0]);
-                    await upload(base64String.split(',')[0], getKey(key), data[key][0].type, key);
+                    return await upload(base64String.split(',')[0], getKey(key), data[key][0].type, key);
                 }
             }
         })
+
+        await Promise.all(uploadResult.flat()).then((result) => {
+            if (result.includes(false)) {
+                setAllUploaded(false);
+            } else {
+                setAllUploaded(true);
+            }
+        }).catch((err) => {
+            console.error('[UPLOAD ERROR] - ', err)
+            setAllUploaded(false)
+        });
+
     }
+
 
     /**
      * fileToBase64
@@ -240,7 +252,7 @@ const DocumentForm = () => {
      * @returns 
      */
     const fileToBase64 = (file: File): Promise<string> => {
-        setFileCount(fileCount + 1)
+
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => {
@@ -260,8 +272,7 @@ const DocumentForm = () => {
      * @param type 
      * @param comment 
      */
-    const upload = async (base64Image: string, category: string, type: string, comment: string) => {
-
+    const upload = async (base64Image: string, category: string, type: string, comment: string): Promise<boolean> => {
         const wrapper = {
             referenceNo: userLoginData?.referenceNo,
             category: category,
@@ -269,34 +280,42 @@ const DocumentForm = () => {
             fileType: type,
             image: base64Image,
             additionalComments: comment
-        }
+        };
 
-        await createGoogleUat(wrapper)
-            .then((response: any) => {
-                if (response.status === 200) {
-                    if (response.data.status === 200) {
-                        setSuccessCount(successCount + 1)
-                    } else {
-                        toast.error(category + ' Uploaded Failed')
-                    }
+        try {
+            const response: any = await createGoogleUat(wrapper);
+
+            if (response.status === 200) {
+                if (response.data.status === 200) {
+
+                    toast.success(response.data.data.message ?? `${wrapper.fileName} - Document Uploaded Successfully`);
+                    return true; // Success
+                } else if (response.data.status === 400) {
+                    toast.error(response.data.data.message);
+                    return false; // Failure
                 }
-            });
-    }
+            } else {
+                toast.error('Uploading Feature Failed, Please try again later');
+                return false; // Failure
+            }
+        } catch (error) {
+            toast.error('An error occurred while uploading the document');
+            return false; // Failure
+        }
+        return false; // Ensure a return value for all code paths
+    };
 
     useEffect(() => {
-        if (successCount === fileCount && successCount !== 0) {
+        if (allUploaded) {
             toast.success('All Documents Uploaded Successfully')
             dispatch(updateDocumentStatus(navigate, userLoginData?.referenceNo ?? '', "A"))
         }
 
         return () => {
-            setFileCount(0);
-            setSuccessCount(0);
+            setAllUploaded(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [successCount])
-
-
+    }, [allUploaded])
 
     isUserDataLoading && <Loader />
 
