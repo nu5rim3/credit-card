@@ -1,15 +1,8 @@
-import { useWindowSize } from 'react-use'
-import Confetti from 'react-confetti'
 import logo from '../assets/images/lolcf_logo.svg'
 
 const Completed = () => {
-    const { width, height } = useWindowSize()
     return (
         <>
-            <Confetti
-                width={width}
-                height={height}
-            />
             <div className="bg-card-pattern flex justify-center items-center min-h-screen">
                 <div className='backdrop-blur-sm p-8 w-full flex flex-col justify-center items-center h-screen pb-20'>
                     <div className="bg-primary-50 p-8 rounded-lg shadow-md w-full my-2 max-w-md animate-fade-up animate-duration-[3000ms] animate-once">

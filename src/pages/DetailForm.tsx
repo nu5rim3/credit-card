@@ -39,7 +39,7 @@ const schema = z.object({
     mailAddressLine2: z.string().optional(),
     mailAddressLine3: z.string().optional(),
     mailAddressLine4: z.string().optional(),
-    whatsappNo: z.string().min(1, 'Whatsapp Number is requied').regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
+    whatsappNo: z.string().min(1, 'WhatsApp Number is requied').regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
     additionalContactNo: z.string().optional().refine((val) => !val || /^\d{10}$|^\+\d{1,3}\d{10}$/.test(val), {
         message: 'Invalid phone number (e.g. +94712345678)',
     }),
@@ -76,7 +76,7 @@ const schema = z.object({
 })
 
 const nationalities: RadioOption[] = [{ label: 'Sri Lankan', value: 'SriLankan' }, { label: 'Other', value: 'Other' }]
-const residenceTypes: RadioOption[] = [{ label: 'Resident', value: 'Resident' }, { label: 'NonResident', value: 'NonResident' }]
+const residenceTypes: RadioOption[] = [{ label: 'Resident', value: 'Resident' }, { label: 'Nonresident', value: 'NonResident' }]
 const politicallyExposedType: RadioOption[] = [{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]
 const preferredLanguages = ["English", "Sinhala", "Tamil"]
 const provinces = ["Central", "Eastern", "North Central", "North Western", "Northern", "Sabaragamuwa", "Southern", "Western", "Uva"]
@@ -459,7 +459,7 @@ const DetailForm = () => {
                         />
                         <Input
                             type={'tel'}
-                            label={'Whatsapp Number'}
+                            label={'WhatsApp Number'}
                             error={errors?.whatsappNo?.message}
                             {...register('whatsappNo')}
                             check
@@ -471,7 +471,7 @@ const DetailForm = () => {
                         <>
                             <Input
                                 type={'text'}
-                                label={'Permenant Address'}
+                                label={'Permanent Address'}
                                 {...register('permAddressLine1')}
                                 placeholder='Line 1'
                                 required
@@ -500,7 +500,7 @@ const DetailForm = () => {
                                 {...register('mailAddressLine1')}
                                 placeholder='Line 1'
                                 check
-                                checkLabel={'Same as the permenant address'}
+                                checkLabel={'Same as the permanent address'}
                                 checkStatus={sameAddress}
                                 setCheackStatus={setSameAddress}
                                 required
