@@ -360,6 +360,15 @@ const DetailForm = () => {
     const [sameAddress, setSameAddress] = useState<boolean>(false)
     const [sameFullName, setSameFullName] = useState<boolean>(false)
     const [openTermsDialog, setOpenTermsDialog] = useState<boolean>(false);
+    const monthlyNetIncome = watch("monthlyNetIncome");
+
+    useEffect(() => {
+        const incomeNumber = monthlyNetIncome.replace(/[^0-9.]/g, '')
+        const formattedValue = incomeNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        setValue("monthlyNetIncome", formattedValue)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [monthlyNetIncome])
+
 
     /**
      * on Submit - main api call to  save the personal details
@@ -702,7 +711,7 @@ const DetailForm = () => {
                             {...register('expInPresentEmployment')}
                         />
                         <Input
-                            type={'number'}
+                            type={'text'}
                             label={'Monthly Net Income'}
                             required
                             error={errors?.monthlyNetIncome?.message}

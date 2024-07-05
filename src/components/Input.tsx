@@ -35,7 +35,7 @@ const Input = forwardRef<HTMLInputElement, HUIInputProps>(
         ref
     ) => {
         const baseStyles =
-            "block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 text-sm bg-white0";
+            "block w-full py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 text-sm bg-white capitalize";
         const baseCheckboxStyles =
             "group block w-4 h-4 rounded border bg-white data-[checked]:bg-primary-500 data-[checked]:data-[disabled]:bg-gray-500 cursor-pointer";
         const disabledStyles = "opacity-50 cursor-not-allowed";
