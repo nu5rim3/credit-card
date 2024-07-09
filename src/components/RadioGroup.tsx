@@ -67,7 +67,7 @@ const RadioGroup = forwardRef<HTMLDivElement, HUIRadioGroupProps>(({ options, on
                     ))}
                 </div>
             </HUIRadioGroup>
-            <Label className="block text-xs font-medium text-red-800 text-left mt-1 italic">{error}</Label>
+            <Label className="block text-xs font-medium text-red-800 text-left mt-1 italic normal-case">{error}</Label>
         </Field>
     )
 });

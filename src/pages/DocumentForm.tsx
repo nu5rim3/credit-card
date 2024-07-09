@@ -54,7 +54,7 @@ const schema = z.object({
         }),
     PAY_SLIP: z
         .any()
-        .refine((files) => files?.length >= 1, { message: 'Latest Pay Slip is required' })
+        .refine((files) => files?.length >= 1, { message: 'Latest pay slip is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
             message: '.jpg, .jpeg, .png and .pdf files are accepted',
         })
@@ -72,7 +72,7 @@ const schema = z.object({
         }).optional(),
     EMPLOYEMENT_CONFIRMATION_LETTER: z
         .any()
-        .refine((files) => files?.length >= 1, { message: 'Employement Confirmation Letter is required' })
+        .refine((files) => files?.length >= 1, { message: 'Employment confirmation letter is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
             message: '.jpg, .jpeg, .png and .pdf files are accepted',
         })
@@ -81,7 +81,7 @@ const schema = z.object({
         }).optional(),
     BANK_STATEMENT: z
         .any()
-        .refine((files) => files?.length >= 1, { message: 'Bank Statements is required' })
+        .refine((files) => files?.length >= 1, { message: 'Bank statements is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
             message: '.jpg, .jpeg, .png and .pdf files are accepted',
         })
@@ -90,25 +90,25 @@ const schema = z.object({
         }).optional(),
     PROOF_OF_INCOME: z
         .any()
-        .refine((files) => files?.length >= 1, { message: 'Proof of Income is required' })
+        .refine((files) => files?.length >= 1, { message: 'Proof of income is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
             message: '.jpg, .jpeg, .png and .pdf files are accepted',
         })
         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
             message: `Max file size is 5MB`,
         }).optional(),
-    BUSINUESS_CARD: z
+    BUSINESS_CARD: z
         .any()
-        .refine((files) => files?.length >= 1, { message: 'Businuess Card is required' })
+        .refine((files) => files?.length >= 1, { message: 'Business card is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
             message: '.jpg, .jpeg, .png and .pdf files are accepted',
         })
         .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
             message: `Max file size is 5MB`,
         }).optional(),
-    BUSINUESS_REGISTRATION_CRETIFICATION: z
+    BUSINESS_REGISTRATION_CRETIFICATION: z
         .any()
-        .refine((files) => files?.length >= 1, { message: 'Businuess Registeration Certificate is required' })
+        .refine((files) => files?.length >= 1, { message: 'Business registeration certificate is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
             message: '.jpg, .jpeg, .png and .pdf files are accepted',
         })
@@ -117,7 +117,7 @@ const schema = z.object({
         }).optional(),
     SELF_BANK_STATEMENT: z
         .any()
-        .refine((files) => files?.length >= 1, { message: 'Bank Statements is required' })
+        .refine((files) => files?.length >= 1, { message: 'Bank statements is required' })
         .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
             message: '.jpg, .jpeg, .png and .pdf files are accepted',
         })
@@ -137,8 +137,8 @@ interface FormData {
     EMPLOYEMENT_CONFIRMATION_LETTER?: any;
     BANK_STATEMENT?: any;
     PROOF_OF_INCOME?: any;
-    BUSINUESS_CARD?: any;
-    BUSINUESS_REGISTRATION_CRETIFICATION?: any;
+    BUSINESS_CARD?: any;
+    BUSINESS_REGISTRATION_CRETIFICATION?: any;
     SELF_BANK_STATEMENT?: any;
 }
 
@@ -155,8 +155,8 @@ const DocumentForm = () => {
             EMPLOYEMENT_CONFIRMATION_LETTER: [],
             BANK_STATEMENT: [],
             PROOF_OF_INCOME: [],
-            BUSINUESS_CARD: [],
-            BUSINUESS_REGISTRATION_CRETIFICATION: [],
+            BUSINESS_CARD: [],
+            BUSINESS_REGISTRATION_CRETIFICATION: [],
             SELF_BANK_STATEMENT: []
         }
     })
@@ -383,7 +383,7 @@ const DocumentForm = () => {
                                         required={false}
                                     />
                                     <Uploader
-                                        label={'Employement Confirmation Letter'}
+                                        label={'Employment Confirmation Letter'}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             const files = event.target.files ? Array.from(event.target.files) : [];
                                             setValue('EMPLOYEMENT_CONFIRMATION_LETTER', files);
@@ -413,12 +413,12 @@ const DocumentForm = () => {
                                         required={false}
                                     />
                                     <Uploader
-                                        label={'Businuess Card'}
+                                        label={'Business Card'}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             const files = event.target.files ? Array.from(event.target.files) : [];
-                                            setValue('BUSINUESS_CARD', files);
+                                            setValue('BUSINESS_CARD', files);
                                         }}
-                                        error={errors.BUSINUESS_CARD?.message?.toString() || ''}
+                                        error={errors.BUSINESS_CARD?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
                                     />
@@ -428,12 +428,12 @@ const DocumentForm = () => {
                                 userData?.employmentCategory === 'self' &&
                                 <>
                                     <Uploader
-                                        label={'Businuess Registeration Certificate'}
+                                        label={'Business Registeration Certificate'}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             const files = event.target.files ? Array.from(event.target.files) : [];
-                                            setValue('BUSINUESS_REGISTRATION_CRETIFICATION', files);
+                                            setValue('BUSINESS_REGISTRATION_CRETIFICATION', files);
                                         }}
-                                        error={errors.BUSINUESS_REGISTRATION_CRETIFICATION?.message?.toString() || ''}
+                                        error={errors.BUSINESS_REGISTRATION_CRETIFICATION?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
                                     />

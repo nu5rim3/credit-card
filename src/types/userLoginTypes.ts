@@ -71,7 +71,7 @@ export interface IUserDetailPostRequest {
   experienceInPreviousEmployment: string;
   nameOfThePreviousEmployer: string;
   guarantorName: string;
-  relationShipToApplication: string;
+  relationShipToApplicant: string;
   guarantorNic: string;
   guarantorMobileNo: string;
   guarantorAddressLine1: string;
@@ -168,4 +168,17 @@ export interface IUserDetailGetRespose {
   officeContactNo: string;
   stage: string;
   referenceNo: string;
+}
+
+export interface IBranch {
+  branchCode: string;
+  branchDes: string;
+  branchAddressLine1: string;
+  branchAddressLine2: string;
+  branchAddressLine3?: string | null;
+  branchAddressLine4?: string | null;
+  branchDistrictCode: string;
+  branchZone: string;
+  branchTypeCode: string;
+  branchFlag: string;
 }

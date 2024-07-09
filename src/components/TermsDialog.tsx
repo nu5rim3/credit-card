@@ -16,11 +16,11 @@ const TermsDialog: React.FC<TermsDialogProps> = ({ isOpen, setIsOpen }) => {
             className="relative z-50"
         >
             <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-primary/50 backdrop-blur-lg">
-                <DialogPanel className="max-w-lg space-y-4 border bg-primary-50 p-5 rounded-lg shadow-lg text-center text-primary">
+                <DialogPanel className="container space-y-4 border bg-primary-50 p-5 rounded-lg shadow-lg text-center text-primary">
                     <DialogTitle className="font-semibold text-xl">
                         Terms and Conditions
                     </DialogTitle>
-                    <Description className="text-gray-500 px-5 bg-white border p-4 rounded-lg h-[50vh] sm:h-[30vh]  overflow-x-scroll">
+                    <Description className="text-gray-500 px-5 bg-white border p-4 rounded-lg h-[50vh] sm:h-[60vh]  overflow-x-scroll">
                         <p className='mb-5 text-base'>CENTRAL BANK OF SRI LANKA</p>
 
                         <p className='mb-5'>

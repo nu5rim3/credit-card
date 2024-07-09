@@ -48,7 +48,7 @@ const Listbox = forwardRef<HTMLDivElement, HUIListboxProps>(
                         ))}
                     </ListboxOptions>
                 </HUIListbox>
-                <Label className="block text-xs font-medium text-red-800 text-left mt-1 italic">{error}</Label>
+                <Label className="block text-xs font-medium text-red-800 text-left mt-1 italic normal-case">{error}</Label>
             </Field>
         );
     }

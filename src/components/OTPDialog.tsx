@@ -59,7 +59,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, referenceId, isOpen, setI
                         OTP Verification
                     </DialogTitle>
                     <Description className="text-gray-500">
-                        Please Check the mobile and enter the verification code
+                        Please check the mobile and enter the verification code
                         <br />({maskPhoneNumber(mobile)})
                     </Description>
                     <div className="flex justify-center">
@@ -83,7 +83,7 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, referenceId, isOpen, setI
                             value={otp}
                             onChange={setOtp}
                             numInputs={6}
-                            renderSeparator={<span>-</span>}
+                            renderSeparator={<span>&amp;</span>}
                             renderInput={(props) => <input {...props} />}
                             inputStyle={{ width: '2.5rem', height: '2.5rem', fontSize: '1.5rem', borderRadius: '0.5rem', border: '1px solid #1c34c6' }}
                         />
@@ -96,13 +96,13 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, referenceId, isOpen, setI
                         >
                             Resend
                         </Button>
-                        <Button
+                        {/* <Button
                             onClick={() => handleVerify()}
                             variant={"primary"}
                             disabled={!isDisabled || otp.length !== 6}
                         >
                             Verify
-                        </Button>
+                        </Button> */}
                     </div>
                 </DialogPanel>
             </div>

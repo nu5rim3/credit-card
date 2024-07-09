@@ -26,7 +26,7 @@ export const updateDocumentStatus =
       });
       dispatch(documentUpdatePostSuccess(response.data));
       toast.success(
-        response.data.message ?? "All Document updated successfully"
+        response.data.message ?? "All document updated successfully"
       );
       navigate("/complete");
     } catch (error: unknown) {

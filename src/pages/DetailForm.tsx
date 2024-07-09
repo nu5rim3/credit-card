@@ -11,14 +11,20 @@ import { RootState, useAppDispatch } from '../store/store';
 import { userDetailPost } from '../store/actions/userDetailPostActions';
 import { parseNIC } from '../utils/textConvertor';
 import { LoaderCircle } from 'lucide-react';
+import ComboBox from '../components/ComboBox';
+import { getFusionBranch } from '../store/actions/getBranchActions';
+import { IBranch } from '../types/userLoginTypes';
 
 const eighteenYearsAgo = new Date();
 eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
+/^(?:\d{9}[vVxX]|\d{12})$/
 const schema = z.object({
-    fullName: z.string().min(1, 'Full name is required'),
+    fullName: z.string().min(1, 'Full name is required').refine(value => /^[a-zA-Z\s.]+$/.test(value), {
+        message: 'Full name can only contain letters'
+    }),
     nationality: z.string().min(1, 'Nationality is required'),
-    preferredLanguage: z.string().min(1, 'Preferred Language is required'),
+    preferredLanguage: z.string().min(1, 'Preferred language is required'),
     dob: z.string().refine(
         (val) => {
             const date = new Date(val);
@@ -27,51 +33,55 @@ const schema = z.object({
         },
         { message: "You must be at least 18 years old" }
     ),
-    mothersMaidenName: z.string().min(1, 'Mother`s Maiden Name is required'),
-    residencePhone: z.string().optional().refine((val) => !val || /^\d{10}$|^\+\d{1,3}\d{10}$/.test(val), {
-        message: 'Invalid phone number (e.g. +94712345678)',
+    mothersMaidenName: z.string().min(1, 'Mother\'s maiden name is required').refine(value => /^[a-zA-Z\s.]+$/.test(value), {
+        message: 'Full name can only contain letters'
     }),
-    permAddressLine1: z.string().min(1, 'Permanent Address is required'),
+    residencePhone: z.string().optional().refine((val) => !val || /^(?:[0-9]{10})$/.test(val), {
+        message: 'Invalid phone number',
+    }),
+    permAddressLine1: z.string().min(1, 'Permanent address is required'),
     permAddressLine2: z.string().optional(),
     permAddressLine3: z.string().optional(),
     permAddressLine4: z.string().optional(),
-    mailAddressLine1: z.string().min(1, 'Mailling Address is required'),
+    mailAddressLine1: z.string().min(1, 'Maling address is required'),
     mailAddressLine2: z.string().optional(),
     mailAddressLine3: z.string().optional(),
     mailAddressLine4: z.string().optional(),
-    whatsappNo: z.string().min(1, 'WhatsApp Number is requied').regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
-    additionalContactNo: z.string().optional().refine((val) => !val || /^\d{10}$|^\+\d{1,3}\d{10}$/.test(val), {
-        message: 'Invalid phone number (e.g. +94712345678)',
+    whatsappNo: z.string().min(1, 'WhatsApp number is requied').regex(/^(?:[0-9]{10})$/, 'Invalid phone number (e.g. 0712345678)'),
+    additionalContactNo: z.string().optional().refine((val) => !val || /^(?:[0-9]{10})$/.test(val), {
+        message: 'Invalid phone number',
     }),
-    residenceType: z.string().min(1, 'Residence Type is required'),
+    residenceType: z.string().min(1, 'Residence type is required'),
     province: z.string().min(1, 'Province is required'),
     politicallyExposed: z.string().min(1, 'Politically exposed is required'),
-    employmentCategory: z.string().min(1, 'Employment Category is required'),
-    governmentSectorType: z.string().min(1, 'Government Sector Type is required').optional(),
-    pvtSectorType: z.string().min(1, 'Private Sector Type is required').optional(),
-    selfEmpType: z.string().min(1, 'Self Employed Types is required').optional(),
-    expInPresentEmployment: z.string().min(1, 'Experience in Present Employment is required'),
-    experienceInPreviousEmployment: z.string().min(1, 'Experience In Previous Employment is required'),
-    nameOfThePreviousEmployer: z.string().min(1, 'Name Of The Previous Employer is required'),
-    occupationType: z.string().min(1, 'Occupation Type is required'),
-    nameOfTheEmployer: z.string().min(1, 'Name Of The Employer/Business is required'),
+    employmentCategory: z.string().min(1, 'Employment category is required'),
+    governmentSectorType: z.string().min(1, 'Government sector type is required').optional(),
+    pvtSectorType: z.string().min(1, 'Private sector type is required').optional(),
+    selfEmpType: z.string().min(1, 'Self employed types is required').optional(),
+    expInPresentEmployment: z.string().min(1, 'Experience in present employment is required').regex(/^[0-9]*$/, 'Years in number reqired'),
+    experienceInPreviousEmployment: z.string().min(1, 'Experience in previous employment is required').regex(/^[0-9]*$/, 'Years in number reqired'),
+    nameOfThePreviousEmployer: z.string().min(1, 'Name of the previous employer is required'),
+    occupationType: z.string().min(1, 'Occupation type is required'),
+    nameOfTheEmployer: z.string().min(1, 'Name of the employer/business is required'),
     designation: z.string().min(1, 'Designation is required'),
-    monthlyNetIncome: z.string().min(1, 'Monthly Net Income is required'),
-    officeContactNo: z.string().min(1, 'Office Contact Number is required').regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
-    officeAddressLine1: z.string().min(1, 'Office Address is required'),
+    monthlyNetIncome: z.string().min(1, 'Monthly net income is required'),
+    officeContactNo: z.string().min(1, 'Office contact number is required').regex(/^(?:[0-9]{10})$/, 'Invalid phone number (e.g. 0712345678)'),
+    officeAddressLine1: z.string().min(1, 'Office address is required'),
     officeAddressLine2: z.string().optional(),
     officeAddressLine3: z.string().optional(),
     officeAddressLine4: z.string().optional(),
-    guarantorName: z.string().min(1, 'Guarantor Name is required'),
-    relationShipToApplication: z.string().min(1, 'RelationShip To Application is required'),
-    guarantorNic: z.string().min(1, 'Guarantor NIC Number is required').regex(/^(?:\d{9}[VX]|\d{12})$/, 'Invalid NIC number (e.g. 123456789V)'),
-    guarantorMobileNo: z.string().min(1, 'Guarantor Mobile Number is required').regex(/^(?:\+\d{1,3}\d{10}|[0-9]{10})$/, 'Invalid phone number (e.g. +94712345678)'),
-    guarantorAddressLine1: z.string().min(1, 'Office Address is required'),
+    guarantorName: z.string().min(1, 'Guarantor name is required').refine(value => /^[a-zA-Z\s.]+$/.test(value), {
+        message: 'Full name can only contain letters'
+    }),
+    relationShipToApplicant: z.string().min(1, 'Relationship to applicant is required'),
+    guarantorNic: z.string().min(1, 'Guarantor NIC number is required').regex(/^(?:\d{9}[vVxX]|\d{12})$/, 'Invalid NIC number'),
+    guarantorMobileNo: z.string().min(1, 'Guarantor mobile number is required').regex(/^(?:[0-9]{10})$/, 'Invalid phone number (e.g. 0712345678)'),
+    guarantorAddressLine1: z.string().min(1, 'Office address is required'),
     guarantorAddressLine2: z.string().optional(),
     guarantorAddressLine3: z.string().optional(),
     guarantorAddressLine4: z.string().optional(),
-    cardCollectBranch: z.string().min(1, 'Card Collect Branch is required'),
-    nameOnCard: z.string().min(1, 'Name On Card is required'),
+    cardCollectBranch: z.string().min(1, 'Card collection branch is required'),
+    nameOnCard: z.string().min(1, 'Name on card is required'),
     termsAndCondition: z.boolean().refine((val) => val === true, "You must accept the Terms and Conditions."),
 })
 
@@ -85,214 +95,6 @@ const governmentSectorTypes = ["Government Healthcare Professionals", "Governmen
 const privateSectorTypes = ["Private Healthcare Professionals", "Private Bankers", "Others"]
 const selfEmployedTypes = ["Entrepreneurs/Small Business Owners", "Freelancers"]
 const occupationTypes = ["Full Time", "Part Time", "Contract"]
-const branches = ["AKKARAIPATTU IBU",
-    "AKURANA IBU",
-    "AKURESSA I",
-    "AKURESSA II",
-    "ALUTHGAMA",
-    "AMBALANGODA I",
-    "AMBALANGODA II",
-    "AMBALANTHOTA",
-    "AMPARA I",
-    "AMPARA II",
-    "ANAMADUWA",
-    "ANURADHAPURA I",
-    "ANURADHAPURA II",
-    "ARALAGANWILA",
-    "AVISSAWELLA I",
-    "AVISSAWELLA II",
-    "BADDEGAMA",
-    "BADULLA I",
-    "BADULLA II",
-    "BADURALIYA",
-    "BAKAMUNA",
-    "BALANGODA",
-    "BAMBALAPITIYA",
-    "BANDARAWELA",
-    "BATTARAMULLA",
-    "BATTICALOA",
-    "BELIATTA",
-    "BIBILA",
-    "BORELLA",
-    "BULATHSINHALA",
-    "CARD CENTRE - HAVELOCK",
-    "CHAVAKACHCHERI",
-    "CHENKALADI",
-    "CHILAW I",
-    "CHILAW II",
-    "CHUNNAKAM I",
-    "CHUNNAKAM II",
-    "CITY OFFICE",
-    "DAMBULLA I",
-    "DAMBULLA II",
-    "DEHIATTAKANDIYA",
-    "DEHIWALA I",
-    "DEHIWALA II",
-    "DELGODA",
-    "DIGANA",
-    "DIKWELLA",
-    "DIVULAPITIYA",
-    "EHELIYAGODA",
-    "ELPITIYA",
-    "EMBILIPITIYA I",
-    "EMBILIPITIYA II",
-    "GALENBINDUNUWEWA",
-    "GALEWELA",
-    "GALGAMUWA",
-    "GALLE I",
-    "GALNEWA",
-    "GAMPAHA I",
-    "GAMPAHA II",
-    "GAMPOLA I",
-    "GAMPOLA II",
-    "GANEMULLA",
-    "GIRIULLA",
-    "GODAKAWELA",
-    "GRANDPASS I",
-    "GRANDPASS II",
-    "HABARADUWA",
-    "HAKMANA",
-    "HANWELLA",
-    "HATTON",
-    "HEAD OFFICE - BRANCH",
-    "HIKKADUWA",
-    "HINGURAKGODA",
-    "HOMAGAMA",
-    "HORANA I",
-    "HORANA II",
-    "HOROWPATHANA",
-    "INGIRIYA",
-    "JA-ELA I",
-    "JA-ELA II",
-    "JAFFNA I",
-    "JAFFNA II",
-    "KADUWELA I",
-    "KADUWELA II",
-    "KAHATAGASDIGILIYA",
-    "KALAWANA",
-    "KALAWANCHIKUDI",
-    "KALMUNAI",
-    "KALUTARA I",
-    "KALUTARA II",
-    "KAMBURUPITIYA",
-    "KANDY I",
-    "KANDY II",
-    "KANDY III",
-    "KANTALE",
-    "KARAPITIYA",
-    "KATTANKUDY IBU",
-    "KATUGASTOTA",
-    "KEGALLE I",
-    "KEGALLE II",
-    "KEKIRAWA",
-    "KESELWATTA",
-    "KILINOCHCHI I",
-    "KILINOCHCHI II",
-    "KINNIYA",
-    "KIRIBATHGODA I",
-    "KIRIBATHGODA II",
-    "KIRINDIWELA",
-    "KOCHCHIKADE I",
-    "KOCHCHIKADE II",
-    "KOHUWALA",
-    "KOLLUPITIYA",
-    "KOTAHENA",
-    "KULIYAPITIYA I",
-    "KULIYAPITIYA II",
-    "KURUNEGALA I",
-    "KURUNEGALA II",
-    "MAHARAGAMA I",
-    "MAHARAGAMA II",
-    "MAHIYANGANAYA",
-    "MALABE",
-    "MANMUNAIPATTU",
-    "MANNAR I",
-    "MANNAR II",
-    "MARADANA",
-    "MATALE I",
-    "MATALE II",
-    "MATARA I",
-    "MATARA II",
-    "MATHUGAMA",
-    "MAWANELLA",
-    "MEDAWACHCHIYA I",
-    "MEDAWACHCHIYA II",
-    "MEDIRIGIRIYA",
-    "MELSIRIPURA",
-    "MINUWANGODA",
-    "MONARAGALA I",
-    "MONARAGALA II",
-    "MORATUWA",
-    "MORAWAKA",
-    "MT. LAVINIA",
-    "MULLAITVU",
-    "MUTHTHUR",
-    "NANATTAN",
-    "NAWALAPITIYA",
-    "NEGOMBO I",
-    "NEGOMBO II",
-    "NELLIADY I",
-    "NELLIADY II",
-    "NELUWA",
-    "NIKAWERATIYA",
-    "NITTAMBUWA I",
-    "NITTAMBUWA II",
-    "NOCHCHIYAGAMA",
-    "NUGEGODA",
-    "NUWARAELIYA I",
-    "NUWARAELIYA II",
-    "ODDAMAWADI IBU",
-    "PADIYATHALAWA",
-    "PALAVIYA",
-    "PANADURA",
-    "PARAKRAMAPURA",
-    "PELMADULLA",
-    "PETTAH I",
-    "PETTAH II",
-    "PILIMATHALAWA",
-    "PILIYANDALA I",
-    "PILIYANDALA II",
-    "PITIGALA",
-    "POLONNARUWA I",
-    "POLONNARUWA II",
-    "POTHUVIL",
-    "PUDUKUDYIRUPPU",
-    "PUTTALAM",
-    "RAJAGIRIYA",
-    "RATHNAPURA I",
-    "RATHNAPURA II",
-    "RATTOTA",
-    "RIKILLAGASKADA",
-    "RUWANWELLA",
-    "SERUNUWARA",
-    "SURIYAWEWA",
-    "TANGALLE I",
-    "TANGALLE II",
-    "THALAWAKELE",
-    "THAMBUTTEGAMA I",
-    "THAMBUTTEGAMA II",
-    "THIRUKKOVIL",
-    "TISSAMAHARAMA",
-    "TRINCOMALEE I",
-    "TRINCOMALEE II",
-    "UDAPPUWA",
-    "UDUGAMA",
-    "VALACHCHENAI",
-    "VAVUNIYA I",
-    "VAVUNIYA II",
-    "WALASMULLA",
-    "WARAKAPOLA",
-    "WATTALA I",
-    "WATTALA II",
-    "WELIGAMA",
-    "WELIKANDA",
-    "WELIMADA",
-    "WELIWERIYA",
-    "WELLAWATTA",
-    "WELLAWAYA",
-    "WENNAPPUWA I",
-    "WENNAPPUWA II",
-    "WILGAMUWA",]
 
 type FormData = z.infer<typeof schema>;
 
@@ -300,6 +102,7 @@ type FormData = z.infer<typeof schema>;
 const DetailForm = () => {
     const { data: userData } = useSelector((state: RootState) => state.userLogin);
     const { loading } = useSelector((state: RootState) => state.userDetailPost);
+    const { data: allBranches } = useSelector((state: RootState) => state.allBranches);
     const userdob = parseNIC(userData?.nic ?? '')
     const { control, register, unregister, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
@@ -338,14 +141,14 @@ const DetailForm = () => {
             experienceInPreviousEmployment: "",
             nameOfThePreviousEmployer: "",
             guarantorName: "",
-            relationShipToApplication: "",
+            relationShipToApplicant: "",
             guarantorNic: "",
             guarantorMobileNo: "",
             guarantorAddressLine1: "",
             guarantorAddressLine2: "",
             guarantorAddressLine3: "",
             guarantorAddressLine4: "",
-            cardCollectBranch: branches[0],
+            cardCollectBranch: "",
             nameOnCard: "",
             termsAndCondition: false,
             governmentSectorType: governmentSectorTypes[0],
@@ -437,6 +240,11 @@ const DetailForm = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [watch])
 
+    useEffect(() => {
+        dispatch(getFusionBranch());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     return (
         <div className="bg-card-pattern flex justify-center py-5 px-2 sm:px-0 sm:h-screen">
             <div className='container flex flex-col justify-center items-center'>
@@ -461,7 +269,7 @@ const DetailForm = () => {
                         />
                         <Input
                             type={'text'}
-                            label={'Mother`s Maiden Name'}
+                            label={'Mother\'s Maiden Name'}
                             required
                             error={errors?.mothersMaidenName?.message}
                             {...register('mothersMaidenName')}
@@ -505,7 +313,7 @@ const DetailForm = () => {
                         <>
                             <Input
                                 type={'text'}
-                                label={'Mailling Address'}
+                                label={'Maling Address'}
                                 {...register('mailAddressLine1')}
                                 placeholder='Line 1'
                                 check
@@ -705,7 +513,7 @@ const DetailForm = () => {
                         />
                         <Input
                             type={'text'}
-                            label={'Experience in Employment'}
+                            label={'Experience in Employment (years)'}
                             required
                             error={errors?.expInPresentEmployment?.message}
                             {...register('expInPresentEmployment')}
@@ -751,7 +559,7 @@ const DetailForm = () => {
                         </>
                         <Input
                             type={'text'}
-                            label={'Experience In Previous Employment'}
+                            label={'Experience In Previous Employment (years)'}
                             required
                             error={errors?.experienceInPreviousEmployment?.message}
                             {...register('experienceInPreviousEmployment')}
@@ -791,10 +599,10 @@ const DetailForm = () => {
                         />
                         <Input
                             type={'text'}
-                            label={'Relationship to Application'}
+                            label={'Relationship to Applicant'}
                             required
-                            error={errors?.relationShipToApplication?.message}
-                            {...register('relationShipToApplication')}
+                            error={errors?.relationShipToApplicant?.message}
+                            {...register('relationShipToApplicant')}
                         />
                         <>
                             <Input
@@ -840,8 +648,8 @@ const DetailForm = () => {
                             control={control}
                             name={'cardCollectBranch'}
                             render={({ field }) =>
-                                <Listbox
-                                    options={branches}
+                                <ComboBox
+                                    options={allBranches !== null ? allBranches.map((item: IBranch) => item.branchDes) : []}
                                     label={'Card Collecting Branch'}
                                     error={errors?.cardCollectBranch?.message}
                                     {...field}
@@ -849,6 +657,8 @@ const DetailForm = () => {
                                 />
                             }
                         />
+
+
 
                         <div className="bg-primary-200 rounded-lg p-3 text-primary animate-fade-up animate-duration-[1500ms] animate-once">
                             <Controller
@@ -866,6 +676,7 @@ const DetailForm = () => {
                             />
 
                         </div>
+
                     </div>
                     <div className="md:col-span-4 justify-end h-10 animate-fade-up animate-duration-[6000ms] animate-once hidden sm:flex">
                         <Button variant='primary' type="submit" className={''} >

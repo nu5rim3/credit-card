@@ -79,7 +79,7 @@ const Uploader = forwardRef<HTMLInputElement, UploaderProps>(
                         className="hidden"
                         onChange={handleFileSelected}
                     />
-                    <Label className="block text-xs font-medium text-red-800 text-left mt-1 italic">
+                    <Label className="block text-xs font-medium text-red-800 text-left mt-1 italic normal-case">
                         {error}
                     </Label>
                     {files.length > 0 && (

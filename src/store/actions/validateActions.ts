@@ -23,7 +23,7 @@ export const validateOTP =
       );
       dispatch(validateOTPSuccess(response.data));
       toast.success(
-        response.data.message ?? "OTP Code Successfully Validated!"
+        response.data.message ?? "OTP code successfully validated!"
       );
       if (response?.data?.stage === "PENDING") {
         navigate("/personal-detail");
