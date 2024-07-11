@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 import { updateDocumentStatus } from '../store/actions/documentUpdateActions';
 import { useNavigate } from 'react-router-dom';
 import { LoaderCircle } from 'lucide-react';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 
 const MAX_FILE_SIZE = 5000000
@@ -21,111 +22,204 @@ const ACCEPTED_IMAGE_TYPES = [
     'image/jpeg',
     'image/jpg',
     'image/png',
-    'applocation/pdf'
+    'application/pdf'
 ]
 
-const schema = z.object({
+const baseSchema = z.object({
     USER_IDENTIFICATION_1: z
         .any()
         .refine((files) => files?.length >= 1, { message: 'You must upload front side of the identification' })
-        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
+        .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
             message: '.jpg, .jpeg, .png and .pdf files are accepted',
         })
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
+        .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
             message: `Max file size is 5MB`,
         }),
     USER_IDENTIFICATION_2: z
         .any()
         .refine((files) => files?.length >= 1, { message: 'You must upload rear side of the identification' })
-        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
+        .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
             message: '.jpg, .jpeg, .png and .pdf files are accepted',
         })
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
+        .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
             message: `Max file size is 5MB`,
         }),
     UTILITY_BILL: z
         .any()
-        .refine((files) => files?.length >= 1, { message: 'Utility Bill is required' })
-        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
+        .refine((files) => files?.length >= 1, { message: 'Utility bill is required' })
+        .refine((files) => files?.length <= 3, { message: 'You can upload upto 3 files' })
+        .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
             message: '.jpg, .jpeg, .png and .pdf files are accepted',
         })
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
+        .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
             message: `Max file size is 5MB`,
         }),
-    PAY_SLIP: z
-        .any()
-        .refine((files) => files?.length >= 1, { message: 'Latest pay slip is required' })
-        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
-            message: '.jpg, .jpeg, .png and .pdf files are accepted',
-        })
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
-            message: `Max file size is 5MB`,
-        }),
-    EMLOYEE_ID: z
-        .any()
-        .refine((files) => files?.length >= 1, { message: 'Employee ID is required' })
-        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
-            message: '.jpg, .jpeg, .png and .pdf files are accepted',
-        })
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
-            message: `Max file size is 5MB`,
-        }).optional(),
-    EMPLOYEMENT_CONFIRMATION_LETTER: z
-        .any()
-        .refine((files) => files?.length >= 1, { message: 'Employment confirmation letter is required' })
-        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
-            message: '.jpg, .jpeg, .png and .pdf files are accepted',
-        })
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
-            message: `Max file size is 5MB`,
-        }).optional(),
-    BANK_STATEMENT: z
-        .any()
-        .refine((files) => files?.length >= 1, { message: 'Bank statements is required' })
-        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
-            message: '.jpg, .jpeg, .png and .pdf files are accepted',
-        })
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
-            message: `Max file size is 5MB`,
-        }).optional(),
-    PROOF_OF_INCOME: z
-        .any()
-        .refine((files) => files?.length >= 1, { message: 'Proof of income is required' })
-        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
-            message: '.jpg, .jpeg, .png and .pdf files are accepted',
-        })
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
-            message: `Max file size is 5MB`,
-        }).optional(),
-    BUSINESS_CARD: z
-        .any()
-        .refine((files) => files?.length >= 1, { message: 'Business card is required' })
-        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
-            message: '.jpg, .jpeg, .png and .pdf files are accepted',
-        })
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
-            message: `Max file size is 5MB`,
-        }).optional(),
-    BUSINESS_REGISTRATION_CRETIFICATION: z
-        .any()
-        .refine((files) => files?.length >= 1, { message: 'Business registeration certificate is required' })
-        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
-            message: '.jpg, .jpeg, .png and .pdf files are accepted',
-        })
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
-            message: `Max file size is 5MB`,
-        }).optional(),
-    SELF_BANK_STATEMENT: z
-        .any()
-        .refine((files) => files?.length >= 1, { message: 'Bank statements is required' })
-        .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
-            message: '.jpg, .jpeg, .png and .pdf files are accepted',
-        })
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
-            message: `Max file size is 5MB`,
-        }).optional(),
 
 })
+
+// Function to extend the schema based on employmentCategory
+const getDynamicSchema = (employmentCategory?: string) => {
+    let dynamicPart = z.object({});
+    switch (employmentCategory) {
+        case 'Government Sector':
+            dynamicPart = z.object({
+                PAY_SLIP: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Latest pay slip is required' })
+                    .refine((files) => files?.length <= 3, { message: 'You can upload upto 3 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }),
+                EMLOYEE_ID: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Employee ID is required' })
+                    .refine((files) => files?.length <= 2, { message: 'You can upload upto 2 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }).optional(),
+                EMPLOYEMENT_CONFIRMATION_LETTER: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Employment confirmation letter is required' })
+                    .refine((files) => files?.length <= 2, { message: 'You can upload upto 2 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }).optional(),
+                BANK_STATEMENT: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Bank statements is required' })
+                    .refine((files) => files?.length <= 20, { message: 'You can upload upto 20 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }).optional(),
+                PROOF_OF_INCOME: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Proof of income is required' })
+                    .refine((files) => files?.length <= 5, { message: 'You can upload upto 5 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }),
+                BUSINESS_CARD: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Business card is required' })
+                    .refine((files) => files?.length <= 2, { message: 'You can upload upto 2 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }).optional(),
+            });
+            break;
+        case 'Private Sector':
+            dynamicPart = z.object({
+                PAY_SLIP: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Latest pay slip is required' })
+                    .refine((files) => files?.length <= 3, { message: 'You can upload upto 3 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }),
+                EMLOYEE_ID: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Employee ID is required' })
+                    .refine((files) => files?.length <= 2, { message: 'You can upload upto 2 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }).optional(),
+                EMPLOYEMENT_CONFIRMATION_LETTER: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Employment confirmation letter is required' })
+                    .refine((files) => files?.length <= 2, { message: 'You can upload upto 2 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }).optional(),
+                BANK_STATEMENT: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Bank statements is required' })
+                    .refine((files) => files?.length <= 20, { message: 'You can upload upto 20 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }).optional(),
+                PROOF_OF_INCOME: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Proof of income is required' })
+                    .refine((files) => files?.length <= 5, { message: 'You can upload upto 5 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }),
+                BUSINESS_CARD: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Business card is required' })
+                    .refine((files) => files?.length <= 2, { message: 'You can upload upto 2 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }).optional(),
+            });
+            break;
+        case 'Self Employed':
+            dynamicPart = z.object({
+
+                BUSINESS_REGISTRATION_CRETIFICATION: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Business registeration certificate is required' })
+                    .refine((files) => files?.length <= 5, { message: 'You can upload upto 5 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }),
+                SELF_BANK_STATEMENT: z
+                    .any()
+                    .refine((files) => files?.length >= 1, { message: 'Bank statements is required' })
+                    .refine((files) => files?.length <= 20, { message: 'You can upload upto 20 files' })
+                    .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
+                        message: '.jpg, .jpeg, .png and .pdf files are accepted',
+                    })
+                    .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
+                        message: `Max file size is 5MB`,
+                    }),
+            });
+            break;
+        // Add more cases as needed
+        default:
+            break;
+    }
+    return baseSchema.merge(dynamicPart);
+};
 
 interface FormData {
     [key: string]: any;
@@ -143,6 +237,8 @@ interface FormData {
 }
 
 const DocumentForm = () => {
+    const { data: userData, loading: isUserDataLoading } = useSelector((state: RootState) => state.userDetailGet);
+    const schema = getDynamicSchema(userData?.employmentCategory);
     const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
         shouldUnregister: true,
@@ -163,7 +259,8 @@ const DocumentForm = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [allUploaded, setAllUploaded] = useState(false);
-    const { data: userData, loading: isUserDataLoading } = useSelector((state: RootState) => state.userDetailGet);
+    const [confirmDialog, setConfirmDialog] = useState(false);
+    const [formData, setFormData] = useState<FormData | undefined>();
     const { loading: isdocumentUpdateLoading } = useSelector((state: RootState) => state.documentUpdatePost);
     const { data: userLoginData } = useSelector((state: RootState) => state.userLogin);
 
@@ -195,54 +292,65 @@ const DocumentForm = () => {
     * @param data 
     */
     const onSubmit = async (data: FormData) => {
-        const uploadResult = Object.keys(data).map(async (key: any) => {
-            if (data[key].length > 1) {
-                data[key].forEach(async (_: any, i: number) => {
-                    if (data[key][i].type !== 'application/pdf') {
+        setConfirmDialog(true);
+        setFormData(data);
+    }
+
+    /**
+     * onConfirm - upload the documents to the GCP
+     */
+    const onConfirm = async () => {
+        const data = formData;
+        if (data !== undefined) {
+            const uploadResult = Object.keys(data).map(async (key: any) => {
+                if (data[key].length > 1) {
+                    data[key].forEach(async (_: any, i: number) => {
+                        if (data[key][i].type !== 'application/pdf') {
+                            const options = {
+                                maxSizeMB: 1,
+                                maxWidthOrHeight: 1920,
+                                useWebWorker: true,
+                                fileType: data[key].type
+                            }
+                            const compressedFile = await imageCompression(data[key][i], options);
+                            const base64String = await fileToBase64(compressedFile);
+                            return await upload(base64String.split(',')[0], getKey(key), data[key][i].type, key);
+                        } else {
+                            const base64String = await fileToBase64(data[key][i]);
+                            return await upload(base64String.split(',')[0], getKey(key), data[key][i].type, key);
+                        }
+                    })
+
+                } else {
+                    if (data[key][0].type !== 'application/pdf') {
                         const options = {
                             maxSizeMB: 1,
                             maxWidthOrHeight: 1920,
                             useWebWorker: true,
                             fileType: data[key].type
                         }
-                        const compressedFile = await imageCompression(data[key][i], options);
+                        const compressedFile = await imageCompression(data[key][0], options);
                         const base64String = await fileToBase64(compressedFile);
-                        return await upload(base64String.split(',')[0], getKey(key), data[key][i].type, key);
+                        return await upload(base64String.split(',')[0], getKey(key), data[key][0].type, key);
                     } else {
-                        const base64String = await fileToBase64(data[key][i]);
-                        return await upload(base64String.split(',')[0], getKey(key), data[key][i].type, key);
+                        const base64String = await fileToBase64(data[key][0]);
+                        return await upload(base64String.split(',')[0], getKey(key), data[key][0].type, key);
                     }
-                })
-
-            } else {
-                if (data[key][0].type !== 'application/pdf') {
-                    const options = {
-                        maxSizeMB: 1,
-                        maxWidthOrHeight: 1920,
-                        useWebWorker: true,
-                        fileType: data[key].type
-                    }
-                    const compressedFile = await imageCompression(data[key][0], options);
-                    const base64String = await fileToBase64(compressedFile);
-                    return await upload(base64String.split(',')[0], getKey(key), data[key][0].type, key);
-                } else {
-                    const base64String = await fileToBase64(data[key][0]);
-                    return await upload(base64String.split(',')[0], getKey(key), data[key][0].type, key);
                 }
-            }
-        })
+            })
 
-        await Promise.all(uploadResult.flat()).then((result) => {
-            if (result.includes(false)) {
-                setAllUploaded(false);
-            } else {
-                setAllUploaded(true);
-            }
-        }).catch((err) => {
-            console.error('[UPLOAD ERROR] - ', err)
-            setAllUploaded(false)
-        });
-
+            await Promise.all(uploadResult.flat()).then((result) => {
+                if (result.includes(false)) {
+                    setAllUploaded(false);
+                } else {
+                    setAllUploaded(true);
+                }
+            }).catch((err) => {
+                console.error('[UPLOAD ERROR] - ', err)
+                setAllUploaded(false)
+            });
+        }
+        setConfirmDialog(false);
     }
 
 
@@ -329,7 +437,7 @@ const DocumentForm = () => {
                         <div className='grid grid-cols-1 sm:grid-cols-4 gap-2'>
                             <Uploader
                                 label={'NIC/Driving License (Front Side)'}
-                                multiple={true}
+                                multiple={false}
                                 required
                                 {...register('USER_IDENTIFICATION_1')}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -340,7 +448,7 @@ const DocumentForm = () => {
                             />
                             <Uploader
                                 label={'NIC/Driving License (Rear Side)'}
-                                multiple={true}
+                                multiple={false}
                                 required
                                 {...register('USER_IDENTIFICATION_2')}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -360,27 +468,27 @@ const DocumentForm = () => {
                                 error={errors.UTILITY_BILL?.message?.toString() || ''}
                             />
                             {
-                                userData?.employmentCategory !== 'self' &&
+                                userData?.employmentCategory !== 'Self Employed' &&
                                 <>
                                     <Uploader
                                         label={'Latest Pay Slip'}
+                                        multiple={true}
+                                        required
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             const files = event.target.files ? Array.from(event.target.files) : [];
                                             setValue('PAY_SLIP', files);
                                         }}
                                         error={errors.PAY_SLIP?.message?.toString() || ''}
-                                        multiple={true}
-                                        required
                                     />
                                     <Uploader
                                         label={'Employee ID'}
+                                        multiple={true}
+                                        required={false}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                             const files = event.target.files ? Array.from(event.target.files) : [];
                                             setValue('EMLOYEE_ID', files);
                                         }}
                                         error={errors.EMLOYEE_ID?.message?.toString() || ''}
-                                        multiple={true}
-                                        required={false}
                                     />
                                     <Uploader
                                         label={'Employment Confirmation Letter'}
@@ -410,7 +518,7 @@ const DocumentForm = () => {
                                         }}
                                         error={errors.PROOF_OF_INCOME?.message?.toString() || ''}
                                         multiple={true}
-                                        required={false}
+                                        required
                                     />
                                     <Uploader
                                         label={'Business Card'}
@@ -425,7 +533,7 @@ const DocumentForm = () => {
                                 </>
                             }
                             {
-                                userData?.employmentCategory === 'self' &&
+                                userData?.employmentCategory === 'Self Employed' &&
                                 <>
                                     <Uploader
                                         label={'Business Registeration Certificate'}
@@ -435,7 +543,7 @@ const DocumentForm = () => {
                                         }}
                                         error={errors.BUSINESS_REGISTRATION_CRETIFICATION?.message?.toString() || ''}
                                         multiple={true}
-                                        required={false}
+                                        required
                                     />
                                     <Uploader
                                         label={'Bank Statements (Last 3 months)'}
@@ -445,7 +553,7 @@ const DocumentForm = () => {
                                         }}
                                         error={errors.SELF_BANK_STATEMENT?.message?.toString() || ''}
                                         multiple={true}
-                                        required={false}
+                                        required
                                     />
                                 </>
                             }
@@ -463,6 +571,7 @@ const DocumentForm = () => {
                     </div>
                 </form>
             </div>
+            <ConfirmDialog open={confirmDialog} close={() => setConfirmDialog(false)} onConfirm={onConfirm} />
         </div>
     )
 }
