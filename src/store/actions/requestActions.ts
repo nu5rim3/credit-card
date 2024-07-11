@@ -19,9 +19,11 @@ export const requestOTP =
       const response = await axiosInstance.post(`/otp-request/${referenceId}`);
       dispatch(requestOTPSuccess(response.data));
       toast.success(response.data.message ?? "OTP sent to your mobile");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        dispatch(requestOTPFailure(error.message));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error) {
+        dispatch(requestOTPFailure(error?.response?.data?.error));
+        toast.error(error?.response?.data?.error);
       } else {
         dispatch(requestOTPFailure("An unknown error occurred"));
       }

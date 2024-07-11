@@ -32,10 +32,11 @@ export const validateOTP =
       } else if (response?.data?.stage === "COMPLETED") {
         navigate("/complete");
       }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        dispatch(validateOTPFailure(error.message));
-        toast.error(error.message);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error) {
+        dispatch(validateOTPFailure(error?.response?.data?.error));
+        toast.error(error?.response?.data?.error);
       } else {
         dispatch(validateOTPFailure("An unknown error occurred"));
       }

@@ -29,9 +29,11 @@ export const updateDocumentStatus =
         response.data.message ?? "All document updated successfully"
       );
       navigate("/complete");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        dispatch(documentUpdatePostFailure(error.message));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error) {
+        dispatch(documentUpdatePostFailure(error?.response?.data?.error));
+        toast.error(error?.response?.data?.error);
       } else {
         dispatch(documentUpdatePostFailure("An unknown error occurred"));
       }

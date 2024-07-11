@@ -1,7 +1,7 @@
 import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Checkbox, Input, Listbox, RadioGroup, TermsDialog } from '../components';
+import { Button, Checkbox, Input, Listbox, Loader, RadioGroup, TermsDialog } from '../components';
 import logo from '../assets/images/lolcf_logo.svg'
 import { RadioOption } from '../components/RadioGroup';
 import { useEffect, useState } from 'react';
@@ -14,11 +14,11 @@ import { LoaderCircle } from 'lucide-react';
 import ComboBox from '../components/ComboBox';
 import { getFusionBranch } from '../store/actions/getBranchActions';
 import { IBranch } from '../types/userLoginTypes';
+import { userDetailGet } from '../store/actions/userDetailGetActions';
 
 const eighteenYearsAgo = new Date();
 eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
-/^(?:\d{9}[vVxX]|\d{12})$/
 const schema = z.object({
     fullName: z.string().min(1, 'Full name is required').refine(value => /^[a-zA-Z\s.]+$/.test(value), {
         message: 'Full name can only contain letters'
@@ -100,64 +100,73 @@ type FormData = z.infer<typeof schema>;
 
 
 const DetailForm = () => {
+    const dispatch = useAppDispatch();
     const { data: userData } = useSelector((state: RootState) => state.userLogin);
     const { loading } = useSelector((state: RootState) => state.userDetailPost);
     const { data: allBranches } = useSelector((state: RootState) => state.allBranches);
+    const { data: userGetData, loading: isUserGetLoading } = useSelector((state: RootState) => state.userDetailGet);
+
+
+    useEffect(() => {
+        if (userData?.referenceNo === undefined) return;
+        dispatch(userDetailGet(userData?.referenceNo ?? ''))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userData])
+
     const userdob = parseNIC(userData?.nic ?? '')
     const { control, register, unregister, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
         shouldUnregister: true,
         defaultValues: {
-            nationality: "",
-            fullName: "",
-            preferredLanguage: preferredLanguages[0],
+            nationality: userGetData?.nationality ?? "",
+            fullName: userGetData?.fullName ?? "",
+            preferredLanguage: userGetData?.preferredLanguage ?? preferredLanguages[0],
             dob: userdob?.Birthday ?? "",
-            mothersMaidenName: "",
-            residencePhone: "",
-            whatsappNo: "",
-            additionalContactNo: "",
-            residenceType: "",
-            permAddressLine1: "",
-            permAddressLine2: "",
-            permAddressLine3: "",
-            permAddressLine4: "",
-            province: provinces[0],
-            mailAddressLine1: "",
-            mailAddressLine2: "",
-            mailAddressLine3: "",
-            mailAddressLine4: "",
-            politicallyExposed: "",
-            employmentCategory: employmentCategories[0],
-            expInPresentEmployment: "",
-            occupationType: occupationTypes[0],
-            nameOfTheEmployer: "",
-            designation: "",
-            monthlyNetIncome: "",
-            officeContactNo: "",
-            officeAddressLine1: "",
-            officeAddressLine2: "",
-            officeAddressLine3: "",
-            officeAddressLine4: "",
-            experienceInPreviousEmployment: "",
-            nameOfThePreviousEmployer: "",
-            guarantorName: "",
-            relationShipToApplicant: "",
-            guarantorNic: "",
-            guarantorMobileNo: "",
-            guarantorAddressLine1: "",
-            guarantorAddressLine2: "",
-            guarantorAddressLine3: "",
-            guarantorAddressLine4: "",
-            cardCollectBranch: "",
-            nameOnCard: "",
-            termsAndCondition: false,
+            mothersMaidenName: userGetData?.mothersMaidenName ?? "",
+            residencePhone: userGetData?.residencePhone ?? "",
+            whatsappNo: userGetData?.whatsappNo ?? "",
+            additionalContactNo: userGetData?.additionalContactNo ?? "",
+            residenceType: userGetData?.residenceType ?? "",
+            permAddressLine1: userGetData?.permAddressLine1 ?? "",
+            permAddressLine2: userGetData?.permAddressLine2 ?? "",
+            permAddressLine3: userGetData?.permAddressLine3 ?? "",
+            permAddressLine4: userGetData?.permAddressLine4 ?? "",
+            province: userGetData?.province ?? provinces[0],
+            mailAddressLine1: userGetData?.mailAddressLine1 ?? "",
+            mailAddressLine2: userGetData?.mailAddressLine2 ?? "",
+            mailAddressLine3: userGetData?.mailAddressLine3 ?? "",
+            mailAddressLine4: userGetData?.mailAddressLine4 ?? "",
+            politicallyExposed: userGetData?.politicallyExposed ?? "",
+            employmentCategory: userGetData?.employmentCategory ?? employmentCategories[0],
+            expInPresentEmployment: userGetData?.expInPresentEmployment ?? "",
+            occupationType: userGetData?.occupationType ?? occupationTypes[0],
+            nameOfTheEmployer: userGetData?.nameOfTheEmployer ?? "",
+            designation: userGetData?.designation ?? "",
+            monthlyNetIncome: userGetData?.monthlyNetIncome ?? "",
+            officeContactNo: userGetData?.officeContactNo ?? "",
+            officeAddressLine1: userGetData?.officeAddressLine1 ?? "",
+            officeAddressLine2: userGetData?.officeAddressLine2 ?? "",
+            officeAddressLine3: userGetData?.officeAddressLine3 ?? "",
+            officeAddressLine4: userGetData?.officeAddressLine4 ?? "",
+            experienceInPreviousEmployment: userGetData?.experienceInPreviousEmployment ?? "",
+            nameOfThePreviousEmployer: userGetData?.nameOfThePreviousEmployer ?? "",
+            guarantorName: userGetData?.guarantorName ?? "",
+            relationShipToApplicant: userGetData?.relationShipToApplicant ?? "",
+            guarantorNic: userGetData?.guarantorNic ?? "",
+            guarantorMobileNo: userGetData?.guarantorMobileNo ?? "",
+            guarantorAddressLine1: userGetData?.guarantorAddressLine1 ?? "",
+            guarantorAddressLine2: userGetData?.guarantorAddressLine2 ?? "",
+            guarantorAddressLine3: userGetData?.guarantorAddressLine3 ?? "",
+            guarantorAddressLine4: userGetData?.guarantorAddressLine4 ?? "",
+            cardCollectBranch: userGetData?.cardCollectBranch ?? "",
+            nameOnCard: userGetData?.nameOnCard ?? "",
+            termsAndCondition: userGetData?.status === 'A' ? true : false ?? false,
             governmentSectorType: governmentSectorTypes[0],
             pvtSectorType: privateSectorTypes[0],
             selfEmpType: selfEmployedTypes[0]
         }
     });
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
     const empCategory = watch("employmentCategory");
     const [sameMobile, setSameMobile] = useState<boolean>(false)
     const [sameAddress, setSameAddress] = useState<boolean>(false)
@@ -209,7 +218,7 @@ const DetailForm = () => {
         if (sameMobile) {
             setValue("whatsappNo", userData?.mobileNumber ?? '');
         } else {
-            setValue("whatsappNo", '');
+            setValue("whatsappNo", userGetData?.whatsappNo ?? '');
         }
         if (sameAddress) {
             const { permAddressLine1, permAddressLine2, permAddressLine3, permAddressLine4 } = getValues();
@@ -218,16 +227,16 @@ const DetailForm = () => {
             setValue('mailAddressLine3', permAddressLine3)
             setValue('mailAddressLine4', permAddressLine4)
         } else {
-            setValue('mailAddressLine1', "")
-            setValue('mailAddressLine2', "")
-            setValue('mailAddressLine3', "")
-            setValue('mailAddressLine4', "")
+            setValue('mailAddressLine1', userGetData?.mailAddressLine1 ?? "")
+            setValue('mailAddressLine2', userGetData?.mailAddressLine2 ?? "")
+            setValue('mailAddressLine3', userGetData?.mailAddressLine3 ?? "")
+            setValue('mailAddressLine4', userGetData?.mailAddressLine4 ?? "")
         }
         if (sameFullName) {
             const { fullName } = getValues();
             setValue("nameOnCard", fullName)
         } else {
-            setValue("nameOnCard", "")
+            setValue("nameOnCard", userGetData?.nameOnCard ?? '')
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sameMobile, sameAddress, sameFullName])
@@ -244,6 +253,8 @@ const DetailForm = () => {
         dispatch(getFusionBranch());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    isUserGetLoading && <Loader />
 
     return (
         <div className="bg-card-pattern flex justify-center py-5 px-2 sm:px-0 sm:h-screen">

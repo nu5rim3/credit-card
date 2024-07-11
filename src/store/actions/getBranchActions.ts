@@ -15,9 +15,10 @@ export const getFusionBranch = () => async (dispatch: AppDispatch) => {
   try {
     const response = await axiosInstance.get(`/branches/fusion`);
     dispatch(getBranchPostSuccess(response.data.data.content ?? []));
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      dispatch(getBranchPostFailure(error.message));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    if (error) {
+      dispatch(getBranchPostFailure(error?.response?.data?.error));
     } else {
       dispatch(getBranchPostFailure("An unknown error occurred"));
     }

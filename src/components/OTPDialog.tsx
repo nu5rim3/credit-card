@@ -53,12 +53,12 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, referenceId, isOpen, setI
             onClose={() => setIsOpen(false)}
             className="relative z-50"
         >
-            <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-primary/50 backdrop-blur-lg">
-                <DialogPanel className="max-w-lg space-y-4 border bg-primary-50 p-5 rounded-lg shadow-lg text-center text-primary">
+            <div className="fixed inset-0 flex w-screen items-center justify-center p-2 bg-primary/50 backdrop-blur-lg">
+                <DialogPanel className="space-y-4 border bg-primary-50 p-2 rounded-lg shadow-lg text-center text-primary">
                     <DialogTitle className="font-semibold text-xl">
                         OTP Verification
                     </DialogTitle>
-                    <Description className="text-gray-500">
+                    <Description className="text-gray-500 px-5">
                         Please check the mobile and enter the verification code
                         <br />({maskPhoneNumber(mobile)})
                     </Description>
@@ -77,13 +77,13 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, referenceId, isOpen, setI
                             {({ remainingTime }) => remainingTime}
                         </CountdownCircleTimer>
                     </div>
-                    <div className="bg-gray-100 p-5 rounded-lg">
+                    <div className="bg-gray-200 rounded-lg flex justify-center items-center">
                         <OtpInput
-                            containerStyle="grid grid-cols-6 gap-2 justify-center"
+                            containerStyle="flex flex-1 justify-between items-center px-5 py-5"
                             value={otp}
                             onChange={setOtp}
                             numInputs={6}
-                            renderSeparator={<span>&amp;</span>}
+                            renderSeparator={<span> </span>}
                             renderInput={(props) => <input {...props} />}
                             inputStyle={{ width: '2.5rem', height: '2.5rem', fontSize: '1.5rem', borderRadius: '0.5rem', border: '1px solid #1c34c6' }}
                         />

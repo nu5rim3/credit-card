@@ -21,10 +21,11 @@ export const userDetailGet =
         `/general-customer/${referenceNo}`
       );
       dispatch(personalDetailGetSuccess(response.data));
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        dispatch(personalDetailGetFailure(error.message));
-        toast.error(error.message);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error) {
+        dispatch(personalDetailGetFailure(error?.response?.data?.error));
+        toast.error(error?.response?.data?.error);
       } else {
         dispatch(personalDetailGetFailure("An unknown error occurred"));
       }

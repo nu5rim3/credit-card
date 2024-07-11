@@ -13,7 +13,7 @@ import { createGoogleUat } from '../services/api/apiFetch';
 import toast from 'react-hot-toast';
 import { updateDocumentStatus } from '../store/actions/documentUpdateActions';
 import { useNavigate } from 'react-router-dom';
-import { LoaderCircle } from 'lucide-react';
+import { LoaderCircle, StepBack } from 'lucide-react';
 import ConfirmDialog from '../components/ConfirmDialog';
 
 
@@ -425,12 +425,21 @@ const DocumentForm = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [allUploaded])
 
+    const onBack = () => {
+        navigate('/personal-detail')
+    }
+
     isUserDataLoading && <Loader />
 
     return (
         <div className="bg-card-pattern flex justify-center py-5 px-2 sm:px-0 sm:h-screen">
             <div className='container flex flex-col justify-center items-center'>
                 <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
+                <div className='w-full flex flex-1 sm:hidden'>
+                    <Button variant={'link'} className='flex flex-row items-center' onClick={onBack}>
+                        <StepBack size={18} className='mr-1' /> personal details
+                    </Button>
+                </div>
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full mb-10 sm:mb-0">
                     <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl sm:h-[75vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950 text-center sm:text-left mb-5 text-lg'>Customer Document Details</p>
@@ -559,7 +568,10 @@ const DocumentForm = () => {
                             }
                         </div>
                     </div>
-                    <div className="mt-5 md:col-span-3 justify-end h-10 animate-fade-up animate-duration-[6000ms] animate-once hidden sm:flex">
+                    <div className="mt-5 md:col-span-3 justify-between h-10 animate-fade-up animate-duration-[6000ms] animate-once hidden sm:flex">
+                        <Button variant={'link'} className='flex flex-row items-center' onClick={onBack}>
+                            <StepBack size={18} className='mr-1' /> personal details
+                        </Button>
                         <Button variant='primary' type="submit" className={''} >
                             {isdocumentUpdateLoading ? <LoaderCircle className="animate-spin animate-infinite" /> : 'Save Document Details'}
                         </Button>

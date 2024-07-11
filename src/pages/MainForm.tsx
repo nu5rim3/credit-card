@@ -95,6 +95,7 @@ const MainForm = () => {
                             <Input
                                 type={"email"}
                                 label={"Email"}
+                                className="normal-case"
                                 error={errors?.email?.message?.toString()}
                                 required
                                 {...register("email")}
@@ -110,5 +111,5 @@ const MainForm = () => {
         </>
     );
 };
-
+// CC000000000003592
 export default MainForm;

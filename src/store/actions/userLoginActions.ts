@@ -20,11 +20,11 @@ export const userLogin =
       const response = await axiosInstance.post("/master/v2", data);
       dispatch(loginSuccess(response.data));
       toast.success(response.data.message);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error("[ERROR] - ", error);
-        dispatch(loginFailure(error.message));
-        toast.error(error.message);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error) {
+        dispatch(loginFailure(error?.response?.data?.error));
+        toast.error(error?.response?.data?.error);
       } else {
         dispatch(loginFailure("An unknown error occurred"));
       }

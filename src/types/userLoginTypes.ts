@@ -151,7 +151,7 @@ export interface IUserDetailGetRespose {
   experienceInPreviousEmployment: string;
   nameOfThePreviousEmployer: string;
   guarantorName: string;
-  relationShipToApplication: string;
+  relationShipToApplicant: string;
   guarantorNic: string;
   guarantorMobileNo: string;
   guarantorAddressLine1: string;
