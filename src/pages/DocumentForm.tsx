@@ -437,7 +437,7 @@ const DocumentForm = () => {
                 <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
                 <div className='w-full flex flex-1 sm:hidden'>
                     <Button variant={'link'} className='flex flex-row items-center' onClick={onBack}>
-                        <StepBack size={18} className='mr-1' /> personal details
+                        <StepBack size={18} className='mr-1' /> Personal details
                     </Button>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full mb-10 sm:mb-0">
@@ -570,7 +570,7 @@ const DocumentForm = () => {
                     </div>
                     <div className="mt-5 md:col-span-3 justify-between h-10 animate-fade-up animate-duration-[6000ms] animate-once hidden sm:flex">
                         <Button variant={'link'} className='flex flex-row items-center' onClick={onBack}>
-                            <StepBack size={18} className='mr-1' /> personal details
+                            <StepBack size={18} className='mr-1' /> Personal details
                         </Button>
                         <Button variant='primary' type="submit" className={''} >
                             {isdocumentUpdateLoading ? <LoaderCircle className="animate-spin animate-infinite" /> : 'Save Document Details'}

@@ -1,13 +1,17 @@
 import logo from '../assets/images/lolcf_logo.svg'
 import cardImage from '../assets/images/cards.webp'
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components';
 
 const GetStart = () => {
+
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const ved = searchParams.get('ved');
     const navigate = useNavigate();
 
     const onGetStartClick = () => {
-        navigate('/form')
+        navigate(`/form/?ved=${ved}`)
     }
 
     return (

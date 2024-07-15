@@ -28,6 +28,7 @@ export interface IUserLoginRequest {
   nic: string;
   mobileNumber: string;
   email: string;
+  identifire?: string | null;
 }
 
 export interface IResponseState {

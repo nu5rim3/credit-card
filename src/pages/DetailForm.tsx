@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store/store';
 import { userDetailPost } from '../store/actions/userDetailPostActions';
 import { parseNIC } from '../utils/textConvertor';
-import { LoaderCircle } from 'lucide-react';
+import { LoaderCircle, StepForward } from 'lucide-react';
 import ComboBox from '../components/ComboBox';
 import { getFusionBranch } from '../store/actions/getBranchActions';
 import { IBranch } from '../types/userLoginTypes';
@@ -254,12 +254,23 @@ const DetailForm = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const onForward = () => {
+        navigate("/document-detail");
+    }
+
     isUserGetLoading && <Loader />
 
     return (
         <div className="bg-card-pattern flex justify-center py-5 px-2 sm:px-0 sm:h-screen">
             <div className='container flex flex-col justify-center items-center'>
                 <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
+                {userGetData?.stage === 'A' &&
+                    <div className='w-full flex flex-1 sm:hidden justify-end'>
+                        <Button variant={'link'} className='flex flex-row items-center' onClick={onForward}>
+                            Document details <StepForward size={18} className='ml-1' />
+                        </Button>
+                    </div>
+                }
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
 
                     <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
@@ -689,14 +700,22 @@ const DetailForm = () => {
                         </div>
 
                     </div>
-                    <div className="md:col-span-4 justify-end h-10 animate-fade-up animate-duration-[6000ms] animate-once hidden sm:flex">
+                    <div className="mt-5 md:col-span-4 justify-between h-10 animate-fade-up animate-duration-[6000ms] animate-once hidden sm:flex">
+                        {userGetData?.status === 'A' &&
+                            <Button variant={'link'} className='flex flex-row items-center' onClick={onForward}>
+                                Document details <StepForward size={18} className='ml-1' />
+                            </Button>
+                        }
+
                         <Button variant='primary' type="submit" className={''} >
-                            {loading ? <LoaderCircle className="animate-spin animate-infinite" /> : 'Save Personal Details'}
+                            {loading && <LoaderCircle className="animate-spin animate-infinite" />}
+                            {userGetData?.status === 'A' ? 'Update Personal Details' : 'Save Personal Details'}
                         </Button>
                     </div>
                     <div className="fixed sm:hidden bottom-3 bg-primary-50 h-auto animate-fade-up animate-duration-[6000ms] animate-once w-full rounded-lg pr-4">
                         <Button variant='primary' type="submit" className={'w-full'} >
-                            {loading ? <LoaderCircle className="animate-spin animate-infinite" /> : 'Save Personal Details'}
+                            {loading && <LoaderCircle className="animate-spin animate-infinite" />}
+                            {userGetData?.status === 'A' ? 'Update Personal Details' : 'Save Personal Details'}
                         </Button>
                     </div>
                 </form>

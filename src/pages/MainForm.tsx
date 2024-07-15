@@ -8,6 +8,7 @@ import * as z from 'zod';
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/store";
 import { userLogin } from "../store/actions/userLoginActions";
+import { useLocation } from "react-router-dom";
 
 const schema = z.object({
     nic: z.string().min(1, 'NIC Number is required').regex(/^(?:\d{9}[vVxX]|\d{12})$/, 'Invalid NIC number'),
@@ -22,6 +23,10 @@ interface FormData {
 }
 
 const MainForm = () => {
+
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const ved = searchParams.get('ved');
 
     const {
         register,
@@ -38,7 +43,7 @@ const MainForm = () => {
 
     const onSubmit = useCallback((formData: FormData) => {
         setFormData(formData);
-        dispatch(userLogin(formData))
+        dispatch(userLogin({ ...formData, identifire: ved ?? null }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
