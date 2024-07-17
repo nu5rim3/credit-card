@@ -187,7 +187,8 @@ const DetailForm = () => {
      * @param data 
      */
     const onSubmit = (data: FormData) => {
-        dispatch(userDetailPost(navigate, { ...data, referenceNo: userData?.referenceNo ?? "" }))
+        const branchCode = allBranches?.find((branch: IBranch) => branch?.branchDes === data.cardCollectBranch)?.branchCode ?? ''
+        dispatch(userDetailPost(navigate, { ...data, referenceNo: userData?.referenceNo ?? "", branchCode: branchCode }))
     };
 
     /**

@@ -80,6 +80,7 @@ export interface IUserDetailPostRequest {
   guarantorAddressLine3?: string;
   guarantorAddressLine4?: string;
   cardCollectBranch: string;
+  branchCode: string;
   nameOnCard: string;
   governmentSectorType?: string;
   pvtSectorType?: string;
