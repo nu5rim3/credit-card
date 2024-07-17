@@ -14,6 +14,7 @@ interface HUIInputProps extends InputProps {
     checkLabel?: string;
     checkStatus?: boolean;
     setCheackStatus?: (check: boolean) => void;
+    ruleLabel?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, HUIInputProps>(
@@ -30,6 +31,7 @@ const Input = forwardRef<HTMLInputElement, HUIInputProps>(
             checkLabel,
             checkStatus,
             setCheackStatus,
+            ruleLabel,
             ...props
         },
         ref
@@ -94,6 +96,9 @@ const Input = forwardRef<HTMLInputElement, HUIInputProps>(
                         className
                     )}
                 />
+                {ruleLabel && error === undefined && (
+                    <p className="text-xs text-gray-500 mt-1 italic normal-case">{ruleLabel}</p>
+                )}
                 <Label className="block text-xs font-medium text-red-800 text-left mt-1 italic normal-case">
                     {error}
                 </Label>

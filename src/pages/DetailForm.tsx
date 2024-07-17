@@ -437,12 +437,14 @@ const DetailForm = () => {
                             label={'Residence Phone Number'}
                             error={errors?.residencePhone?.message}
                             {...register('residencePhone')}
+                            ruleLabel={"Enter phone number (e.g. 0712345678)"}
                         />
                         <Input
                             type={'tel'}
                             label={'Additional Contact Number'}
                             error={errors?.additionalContactNo?.message}
                             {...register('additionalContactNo')}
+                            ruleLabel={"Enter phone number (e.g. 0712345678)"}
                         />
                     </div>
 
@@ -553,6 +555,7 @@ const DetailForm = () => {
                             required
                             error={errors?.officeContactNo?.message}
                             {...register('officeContactNo')}
+                            ruleLabel={"Enter phone number (e.g. 0712345678)"}
                         />
                         <>
                             <Input
@@ -618,6 +621,7 @@ const DetailForm = () => {
                             required
                             error={errors?.guarantorMobileNo?.message}
                             {...register('guarantorMobileNo')}
+                            ruleLabel={"Enter phone number (e.g. 0712345678)"}
                         />
                         <Input
                             type={'text'}

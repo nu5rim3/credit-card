@@ -95,7 +95,7 @@ const MainForm = () => {
                                 error={errors?.mobileNumber?.message?.toString()}
                                 required
                                 {...register("mobileNumber")}
-
+                                ruleLabel={"Enter mobile number (e.g. 0712345678)"}
                             />
                             <Input
                                 type={"email"}
