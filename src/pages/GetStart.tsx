@@ -21,7 +21,7 @@ const GetStart = () => {
                 <div className="text-3xl sm:text-5xl mb-2 text-primary-900 animate-fade-up animate-duration-[2000ms] animate-once text-center sm:text-left">LOLC FINANCE CREDIT CARDS</div>
                 <img src={cardImage} className='animate-fade-up animate-duration-[3000ms] animate-once w-full sm:w-1/2' />
                 <div className="text-3xl sm:text-5xl font-extrabold mb-2 text-primary-900 animate-fade-up animate-duration-[2000ms] animate-once text-center sm:text-left">Fuel the Goodness in You.</div>
-                <Button variant={'primary'} className={'w-full m-1 sm:w-44'} onClick={onGetStartClick}>Get Start</Button>
+                <Button variant={'primary'} className={'w-full m-1 sm:w-44'} onClick={onGetStartClick}>Get Started</Button>
             </div>
         </div>
     )
