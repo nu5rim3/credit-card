@@ -108,8 +108,9 @@ const DetailForm = () => {
 
 
     useEffect(() => {
-        if (userData?.referenceNo === undefined) return;
-        dispatch(userDetailGet(userData?.referenceNo ?? ''))
+        if (userData?.stage === 'PENDING_DOCUMENT') {
+            dispatch(userDetailGet(userData?.referenceNo ?? ''))
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userData])
 
