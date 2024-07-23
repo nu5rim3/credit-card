@@ -34,7 +34,7 @@ const schema = z.object({
         { message: "You must be at least 18 years old" }
     ),
     mothersMaidenName: z.string().min(1, 'Mother\'s maiden name is required').refine(value => /^[a-zA-Z\s.]+$/.test(value), {
-        message: 'Full name can only contain letters'
+        message: 'Name can only contain letters'
     }),
     residencePhone: z.string().optional().refine((val) => !val || /^(?:[0-9]{10})$/.test(val), {
         message: 'Invalid phone number',
@@ -58,8 +58,8 @@ const schema = z.object({
     governmentSectorType: z.string().min(1, 'Government sector type is required').optional(),
     pvtSectorType: z.string().min(1, 'Private sector type is required').optional(),
     selfEmpType: z.string().min(1, 'Self employed types is required').optional(),
-    expInPresentEmployment: z.string().min(1, 'Experience in present employment is required').regex(/^[0-9]*$/, 'Years in number reqired'),
-    experienceInPreviousEmployment: z.string().min(1, 'Experience in previous employment is required').regex(/^[0-9]*$/, 'Years in number reqired'),
+    expInPresentEmployment: z.string().min(1, 'Experience in present employment is required').regex(/^[0-9\s.]*$/, 'Years in number reqired'),
+    experienceInPreviousEmployment: z.string().min(1, 'Experience in previous employment is required').regex(/^[0-9\s.]*$/, 'Years in number reqired'),
     nameOfThePreviousEmployer: z.string().min(1, 'Name of the previous employer is required'),
     occupationType: z.string().min(1, 'Occupation type is required'),
     nameOfTheEmployer: z.string().min(1, 'Name of the employer/business is required'),
@@ -71,7 +71,7 @@ const schema = z.object({
     officeAddressLine3: z.string().optional(),
     officeAddressLine4: z.string().optional(),
     guarantorName: z.string().min(1, 'Guarantor name is required').refine(value => /^[a-zA-Z\s.]+$/.test(value), {
-        message: 'Full name can only contain letters'
+        message: 'Name can only contain letters'
     }),
     relationShipToApplicant: z.string().min(1, 'Relationship to applicant is required'),
     guarantorNic: z.string().min(1, 'Guarantor NIC number is required').regex(/^(?:\d{9}[vVxX]|\d{12})$/, 'Invalid NIC number'),
@@ -81,7 +81,9 @@ const schema = z.object({
     guarantorAddressLine3: z.string().optional(),
     guarantorAddressLine4: z.string().optional(),
     cardCollectBranch: z.string().min(1, 'Card collection branch is required'),
-    nameOnCard: z.string().min(1, 'Name on card is required'),
+    nameOnCard: z.string().min(1, 'Name of the card is required').refine(value => /^[a-zA-Z\s.]+$/.test(value), {
+        message: 'Name can only contain letters'
+    }),
     termsAndCondition: z.boolean().refine((val) => val === true, "You must accept the Terms and Conditions."),
 })
 
@@ -695,8 +697,8 @@ const DetailForm = () => {
                                 render={({ field }) =>
                                     <Checkbox
                                         type={"terms"}
+                                        checked={field.value}
                                         {...field}
-                                        value={field.value ? "true" : "false"}
                                         setOpen={setOpenTermsDialog}
                                         error={errors?.termsAndCondition?.message}
                                     />

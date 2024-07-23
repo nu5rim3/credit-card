@@ -14,7 +14,6 @@ import { fallbackRender } from "./components/ErrorBoundaryComp";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const GetStart = lazy(() => import('./pages/GetStart'));
-const Playground = lazy(() => import('./pages/Playground'));
 const MainForm = lazy(() => import('./pages/MainForm'));
 const DetailForm = lazy(() => import('./pages/DetailForm'));
 const DocumentForm = lazy(() => import('./pages/DocumentForm'));
@@ -30,12 +29,12 @@ function App() {
           <Suspense fallback={<Loader />}>
             <Routes>
               <Route path="/" element={<GetStart />} />
-              <Route path="/playground" element={<Playground />} />
               <Route path="/form" element={<MainForm />} />
               <Route path="/personal-detail" element={<ProtectedRoute component={DetailForm} />} />
               <Route path="/document-detail" element={<ProtectedRoute component={DocumentForm} />} />
               <Route path="/complete" element={<Completed />} />
-              {/* <Route path="/debug" element={<DocumentForm />} /> */}
+              <Route path="/debug" element={<DetailForm />} />
+              <Route path="/debug2" element={<DocumentForm />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>

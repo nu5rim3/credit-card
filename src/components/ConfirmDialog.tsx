@@ -23,7 +23,7 @@ const ConfirmDialog: React.FC<TConfirmDialog> = ({ open, close, onConfirm }) => 
                             Confirm to Apply
                         </DialogTitle>
                         <p className="mt-2 text-sm/6 text-primary-">
-                            Do you want to apply the creadit card?
+                            Do you want to apply for the credit card?
                         </p>
                         <div className="mt-4 flex gap-2 flex-1 justify-end">
                             <Button
@@ -36,7 +36,7 @@ const ConfirmDialog: React.FC<TConfirmDialog> = ({ open, close, onConfirm }) => 
                                 variant='primary'
                                 onClick={onConfirm}
                             >
-                                Confrim
+                                Confirm
                             </Button>
                         </div>
                     </DialogPanel>
