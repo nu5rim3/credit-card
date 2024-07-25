@@ -1,13 +1,15 @@
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import Button from './Button';
+import { LoaderCircle } from 'lucide-react';
 
 type TConfirmDialog = {
     open: boolean;
     close: () => void;
     onConfirm: () => void;
+    loading: boolean;
 }
 
-const ConfirmDialog: React.FC<TConfirmDialog> = ({ open, close, onConfirm }) => {
+const ConfirmDialog: React.FC<TConfirmDialog> = ({ open, close, onConfirm, loading }) => {
 
 
     return (
@@ -29,14 +31,16 @@ const ConfirmDialog: React.FC<TConfirmDialog> = ({ open, close, onConfirm }) => 
                             <Button
                                 variant='outline'
                                 onClick={close}
+                                disabled={loading}
                             >
                                 Close
                             </Button>
                             <Button
                                 variant='primary'
                                 onClick={onConfirm}
+                                disabled={loading}
                             >
-                                Confirm
+                                {loading && <LoaderCircle className="animate-spin animate-infinite" />} Confirm
                             </Button>
                         </div>
                     </DialogPanel>

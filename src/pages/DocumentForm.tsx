@@ -259,6 +259,7 @@ const DocumentForm = () => {
     const dispatch = useAppDispatch();
     const [allUploaded, setAllUploaded] = useState(false);
     const [confirmDialog, setConfirmDialog] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
     const [formData, setFormData] = useState<FormData | undefined>();
     const { loading: isdocumentUpdateLoading } = useSelector((state: RootState) => state.documentUpdatePost);
     const { data: userLoginData } = useSelector((state: RootState) => state.userLogin);
@@ -299,6 +300,7 @@ const DocumentForm = () => {
      * onConfirm - upload the documents to the GCP
      */
     const onConfirm = async () => {
+        setIsUploading(true);
         const data = formData;
         if (data !== undefined) {
             const uploadResult = Object.keys(data).map(async (key: any) => {
@@ -349,6 +351,7 @@ const DocumentForm = () => {
                 setAllUploaded(false)
             });
         }
+        setIsUploading(false);
         setConfirmDialog(false);
     }
 
@@ -599,7 +602,7 @@ const DocumentForm = () => {
                     </div>
                 </form>
             </div>
-            <ConfirmDialog open={confirmDialog} close={() => setConfirmDialog(false)} onConfirm={onConfirm} />
+            <ConfirmDialog open={confirmDialog} close={() => setConfirmDialog(false)} onConfirm={onConfirm} loading={isUploading} />
         </div>
     )
 }

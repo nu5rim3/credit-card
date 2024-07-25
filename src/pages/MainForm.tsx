@@ -52,8 +52,6 @@ const MainForm = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data?.referenceNo]);
 
-    console.log('[data] - ', data)
-
     useEffect(() => {
         if (data !== null) {
             setOpenOTP(true);
