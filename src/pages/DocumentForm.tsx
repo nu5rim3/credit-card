@@ -428,11 +428,19 @@ const DocumentForm = () => {
         navigate('/personal-detail')
     }
 
+    useEffect(() => {
+        if (userData?.stage === 'COMPLETED') {
+            navigate('/')
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userData])
+
+
     isUserDataLoading && <Loader />
 
     return (
         <div className="bg-card-pattern flex justify-center py-5 px-2 sm:px-0 sm:h-screen">
-            <div className='container flex flex-col justify-center items-center'>
+            <div className='container flex flex-col justify-center items-center md:p-4'>
                 <img className="w-32 mb-3 animate-fade-up animate-duration-[1200ms] animate-once" src={logo} />
                 <div className='w-full flex flex-1 sm:hidden'>
                     <Button variant={'link'} className='flex flex-row items-center' onClick={onBack}>
@@ -442,7 +450,7 @@ const DocumentForm = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full mb-10 sm:mb-0">
                     <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl sm:h-[75vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950 text-center sm:text-left mb-5 text-lg'>Customer Document Details</p>
-                        <div className='grid grid-cols-1 sm:grid-cols-4 gap-2'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 sm:grid-cols-4 gap-2'>
                             <Uploader
                                 label={'NIC/Driving License (Front Side)'}
                                 multiple={false}
@@ -474,6 +482,7 @@ const DocumentForm = () => {
                                     setValue('UTILITY_BILL', files);
                                 }}
                                 error={errors.UTILITY_BILL?.message?.toString() || ''}
+                                ruleLabel={"You can upload upto 3 files"}
                             />
                             {
                                 userData?.employmentCategory !== 'Self Employed' &&
@@ -487,6 +496,7 @@ const DocumentForm = () => {
                                             setValue('PAY_SLIP', files);
                                         }}
                                         error={errors.PAY_SLIP?.message?.toString() || ''}
+                                        ruleLabel={"You can upload upto 3 files"}
                                     />
                                     <Uploader
                                         label={'Employee ID'}
@@ -497,6 +507,7 @@ const DocumentForm = () => {
                                             setValue('EMLOYEE_ID', files);
                                         }}
                                         error={errors.EMLOYEE_ID?.message?.toString() || ''}
+                                        ruleLabel={"You can upload upto 2 files"}
                                     />
                                     <Uploader
                                         label={'Employment Confirmation Letter'}
@@ -507,6 +518,7 @@ const DocumentForm = () => {
                                         error={errors.EMPLOYEMENT_CONFIRMATION_LETTER?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
+                                        ruleLabel={"You can upload upto 2 files"}
                                     />
                                     <Uploader
                                         label={'Bank Statements (Last month)'}
@@ -517,6 +529,7 @@ const DocumentForm = () => {
                                         error={errors.BANK_STATEMENT?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
+                                        ruleLabel={"You can upload upto 20 files"}
                                     />
                                     <Uploader
                                         label={'Proof of Income (Last month)'}
@@ -527,6 +540,7 @@ const DocumentForm = () => {
                                         error={errors.PROOF_OF_INCOME?.message?.toString() || ''}
                                         multiple={true}
                                         required
+                                        ruleLabel={"You can upload upto 5 files"}
                                     />
                                     <Uploader
                                         label={'Business Card'}
@@ -537,6 +551,7 @@ const DocumentForm = () => {
                                         error={errors.BUSINESS_CARD?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
+                                        ruleLabel={"You can upload upto 2 files"}
                                     />
                                 </>
                             }
@@ -552,6 +567,7 @@ const DocumentForm = () => {
                                         error={errors.BUSINESS_REGISTRATION_CRETIFICATION?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
+                                        ruleLabel={"You can upload upto 5 files"}
                                     />
                                     <Uploader
                                         label={'Bank Statements (Last 3 months)'}
@@ -562,6 +578,7 @@ const DocumentForm = () => {
                                         error={errors.SELF_BANK_STATEMENT?.message?.toString() || ''}
                                         multiple={true}
                                         required
+                                        ruleLabel={"You can upload upto 20 files"}
                                     />
                                 </>
                             }

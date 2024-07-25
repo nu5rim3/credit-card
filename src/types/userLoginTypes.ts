@@ -170,6 +170,9 @@ export interface IUserDetailGetRespose {
   officeContactNo: string;
   stage: string;
   referenceNo: string;
+  isCardHolderNameSame: boolean;
+  isMailAddressSame: boolean;
+  isWhatsAppSame: boolean;
 }
 
 export interface IBranch {

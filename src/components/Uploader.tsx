@@ -11,10 +11,11 @@ interface UploaderProps extends InputProps {
     label?: string;
     required: boolean;
     error?: string;
+    ruleLabel?: string;
 }
 
 const Uploader = forwardRef<HTMLInputElement, UploaderProps>(
-    ({ onChange, multiple, label, required, error }, ref) => {
+    ({ onChange, multiple, label, required, error, ruleLabel }, ref) => {
         const inputRef = useRef<HTMLInputElement>(null);
         const [files, setFiles] = useState<File[]>([]);
 
@@ -94,13 +95,16 @@ const Uploader = forwardRef<HTMLInputElement, UploaderProps>(
                         onChange={handleFileSelected}
                         accept="image/*, application/pdf"
                     />
+                    {ruleLabel && error === undefined || error === '' && (
+                        <p className="text-xs text-gray-500 mt-1 italic normal-case">{ruleLabel}</p>
+                    )}
                     <Label className="block text-xs font-medium text-red-800 text-left mt-1 italic normal-case">
                         {error}
                     </Label>
                     {files.length > 0 && (
                         <div className="mt-2">
                             <p className="text-sm font-medium text-gray-700">Selected files:</p>
-                            <div className="mt-2 flex flex-col sm:flex-row gap-2">
+                            <div className="mt-2 grid grid-cols-1 gap-2">
                                 {files.map((file, index) => (
                                     <div key={index} className="rounded-xl overflow-hidden">
                                         {file.type.includes('image') && (
@@ -111,7 +115,7 @@ const Uploader = forwardRef<HTMLInputElement, UploaderProps>(
                                                 key={index}
                                                 className="relative w-44 sm:w-44 h-28 rounded-lg flex items-center justify-start overflow-hidden cursor-pointer bg-gray-100 p-1 hover:shadow-xl transition duration-300 delay-500 hover:delay-300 animate-fade-up animate-duration-[3000ms] animate-once"
                                             >
-                                                <div className="absolute bottom-0 h-full w-full flex flex-col gap-2 items-start p-3 rounded-lg bg-gray-800/50 sm:bg-gray-800/0 hover:bg-gray-800/50">
+                                                <div className="absolute bottom-0 h-full flex flex-col gap-2 items-start p-3 rounded-lg bg-gray-800/50 sm:bg-gray-800/0 hover:bg-gray-800/50">
                                                     <button className="bg-primary-900/70 p-1 rounded-full hover:bg-primary-900" onClick={() => handleRemoveImage(index)}><Trash2 size={20} className="text-primary-200" /></button>
                                                     <a className="bg-primary-900/70 p-1 rounded-full hover:bg-primary-900" href={URL.createObjectURL(file)} target="_blank" rel="noopener noreferrer"><ZoomIn size={20} className="text-primary-200" /></a>
                                                 </div>

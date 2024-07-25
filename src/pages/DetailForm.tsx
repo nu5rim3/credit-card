@@ -85,6 +85,9 @@ const schema = z.object({
         message: 'Name can only contain letters'
     }),
     termsAndCondition: z.boolean().refine((val) => val === true, "You must accept the Terms and Conditions."),
+    isWhatsAppSame: z.boolean().optional(),
+    isMailAddressSame: z.boolean().optional(),
+    isCardHolderNameSame: z.boolean().optional(),
 })
 
 const nationalities: RadioOption[] = [{ label: 'Sri Lankan', value: 'SriLankan' }, { label: 'Other', value: 'Other' }]
@@ -166,7 +169,10 @@ const DetailForm = () => {
             termsAndCondition: userGetData?.status === 'A' ? true : false ?? false,
             governmentSectorType: governmentSectorTypes[0],
             pvtSectorType: privateSectorTypes[0],
-            selfEmpType: selfEmployedTypes[0]
+            selfEmpType: selfEmployedTypes[0],
+            isWhatsAppSame: userGetData?.isWhatsAppSame ?? false,
+            isMailAddressSame: userGetData?.isMailAddressSame ?? false,
+            isCardHolderNameSame: userGetData?.isCardHolderNameSame ?? false,
         }
     });
     const navigate = useNavigate();
@@ -224,6 +230,11 @@ const DetailForm = () => {
         } else {
             setValue("whatsappNo", userGetData?.whatsappNo ?? '');
         }
+        setValue('isWhatsAppSame', sameMobile)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sameMobile])
+
+    useEffect(() => {
         if (sameAddress) {
             const { permAddressLine1, permAddressLine2, permAddressLine3, permAddressLine4 } = getValues();
             setValue('mailAddressLine1', permAddressLine1)
@@ -236,14 +247,22 @@ const DetailForm = () => {
             setValue('mailAddressLine3', userGetData?.mailAddressLine3 ?? "")
             setValue('mailAddressLine4', userGetData?.mailAddressLine4 ?? "")
         }
+        setValue('isWhatsAppSame', sameAddress)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sameAddress])
+
+    useEffect(() => {
         if (sameFullName) {
             const { fullName } = getValues();
             setValue("nameOnCard", fullName)
         } else {
             setValue("nameOnCard", userGetData?.nameOnCard ?? '')
         }
+        setValue('isCardHolderNameSame', sameFullName)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [sameMobile, sameAddress, sameFullName])
+    }, [sameFullName])
+
+
 
     useEffect(() => {
         const { employmentCategory } = getValues()
@@ -261,6 +280,20 @@ const DetailForm = () => {
     const onForward = () => {
         navigate("/document-detail");
     }
+
+    useEffect(() => {
+
+        if (userGetData?.isWhatsAppSame) {
+            setSameMobile(true)
+        }
+        if (userGetData?.isMailAddressSame) {
+            setSameAddress(true)
+        }
+        if (userGetData?.isCardHolderNameSame) {
+            setSameFullName(true)
+        }
+    }, [userGetData])
+
 
     isUserGetLoading && <Loader />
 
