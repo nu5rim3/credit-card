@@ -6,7 +6,6 @@ import { FileUp, Trash2, ZoomIn } from "lucide-react";
 import ImagePreview from "./ImagePreview";
 import "@cyntler/react-doc-viewer/dist/index.css";
 import PdfViewer from "./pdfViewer";
-
 interface UploaderProps extends InputProps {
     onChange: React.ChangeEventHandler<HTMLInputElement>;
     multiple: boolean;
@@ -22,7 +21,6 @@ const Uploader = forwardRef<HTMLInputElement, UploaderProps>(
         const [files, setFiles] = useState<File[]>([]);
         const [open, setOpen] = useState(false);
         const [fileURL, setFileURL] = useState('');
-
         /**
          * handleFileSelected function
          * @param event 

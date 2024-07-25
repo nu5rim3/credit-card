@@ -200,7 +200,7 @@ const getDynamicSchema = (employmentCategory?: string) => {
                     })
                     .refine((files) => files?.every((file: File) => file.size <= MAX_FILE_SIZE), {
                         message: `Max file size is 5MB`,
-                    }),
+                    }).optional(),
                 SELF_BANK_STATEMENT: z
                     .any()
                     .refine((files) => files?.length >= 1, { message: 'Bank statements is required atleast 3 files' })
@@ -398,18 +398,18 @@ const DocumentForm = () => {
             if (response.status === 200) {
                 if (response.data.status === 200) {
 
-                    toast.success(response.data.data.message ?? `${wrapper.fileName} - Document Uploaded Successfully`);
+                    // toast.success(response.data.data.message ?? `${wrapper.fileName} - Document Uploaded Successfully`);
                     return true; // Success
                 } else if (response.data.status === 400) {
-                    toast.error(response.data.data.message);
+                    // toast.error(response.data.data.message);
                     return false; // Failure
                 }
             } else {
-                toast.error('Uploading Feature Failed, Please try again later');
+                // toast.error('Uploading Feature Failed, Please try again later');
                 return false; // Failure
             }
         } catch (error) {
-            toast.error('An error occurred while uploading the document');
+            // toast.error('An error occurred while uploading the document');
             return false; // Failure
         }
         return false; // Ensure a return value for all code paths
@@ -419,6 +419,8 @@ const DocumentForm = () => {
         if (allUploaded) {
             toast.success('All Documents Uploaded Successfully')
             dispatch(updateDocumentStatus(navigate, userLoginData?.referenceNo ?? '', "A"))
+        } else {
+            toast.error('Failed to upload the documents')
         }
 
         return () => {

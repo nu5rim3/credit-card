@@ -26,6 +26,7 @@
     "classnames": "^2.5.1",
     "express": "^4.19.2",
     "lucide-react": "^0.383.0",
+    "mgr-pdf-viewer-react": "^1.0.3",
     "path": "^0.12.7",
     "postcss": "^8.4.38",
     "react": "^18.2.0",
