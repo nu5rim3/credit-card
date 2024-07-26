@@ -419,9 +419,10 @@ const DocumentForm = () => {
         if (allUploaded) {
             toast.success('All Documents Uploaded Successfully')
             dispatch(updateDocumentStatus(navigate, userLoginData?.referenceNo ?? '', "A"))
-        } else {
-            toast.error('Failed to upload the documents')
         }
+        // else {
+        //     // toast.error('Failed to upload the documents')
+        // }
 
         return () => {
             setAllUploaded(false);
