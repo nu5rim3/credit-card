@@ -12,7 +12,7 @@ import imageCompression from 'browser-image-compression';
 import { createGoogleUat } from '../services/api/apiFetch';
 import { updateDocumentStatus } from '../store/actions/documentUpdateActions';
 import { useNavigate } from 'react-router-dom';
-import { LoaderCircle, StepBack } from 'lucide-react';
+import { ArrowRight, LoaderCircle, StepBack } from 'lucide-react';
 import ConfirmDialog from '../components/ConfirmDialog';
 
 
@@ -595,12 +595,14 @@ const DocumentForm = () => {
                             <StepBack size={18} className='mr-1' /> Personal details
                         </Button>
                         <Button variant='primary' type="submit" className={'flex flex-row items-center justify-between gap-2 h-full'} >
-                            {isdocumentUpdateLoading ? <LoaderCircle className="animate-spin animate-infinite" /> : 'Save Document Details'}
+                            {'Save Document Details'}
+                            {isdocumentUpdateLoading ? <LoaderCircle className="animate-spin animate-infinite" /> : <ArrowRight />}
                         </Button>
                     </div>
                     <div className="fixed sm:hidden bottom-3 bg-primary-50 h-auto animate-fade-up animate-duration-[6000ms] animate-once w-full rounded-lg pr-4">
                         <Button variant='primary' type="submit" className={'w-full flex flex-row items-center justify-between gap-2 mt-3'} >
-                            {isdocumentUpdateLoading ? <LoaderCircle className="animate-spin animate-infinite" /> : 'Save Document Details'}
+                            {'Save Document Details'}
+                            {isdocumentUpdateLoading ? <LoaderCircle className="animate-spin animate-infinite" /> : <ArrowRight />}
                         </Button>
                     </div>
                 </form>

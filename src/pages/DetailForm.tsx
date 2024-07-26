@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store/store';
 import { userDetailPost } from '../store/actions/userDetailPostActions';
 import { parseNIC } from '../utils/textConvertor';
-import { LoaderCircle, StepForward } from 'lucide-react';
+import { ArrowRight, LoaderCircle, StepForward } from 'lucide-react';
 import ComboBox from '../components/ComboBox';
 import { getFusionBranch } from '../store/actions/getBranchActions';
 import { IBranch } from '../types/userLoginTypes';
@@ -749,14 +749,14 @@ const DetailForm = () => {
                         }
 
                         <Button variant='primary' type="submit" className={'flex flex-row items-center justify-between gap-2 h-full'} >
-                            {loading && <LoaderCircle className="animate-spin animate-infinite" />}
                             {userGetData?.status === 'A' ? 'Update Personal Details' : 'Save Personal Details'}
+                            {loading ? <LoaderCircle className="animate-spin animate-infinite" /> : <ArrowRight />}
                         </Button>
                     </div>
                     <div className="fixed sm:hidden bottom-3 bg-primary-50 h-auto animate-fade-up animate-duration-[6000ms] animate-once w-full rounded-lg pr-4">
                         <Button variant='primary' type="submit" className={'w-full flex flex-row items-center justify-between gap-2 mt-3'} >
-                            {loading && <LoaderCircle className="animate-spin animate-infinite" />}
                             {userGetData?.status === 'A' ? 'Update Personal Details' : 'Save Personal Details'}
+                            {loading ? <LoaderCircle className="animate-spin animate-infinite" /> : <ArrowRight />}
                         </Button>
                     </div>
                 </form>
