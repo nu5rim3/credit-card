@@ -247,7 +247,7 @@ const DetailForm = () => {
             setValue('mailAddressLine3', userGetData?.mailAddressLine3 ?? "")
             setValue('mailAddressLine4', userGetData?.mailAddressLine4 ?? "")
         }
-        setValue('isWhatsAppSame', sameAddress)
+        setValue('isMailAddressSame', sameAddress)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sameAddress])
 
