@@ -748,13 +748,13 @@ const DetailForm = () => {
                             </Button>
                         }
 
-                        <Button variant='primary' type="submit" className={''} >
+                        <Button variant='primary' type="submit" className={'flex flex-row items-center justify-between gap-2 h-full'} >
                             {loading && <LoaderCircle className="animate-spin animate-infinite" />}
                             {userGetData?.status === 'A' ? 'Update Personal Details' : 'Save Personal Details'}
                         </Button>
                     </div>
                     <div className="fixed sm:hidden bottom-3 bg-primary-50 h-auto animate-fade-up animate-duration-[6000ms] animate-once w-full rounded-lg pr-4">
-                        <Button variant='primary' type="submit" className={'w-full'} >
+                        <Button variant='primary' type="submit" className={'w-full flex flex-row items-center justify-between gap-2 mt-3'} >
                             {loading && <LoaderCircle className="animate-spin animate-infinite" />}
                             {userGetData?.status === 'A' ? 'Update Personal Details' : 'Save Personal Details'}
                         </Button>

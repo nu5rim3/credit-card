@@ -39,6 +39,7 @@ const ConfirmDialog: React.FC<TConfirmDialog> = ({ open, close, onConfirm, loadi
                                 variant='primary'
                                 onClick={onConfirm}
                                 disabled={loading}
+                                className='flex flex-row items-center justify-between gap-2'
                             >
                                 {loading && <LoaderCircle className="animate-spin animate-infinite" />} Confirm
                             </Button>

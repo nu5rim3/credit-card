@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
 import { userDetailGet } from '../store/actions/userDetailGetActions';
 import imageCompression from 'browser-image-compression';
 import { createGoogleUat } from '../services/api/apiFetch';
-import toast from 'react-hot-toast';
 import { updateDocumentStatus } from '../store/actions/documentUpdateActions';
 import { useNavigate } from 'react-router-dom';
 import { LoaderCircle, StepBack } from 'lucide-react';
@@ -419,7 +418,7 @@ const DocumentForm = () => {
 
     useEffect(() => {
         if (allUploaded) {
-            toast.success('All Documents Uploaded Successfully')
+            // toast.success('All Documents Uploaded Successfully')
             dispatch(updateDocumentStatus(navigate, userLoginData?.referenceNo ?? '', "A"))
         }
         // else {
@@ -595,12 +594,12 @@ const DocumentForm = () => {
                         <Button variant={'link'} className='flex flex-row items-center' onClick={onBack}>
                             <StepBack size={18} className='mr-1' /> Personal details
                         </Button>
-                        <Button variant='primary' type="submit" className={''} >
+                        <Button variant='primary' type="submit" className={'flex flex-row items-center justify-between gap-2 h-full'} >
                             {isdocumentUpdateLoading ? <LoaderCircle className="animate-spin animate-infinite" /> : 'Save Document Details'}
                         </Button>
                     </div>
                     <div className="fixed sm:hidden bottom-3 bg-primary-50 h-auto animate-fade-up animate-duration-[6000ms] animate-once w-full rounded-lg pr-4">
-                        <Button variant='primary' type="submit" className={'w-full'} >
+                        <Button variant='primary' type="submit" className={'w-full flex flex-row items-center justify-between gap-2 mt-3'} >
                             {isdocumentUpdateLoading ? <LoaderCircle className="animate-spin animate-infinite" /> : 'Save Document Details'}
                         </Button>
                     </div>

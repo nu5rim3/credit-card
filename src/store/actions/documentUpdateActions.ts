@@ -26,7 +26,7 @@ export const updateDocumentStatus =
       });
       dispatch(documentUpdatePostSuccess(response.data));
       toast.success(
-        response.data.message ?? "All document updated successfully"
+        response.data.message ?? "All documents updated successfully"
       );
       navigate("/complete");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
