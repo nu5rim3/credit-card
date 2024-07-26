@@ -277,9 +277,9 @@ const DocumentForm = () => {
     const getKey = (key: string) => {
         switch (key) {
             case 'USER_IDENTIFICATION_1':
-                return 'identification_document_1_1'
+                return 'identification_document_1'
             case 'USER_IDENTIFICATION_2':
-                return 'identification_document_1_2'
+                return 'identification_document_2'
             case 'PROOF_OF_INCOME':
                 return 'income_proof_document'
             default:
