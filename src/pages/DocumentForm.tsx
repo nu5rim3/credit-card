@@ -241,6 +241,8 @@ const DocumentForm = () => {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
         shouldUnregister: true,
+        reValidateMode: 'onSubmit',
+        mode: 'onSubmit',
         defaultValues: {
             USER_IDENTIFICATION_1: [],
             USER_IDENTIFICATION_2: [],
@@ -440,7 +442,6 @@ const DocumentForm = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userData])
-
 
     isUserDataLoading && <Loader />
 

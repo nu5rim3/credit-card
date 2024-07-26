@@ -118,8 +118,8 @@ const Uploader = forwardRef<HTMLInputElement, UploaderProps>(
                                                 className="relative w-44 sm:w-44 h-28 rounded-lg flex items-center justify-start overflow-hidden cursor-pointer bg-gray-100 p-1 hover:shadow-xl transition duration-300 delay-500 hover:delay-300 animate-fade-up animate-duration-[3000ms] animate-once"
                                             >
                                                 <div className="absolute bottom-0 h-full flex flex-col gap-2 items-start p-3 rounded-lg bg-gray-800/50 sm:bg-gray-800/0 hover:bg-gray-800/50">
-                                                    <button className="bg-primary-900/70 p-1 rounded-full hover:bg-primary-900" onClick={() => handleRemoveImage(index)}><Trash2 size={20} className="text-primary-200" /></button>
-                                                    <button className="bg-primary-900/70 p-1 rounded-full hover:bg-primary-900" onClick={() => {
+                                                    <button type="button" className="bg-primary-900/70 p-1 rounded-full hover:bg-primary-900" onClick={() => handleRemoveImage(index)}><Trash2 size={20} className="text-primary-200" /></button>
+                                                    <button type="button" className="bg-primary-900/70 p-1 rounded-full hover:bg-primary-900" onClick={() => {
                                                         setFileURL(URL.createObjectURL(file))
                                                         setOpen(true)
                                                     }}><ZoomIn size={20} className="text-primary-200" /></button>
