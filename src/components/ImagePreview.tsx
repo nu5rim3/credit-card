@@ -24,7 +24,7 @@ const ImagePreview: React.FC<TImagePreview> = ({ documentSrc, handleRemoveImage 
                     <img src={documentSrc} alt="" className='absolute' />
                 </PhotoView>
                 {/* <div className="absolute left-10 top-5 bg-primary-900/70 p-1 mr-2 rounded-full hover:bg-primary-900"><ZoomIn size={20} className="text-primary-200" /></div> */}
-                <button className="absolute top-5 bg-primary-900/70 p-1 ml-2 rounded-full hover:bg-primary-900" onClick={handleRemoveImage}><Trash2 size={20} className="text-primary-200" /></button>
+                <button type='button' className="absolute top-5 bg-primary-900/70 p-1 ml-2 rounded-full hover:bg-primary-900" onClick={handleRemoveImage}><Trash2 size={20} className="text-primary-200" /></button>
             </div>
 
         </PhotoProvider>
