@@ -270,23 +270,23 @@ const DocumentForm = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userLoginData])
 
-    /**
-     * getKey - get the key for the document
-     * @param key 
-     * @returns 
-     */
-    const getKey = (key: string) => {
-        switch (key) {
-            case 'USER_IDENTIFICATION_1':
-                return 'identification_document_1'
-            case 'USER_IDENTIFICATION_2':
-                return 'identification_document_2'
-            case 'PROOF_OF_INCOME':
-                return 'income_proof_document'
-            default:
-                return 'other_supporting_document'
-        }
-    }
+    // /**
+    //  * getKey - get the key for the document
+    //  * @param key 
+    //  * @returns 
+    //  */
+    // const getKey = (key: string) => {
+    //     switch (key) {
+    //         case 'USER_IDENTIFICATION_1':
+    //             return 'identification_document_1'
+    //         case 'USER_IDENTIFICATION_2':
+    //             return 'identification_document_2'
+    //         case 'PROOF_OF_INCOME':
+    //             return 'income_proof_document'
+    //         default:
+    //             return 'other_supporting_document'
+    //     }
+    // }
 
     /**
     * on Submit - main api call to  save the document details
@@ -316,10 +316,10 @@ const DocumentForm = () => {
                             }
                             const compressedFile = await imageCompression(data[key][i], options);
                             const base64String = await fileToBase64(compressedFile);
-                            return await upload(base64String.split(',')[0], getKey(key), data[key][i].type, key);
+                            return await upload(base64String.split(',')[0], key, data[key][i].type, key);
                         } else {
                             const base64String = await fileToBase64(data[key][i]);
-                            return await upload(base64String.split(',')[0], getKey(key), data[key][i].type, key);
+                            return await upload(base64String.split(',')[0], key, data[key][i].type, key);
                         }
                     })
 
@@ -333,10 +333,10 @@ const DocumentForm = () => {
                         }
                         const compressedFile = await imageCompression(data[key][0], options);
                         const base64String = await fileToBase64(compressedFile);
-                        return await upload(base64String.split(',')[0], getKey(key), data[key][0].type, key);
+                        return await upload(base64String.split(',')[0], key, data[key][0].type, key);
                     } else {
                         const base64String = await fileToBase64(data[key][0]);
-                        return await upload(base64String.split(',')[0], getKey(key), data[key][0].type, key);
+                        return await upload(base64String.split(',')[0], key, data[key][0].type, key);
                     }
                 }
             })
