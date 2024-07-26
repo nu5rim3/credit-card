@@ -742,10 +742,12 @@ const DetailForm = () => {
 
                     </div>
                     <div className="mt-5 md:col-span-4 justify-between h-10 animate-fade-up animate-duration-[6000ms] animate-once hidden sm:flex">
-                        {userGetData?.status === 'A' &&
+                        {userGetData?.status === 'A' ?
                             <Button variant={'link'} className='flex flex-row items-center' onClick={onForward}>
                                 Document details <StepForward size={18} className='ml-1' />
                             </Button>
+                            :
+                            <div />
                         }
 
                         <Button variant='primary' type="submit" className={'flex flex-row items-center justify-between gap-2 h-full'} >

@@ -43,7 +43,7 @@ const MainForm = () => {
 
     const onSubmit = useCallback((formData: FormData) => {
         setFormData(formData);
-        dispatch(userLogin({ ...formData, identifire: ved ?? null }))
+        dispatch(userLogin({ ...formData, nic: formData.nic.toLocaleUpperCase(), identifire: ved ?? null }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
