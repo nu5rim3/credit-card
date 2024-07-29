@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,6 +15,7 @@ import { updateDocumentStatus } from '../store/actions/documentUpdateActions';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, LoaderCircle, StepBack } from 'lucide-react';
 import ConfirmDialog from '../components/ConfirmDialog';
+import toast from 'react-hot-toast';
 
 
 const MAX_FILE_SIZE = 5000000
@@ -294,7 +296,14 @@ const DocumentForm = () => {
     */
     const onSubmit = async (data: FormData) => {
         setConfirmDialog(true);
-        setFormData(data);
+        setFormData(
+            data ? Object.entries(data).flatMap(([key, files]) =>
+                files.map((file: any) => {
+                    file.key = key;
+                    return file;
+                })
+            ) : []
+        );
     }
 
     /**
@@ -302,56 +311,42 @@ const DocumentForm = () => {
      */
     const onConfirm = async () => {
         setIsUploading(true);
-        const data = formData;
-        if (data !== undefined) {
-            const uploadResult = Object.keys(data).map(async (key: any) => {
-                if (data[key].length > 1) {
-                    data[key].forEach(async (_: any, i: number) => {
-                        if (data[key][i].type !== 'application/pdf') {
-                            const options = {
-                                maxSizeMB: 1,
-                                maxWidthOrHeight: 1920,
-                                useWebWorker: true,
-                                fileType: data[key].type
-                            }
-                            const compressedFile = await imageCompression(data[key][i], options);
-                            const base64String = await fileToBase64(compressedFile);
-                            return await upload(base64String.split(',')[0], key, data[key][i].type, key);
-                        } else {
-                            const base64String = await fileToBase64(data[key][i]);
-                            return await upload(base64String.split(',')[0], key, data[key][i].type, key);
-                        }
-                    })
 
-                } else {
-                    if (data[key][0].type !== 'application/pdf') {
-                        const options = {
-                            maxSizeMB: 1,
-                            maxWidthOrHeight: 1920,
-                            useWebWorker: true,
-                            fileType: data[key].type
-                        }
-                        const compressedFile = await imageCompression(data[key][0], options);
-                        const base64String = await fileToBase64(compressedFile);
-                        return await upload(base64String.split(',')[0], key, data[key][0].type, key);
-                    } else {
-                        const base64String = await fileToBase64(data[key][0]);
-                        return await upload(base64String.split(',')[0], key, data[key][0].type, key);
-                    }
-                }
-            })
+        const resultArray = formData && formData.map(async (file: any) => {
 
-            await Promise.all(uploadResult.flat()).then((result) => {
-                if (result.includes(false)) {
-                    setAllUploaded(false);
-                } else {
-                    setAllUploaded(true);
+            if (file.type !== 'application/pdf') {
+                const options = {
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 1920,
+                    useWebWorker: true,
+                    fileType: file.type
                 }
-            }).catch((err) => {
-                console.error('[UPLOAD ERROR] - ', err)
-                setAllUploaded(false)
-            });
-        }
+                return imageCompression(file, options).then(async (compressedFile) => {
+                    file.compressedFile = compressedFile;
+                    fileToBase64(file).then((base64String) => {
+                        file.base64String = base64String.split(',')[0];
+                    });
+                    return await upload(file.base64String, file.key, file.type, file.key);
+                });
+            } else {
+                return fileToBase64(file).then(async (base64String) => {
+                    file.base64String = base64String.split(',')[0];
+                    return await upload(file.base64String, file.key, file.type, file.key);
+                });
+            }
+        });
+        await Promise.all(resultArray).then((result) => {
+
+            if (result.includes(false)) {
+                setAllUploaded(false);
+                toast.error('Uploading Feature Failed, Please try again later');
+            } else if (!result.includes(false)) {
+                setAllUploaded(true);
+            }
+        }).catch((err) => {
+            console.error('[UPLOAD ERROR] - ', err)
+            setAllUploaded(false)
+        });
         setIsUploading(false);
         setConfirmDialog(false);
     }
