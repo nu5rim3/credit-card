@@ -323,10 +323,10 @@ const DocumentForm = () => {
                 }
                 return imageCompression(file, options).then(async (compressedFile) => {
                     file.compressedFile = compressedFile;
-                    fileToBase64(file).then((base64String) => {
+                    return fileToBase64(file).then(async (base64String) => {
                         file.base64String = base64String.split(',')[0];
+                        return await upload(file.base64String, file.key, file.type, file.key);
                     });
-                    return await upload(file.base64String, file.key, file.type, file.key);
                 });
             } else {
                 return fileToBase64(file).then(async (base64String) => {
