@@ -33,8 +33,8 @@ function App() {
               <Route path="/personal-detail" element={<ProtectedRoute component={DetailForm} />} />
               <Route path="/document-detail" element={<ProtectedRoute component={DocumentForm} />} />
               <Route path="/complete" element={<Completed />} />
-              <Route path="/debug" element={<DetailForm />} />
-              <Route path="/debug2" element={<DocumentForm />} />
+              {/* <Route path="/debug" element={<DetailForm />} />
+              <Route path="/debug2" element={<DocumentForm />} /> */}
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>
