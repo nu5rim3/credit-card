@@ -83,9 +83,10 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, referenceId, isOpen, setI
                             value={otp}
                             onChange={setOtp}
                             numInputs={6}
+                            inputType='number'
                             renderSeparator={<span> </span>}
                             renderInput={(props) => <input {...props} />}
-                            inputStyle={{ width: '2.5rem', height: '2.5rem', fontSize: '1.5rem', borderRadius: '0.5rem', border: '1px solid #1c34c6' }}
+                            inputStyle={{ width: '2.5rem', height: '2.5rem', fontSize: '1.5rem', borderRadius: '0.5rem', border: '1px solid #1c34c6', }}
                         />
                     </div>
                     <div className="flex justify-center sm:justify-end gap-4">
@@ -96,13 +97,13 @@ const OTPDialog: React.FC<OTPDialogProps> = ({ mobile, referenceId, isOpen, setI
                         >
                             Resend
                         </Button>
-                        {/* <Button
+                        <Button
                             onClick={() => handleVerify()}
                             variant={"primary"}
                             disabled={!isDisabled || otp.length !== 6}
                         >
                             Verify
-                        </Button> */}
+                        </Button>
                     </div>
                 </DialogPanel>
             </div>

@@ -451,7 +451,7 @@ const DocumentForm = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full mb-10 sm:mb-0">
                     <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl sm:h-[75vh] sm:overflow-scroll'>
                         <p className='font-semibold text-primary-950 text-center sm:text-left mb-5 text-lg'>Customer Document Details</p>
-                        <div className='grid grid-cols-1 md:grid-cols-2 sm:grid-cols-4 gap-2'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 sm:grid-cols-4 gap-3'>
                             <Uploader
                                 label={'NIC/Driving License (Front Side)'}
                                 multiple={false}
@@ -483,7 +483,7 @@ const DocumentForm = () => {
                                     setValue('UTILITY_BILL', files);
                                 }}
                                 error={errors.UTILITY_BILL?.message?.toString() || ''}
-                                ruleLabel={"You can upload upto 3 files"}
+                                ruleLabel={"Utility bills mandatory 1 maximum 3"}
                             />
                             {
                                 userData?.employmentCategory !== 'Self Employed' &&
@@ -497,7 +497,7 @@ const DocumentForm = () => {
                                             setValue('PAY_SLIP', files);
                                         }}
                                         error={errors.PAY_SLIP?.message?.toString() || ''}
-                                        ruleLabel={"You can upload upto 3 files"}
+                                        ruleLabel={"Pay slip mandatory 1 maximum 3"}
                                     />
                                     <Uploader
                                         label={'Employee ID'}
@@ -508,7 +508,7 @@ const DocumentForm = () => {
                                             setValue('EMLOYEE_ID', files);
                                         }}
                                         error={errors.EMLOYEE_ID?.message?.toString() || ''}
-                                        ruleLabel={"You can upload upto 2 files"}
+                                        ruleLabel={"Employee ID mandatory 1 maximum 3"}
                                     />
                                     <Uploader
                                         label={'Employment Confirmation Letter'}
@@ -519,7 +519,7 @@ const DocumentForm = () => {
                                         error={errors.EMPLOYEMENT_CONFIRMATION_LETTER?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
-                                        ruleLabel={"You can upload upto 2 files"}
+                                        ruleLabel={"Employment confirmation letter non-mandatory maximum 3"}
                                     />
                                     <Uploader
                                         label={'Bank Statements (Last month)'}
@@ -530,7 +530,7 @@ const DocumentForm = () => {
                                         error={errors.BANK_STATEMENT?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
-                                        ruleLabel={"You can upload upto 20 files"}
+                                        ruleLabel={"Bank statements non-mandatory maximum 20"}
                                     />
                                     <Uploader
                                         label={'Proof of Income (Last month)'}
@@ -541,7 +541,7 @@ const DocumentForm = () => {
                                         error={errors.PROOF_OF_INCOME?.message?.toString() || ''}
                                         multiple={true}
                                         required
-                                        ruleLabel={"You can upload upto 5 files"}
+                                        ruleLabel={"Proof of income mandatory 2 maximum 5"}
                                     />
                                     <Uploader
                                         label={'Business Card'}
@@ -552,7 +552,7 @@ const DocumentForm = () => {
                                         error={errors.BUSINESS_CARD?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
-                                        ruleLabel={"You can upload upto 2 files"}
+                                        ruleLabel={"Business card non-mandatory maximum 2"}
                                     />
                                 </>
                             }
@@ -568,7 +568,7 @@ const DocumentForm = () => {
                                         error={errors.BUSINESS_REGISTRATION_CRETIFICATION?.message?.toString() || ''}
                                         multiple={true}
                                         required={false}
-                                        ruleLabel={"You can upload upto 5 files"}
+                                        ruleLabel={"Business registeration certificate non-mandatory maximum 5"}
                                     />
                                     <Uploader
                                         label={'Bank Statements (Last 3 months)'}
@@ -579,7 +579,7 @@ const DocumentForm = () => {
                                         error={errors.SELF_BANK_STATEMENT?.message?.toString() || ''}
                                         multiple={true}
                                         required
-                                        ruleLabel={"You can upload upto 20 files"}
+                                        ruleLabel={"Bank statements mandatory 3 maximum 20"}
                                     />
                                 </>
                             }

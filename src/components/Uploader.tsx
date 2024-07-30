@@ -82,7 +82,7 @@ const Uploader = forwardRef<HTMLInputElement, UploaderProps>(
         };
 
         return (
-            <>
+            <div className="border border-primary-200 rounded-md p-2 mb-2 bg-primary-100">
                 <Field>
                     <Label className="block text-sm font-medium text-primary text-left">
                         {label}
@@ -143,7 +143,7 @@ const Uploader = forwardRef<HTMLInputElement, UploaderProps>(
                     )}
                 </Field>
                 <PdfViewer open={open} close={() => setOpen(false)} file={fileURL} />
-            </>
+            </div>
         );
     }
 )

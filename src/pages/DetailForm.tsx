@@ -310,8 +310,8 @@ const DetailForm = () => {
                 }
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
 
-                    <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
-                        <p className='font-semibold text-primary-950'>Customer Personal Details</p>
+                    <div className='bg-primary-50 rounded-lg shadow-lg p-8 my-2 animate-fade-up animate-duration-[3000ms] animate-once hover:shadow-xl flex flex-col gap-3 sm:h-[80vh] sm:overflow-scroll'>
+                        <p className='font-semibold text-primary-950 mb-4'>Customer Personal Details</p>
                         <Input
                             type={'text'}
                             label={'Full Name'}
@@ -485,8 +485,8 @@ const DetailForm = () => {
                         />
                     </div>
 
-                    <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
-                        <p className='font-semibold text-primary-950'>Customer Employment Details</p>
+                    <div className='bg-primary-50 rounded-lg shadow-lg p-8 my-2 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-3 sm:h-[80vh] sm:overflow-scroll'>
+                        <p className='font-semibold text-primary-950 mb-4'>Customer Employment Details</p>
                         <Controller
                             control={control}
                             name={'employmentCategory'}
@@ -636,8 +636,8 @@ const DetailForm = () => {
 
                     </div>
 
-                    <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-2 sm:h-[80vh] sm:overflow-scroll'>
-                        <p className='font-semibold text-primary-950'>Guarantor Details</p>
+                    <div className='bg-primary-50 rounded-lg shadow-lg p-8 my-2 animate-fade-up animate-duration-[4000ms] animate-once hover:shadow-xl flex flex-col gap-3 sm:h-[80vh] sm:overflow-scroll'>
+                        <p className='font-semibold text-primary-950 mb-4'>Guarantor Details</p>
                         <Input
                             type={'text'}
                             label={'Guarantor Name'}
@@ -694,8 +694,8 @@ const DetailForm = () => {
                         </>
                     </div>
 
-                    <div className='bg-primary-50 rounded-lg shadow-lg p-4 animate-fade-up animate-duration-[5000ms] animate-once hover:shadow-xl mb-20 sm:mb-0 flex flex-col gap-2  sm:h-[80vh] sm:overflow-scroll'>
-                        <p className='font-semibold text-primary-950'>Credit Card Details</p>
+                    <div className='bg-primary-50 rounded-lg shadow-lg p-8 my-2 animate-fade-up animate-duration-[5000ms] animate-once hover:shadow-xl mb-20 sm:mb-0 flex flex-col gap-3  sm:h-[80vh] sm:overflow-scroll'>
+                        <p className='font-semibold text-primary-950 mb-4'>Credit Card Details</p>
                         <Input
                             type={'text'}
                             label={'Name on Card'}
@@ -755,7 +755,7 @@ const DetailForm = () => {
                             {loading ? <LoaderCircle className="animate-spin animate-infinite" /> : <ArrowRight />}
                         </Button>
                     </div>
-                    <div className="fixed sm:hidden bottom-3 bg-primary-50 h-auto animate-fade-up animate-duration-[6000ms] animate-once w-full rounded-lg pr-4">
+                    <div className="fixed sm:hidden bottom-0 bg-primary-50 animate-fade-up animate-duration-[6000ms] animate-once w-full rounded-lg pr-4 h-14">
                         <Button variant='primary' type="submit" className={'w-full flex flex-row items-center justify-between gap-2 mt-3'} >
                             {userGetData?.status === 'A' ? 'Update Personal Details' : 'Save Personal Details'}
                             {loading ? <LoaderCircle className="animate-spin animate-infinite" /> : <ArrowRight />}
