@@ -27,6 +27,8 @@ const MainForm = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const ved = searchParams.get('ved');
+    const emp = searchParams.get('emp');
+    const shp = searchParams.get('shp');
 
     const {
         register,
@@ -43,7 +45,7 @@ const MainForm = () => {
 
     const onSubmit = useCallback((formData: FormData) => {
         setFormData(formData);
-        dispatch(userLogin({ ...formData, nic: formData.nic.toLocaleUpperCase(), identifire: ved ?? null }))
+        dispatch(userLogin({ ...formData, nic: formData.nic.toLocaleUpperCase(), identifire: ved ?? null, shopIdentifire: shp ?? null, userIdentifire: emp ?? null }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -107,7 +109,7 @@ const MainForm = () => {
 
                             />
 
-                            <Button type="submit" variant={"primary"} className="w-full flex flex-row items-center justify-between gap-2 mt-3">Start {loading ? <LoaderCircle className="animate-spin animate-infinite" /> : <ArrowRight />}</Button>
+                            <Button type="submit" variant={"primary"} className="w-full flex flex-row items-center justify-between gap-2 mt-3" disabled={loading}>Start {loading ? <LoaderCircle className="animate-spin animate-infinite" /> : <ArrowRight />}</Button>
                         </div>
                     </form>
                 </div>

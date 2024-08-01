@@ -8,10 +8,12 @@ const GetStart = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const ved = searchParams.get('ved');
+    const emp = searchParams.get('emp');
+    const shp = searchParams.get('shp');
     const navigate = useNavigate();
 
     const onGetStartClick = () => {
-        navigate(`/form/?ved=${ved}`)
+        navigate(`/form/?ved=${ved}&emp=${emp}&shp=${shp}`)
     }
 
     return (

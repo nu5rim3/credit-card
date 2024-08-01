@@ -29,6 +29,8 @@ export interface IUserLoginRequest {
   mobileNumber: string;
   email: string;
   identifire?: string | null;
+  shopIdentifire?: string | null;
+  userIdentifire?: string | null;
 }
 
 export interface IResponseState {
