@@ -75,7 +75,7 @@ const getDynamicSchema = (employmentCategory?: string) => {
                     }),
                 EMLOYEE_ID: z
                     .any()
-                    .refine((files) => files?.length >= 1, { message: 'Employee ID is required' })
+                    // .refine((files) => files?.length >= 1, { message: 'Employee ID is required' })
                     .refine((files) => files?.length <= 2, { message: 'You can upload upto 2 files' })
                     .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
                         message: '.jpg, .jpeg, .png and .pdf files are accepted',
@@ -95,7 +95,7 @@ const getDynamicSchema = (employmentCategory?: string) => {
                     }).optional(),
                 BANK_STATEMENT: z
                     .any()
-                    .refine((files) => files?.length >= 1, { message: 'Bank statements is required' })
+                    // .refine((files) => files?.length >= 1, { message: 'Bank statements is required' })
                     .refine((files) => files?.length <= 20, { message: 'You can upload upto 20 files' })
                     .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
                         message: '.jpg, .jpeg, .png and .pdf files are accepted',
@@ -139,7 +139,7 @@ const getDynamicSchema = (employmentCategory?: string) => {
                     }),
                 EMLOYEE_ID: z
                     .any()
-                    .refine((files) => files?.length >= 1, { message: 'Employee ID is required atleast 1 file' })
+                    // .refine((files) => files?.length >= 1, { message: 'Employee ID is required atleast 1 file' })
                     .refine((files) => files?.length <= 2, { message: 'You can upload upto 2 files' })
                     .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
                         message: '.jpg, .jpeg, .png and .pdf files are accepted',
@@ -159,7 +159,7 @@ const getDynamicSchema = (employmentCategory?: string) => {
                     }).optional(),
                 BANK_STATEMENT: z
                     .any()
-                    .refine((files) => files?.length >= 1, { message: 'Bank statements is required' })
+                    // .refine((files) => files?.length >= 1, { message: 'Bank statements is required' })
                     .refine((files) => files?.length <= 20, { message: 'You can upload upto 20 files' })
                     .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
                         message: '.jpg, .jpeg, .png and .pdf files are accepted',
@@ -508,7 +508,7 @@ const DocumentForm = () => {
                                             setValue('EMLOYEE_ID', files);
                                         }}
                                         error={errors.EMLOYEE_ID?.message?.toString() || ''}
-                                        ruleLabel={"Employee ID mandatory 1 maximum 3"}
+                                        ruleLabel={"Employee ID non-mandatory maximum 3"}
                                     />
                                     <Uploader
                                         label={'Employment Confirmation Letter'}
