@@ -204,7 +204,7 @@ const getDynamicSchema = (employmentCategory?: string) => {
                     }).optional(),
                 SELF_BANK_STATEMENT: z
                     .any()
-                    .refine((files) => files?.length >= 1, { message: 'Bank statements is required atleast 3 files' })
+                    .refine((files) => files?.length >= 3, { message: 'Bank statements is required atleast 3 files' })
                     .refine((files) => files?.length <= 20, { message: 'You can upload upto 20 files' })
                     .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
                         message: '.jpg, .jpeg, .png and .pdf files are accepted',
