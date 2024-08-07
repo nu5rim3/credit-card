@@ -105,7 +105,7 @@ const getDynamicSchema = (employmentCategory?: string) => {
                     }).optional(),
                 PROOF_OF_INCOME: z
                     .any()
-                    .refine((files) => files?.length >= 1, { message: 'Proof of income is required atleast 2 files' })
+                    .refine((files) => files?.length >= 2, { message: 'Proof of income is required atleast 2 files' })
                     .refine((files) => files?.length <= 5, { message: 'You can upload upto 5 files' })
                     .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
                         message: '.jpg, .jpeg, .png and .pdf files are accepted',
@@ -169,7 +169,7 @@ const getDynamicSchema = (employmentCategory?: string) => {
                     }).optional(),
                 PROOF_OF_INCOME: z
                     .any()
-                    .refine((files) => files?.length >= 1, { message: 'Proof of income is required atleast 2 files' })
+                    .refine((files) => files?.length >= 2, { message: 'Proof of income is required atleast 2 files' })
                     .refine((files) => files?.length <= 5, { message: 'You can upload upto 5 files' })
                     .refine((files) => files?.every((file: File) => ACCEPTED_IMAGE_TYPES.includes(file.type)), {
                         message: '.jpg, .jpeg, .png and .pdf files are accepted',
